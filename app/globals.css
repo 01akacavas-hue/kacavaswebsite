@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-ink: #090908;
+  --color-ink-2: #121210;
+  --color-paper: #f3efe6;
+  --color-muted: #c8c1b4;
+  --color-faint: #9c968b;
+  --color-line: rgb(243 239 230 / 0.14);
+  --color-eli: #e0b15c;
+  --color-niko: #a3b896;
+  --color-alec: #e07a52;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--color-ink);
+}
+
+body {
+  min-height: 100%;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: rgb(224 177 92 / 0.35);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-paper);
+  outline-offset: 3px;
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 80;
+  transform: translateY(-160%);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  padding: 0.6rem 0.9rem;
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+.home-stage {
+  background:
+    radial-gradient(920px 540px at 50% 40%, var(--glow, transparent), transparent 64%),
+    var(--color-ink);
+  transition: background 700ms ease;
+}
+
+.home-stage[data-brother="eli"] {
+  --glow: rgb(224 177 92 / 0.2);
+}
+
+.home-stage[data-brother="niko"] {
+  --glow: rgb(163 184 150 / 0.2);
+}
+
+.home-stage[data-brother="alec"] {
+  --glow: rgb(224 122 82 / 0.2);
+}
+
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--color-line);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+.marquee-copy {
+  display: flex;
+  gap: 2.75rem;
+  padding: 0.9rem 1.375rem 0.9rem 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-track {
+    animation: marquee 48s linear infinite;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  main {
+    animation: enter 0.45s ease both;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stage {
+    transition: none;
+  }
+}
+
+.captain-bars {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.captain-bars span {
+  display: block;
+  width: 1.35rem;
+  height: 0.38rem;
+  background: var(--color-paper);
+}
+
+.map-land {
+  fill: #1c1b18;
+  stroke: #3a3832;
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-land:hover {
+  fill: #26241f;
+}
+
+.pin:focus-visible {
+  outline: none;
+}
+
+.pin:focus-visible .pin-hit {
+  stroke: var(--color-paper);
+  stroke-width: 1.5;
+}
