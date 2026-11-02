@@ -5,7 +5,7 @@ export const ogContentType = "image/png"
 
 export function OgImage({
   eyebrow = "Kacavas",
-  title = "Eli, Niko, and Alec",
+  title = "Elias, Nicholas, and Alexander",
   footer = "Actor, captain, and GTM lead",
   accent = "#1a1714",
 }: {

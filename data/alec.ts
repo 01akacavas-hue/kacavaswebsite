@@ -54,8 +54,27 @@ export const alecRoles: readonly Role[] = [
   },
 ]
 
+/**
+ * An Academy Award statuette, not a still from CODA and not a photo of Alexander.
+ * Downloaded from Wikimedia Commons. License: Creative Commons Attribution-ShareAlike 4.0.
+ * Source: https://commons.wikimedia.org/wiki/File:DSC_7227_Музей_кино.jpg
+ * Author: Amm789 (https://commons.wikimedia.org/wiki/User:Amm789), own work, 2021-05-17.
+ */
+export const academyAwardPhoto = {
+  src: "/images/alec/academy-award.jpg",
+  alt: "An Academy Award statuette in a museum case.",
+  width: 1280,
+  height: 854,
+  author: "Amm789",
+  authorUrl: "https://commons.wikimedia.org/wiki/User:Amm789",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:DSC_7227_Музей_кино.jpg",
+  depicted: "Oscar statuette for the 1943 documentary Moscow Strikes Back, at the State Central Film Museum in Moscow",
+} as const
+
 export const alecQuote = {
   text: "From hosting family and friends at home to traveling around the world. Taking care of others is how I believe people should operate.",
-  source: "Alec, on joining Lance",
+  source: "Alexander, on joining Lance",
   href: "https://www.linkedin.com/posts/aleckacavas_i-have-a-new-hotel-key-it-unlocks-my-role-activity-7519067663931752448-WxTb",
 }

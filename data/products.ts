@@ -25,7 +25,7 @@ export const products: readonly Product[] = [
   {
     id: "example-marquee-print",
     name: "Marquee print",
-    description: "Example. A typographic print in Eli's gold. Not for sale.",
+    description: "Example. A typographic print in Elias's green. Not for sale.",
     priceCents: 3600,
     image: "/images/placeholders/print.svg",
     imageAlt: "Placeholder image of a marquee print",

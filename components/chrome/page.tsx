@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { SiteLinks } from "@/components/chrome/site-links"
 import type { BrotherId } from "@/lib/types"
 
 const toneClass: Record<BrotherId, string> = {
@@ -14,17 +15,16 @@ export function Page({
 }: {
   children: ReactNode
   tone?: BrotherId
-  width?: "default" | "wide"
+  width?: "default" | "wide" | "map"
 }) {
-  const max = width === "wide" ? "max-w-[1120px]" : "max-w-6xl"
+  const max = width === "map" ? "max-w-[1320px]" : width === "wide" ? "max-w-[1120px]" : "max-w-6xl"
   return (
     <article
       className={`mx-auto w-full border-t-2 ${max} px-5 pt-24 pb-16 sm:px-8 ${tone ? toneClass[tone] : "border-transparent"}`}
     >
       {children}
-      <footer className="mt-20 flex flex-wrap items-baseline justify-between gap-3 border-t border-line pt-6 text-xs tracking-[0.14em] text-faint uppercase">
-        <span>Kacavas</span>
-        <span>Eli, Niko, and Alec</span>
+      <footer className="mt-20 border-t border-line pt-6">
+        <SiteLinks />
       </footer>
     </article>
   )

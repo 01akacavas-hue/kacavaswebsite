@@ -6,7 +6,7 @@ export const contentType = ogContentType
 
 export default function OpenGraphImage() {
   return OgImage({
-    eyebrow: "Niko",
+    eyebrow: "Nicholas",
     title: "Nicholas Kacavas",
     footer: "U.S. Army captain, West Point class of 2022",
     accent: "#9b2c2c",

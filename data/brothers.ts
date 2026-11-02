@@ -7,6 +7,8 @@ export type Brother = {
   index: number
   name: string
   shortName: string
+  /** Nickname, shown on the page and the home card. */
+  knownAs?: string
   epithet: string
   href: string
   bio: string
@@ -23,11 +25,11 @@ export const brothers = [
     id: "eli",
     index: 0,
     name: "Elias Kacavas",
-    shortName: "Eli",
+    shortName: "Elias",
     epithet: "The actor",
     href: "/eli",
     bio: "Actor from Manchester, New Hampshire. Euphoria, Pretty Little Liars: Original Sin, and My Big Fat Greek Wedding 3.",
-    career: "Film and television, after two years at NYU Tisch.",
+    career: "Film and television.",
     asideLabel: "Music & hobbies",
     sports: "Guitar, piano, and The Vanity. Basketball growing up.",
     socials: [
@@ -41,10 +43,11 @@ export const brothers = [
     id: "niko",
     index: 1,
     name: "Nicholas Kacavas",
-    shortName: "Niko",
+    shortName: "Nicholas",
+    knownAs: "Niko",
     epithet: "The captain",
     href: "/niko",
-    bio: "U.S. Army captain. West Point class of 2022, and Elias's identical twin.",
+    bio: "U.S. Army captain. West Point class of 2022.",
     career: "Captain and cavalry officer.",
     asideLabel: "Sports",
     sports: "Grew up playing the same sports as his brothers.",
@@ -54,8 +57,9 @@ export const brothers = [
   {
     id: "alec",
     index: 2,
-    name: "Alec Kacavas",
-    shortName: "Alec",
+    name: "Alexander Kacavas",
+    shortName: "Alexander",
+    knownAs: "Alec",
     epithet: "GTM lead",
     href: "/alec",
     bio: "GTM lead at Lance in San Francisco. Babson College. He loves any sport.",

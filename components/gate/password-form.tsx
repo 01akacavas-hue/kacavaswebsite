@@ -1,8 +1,8 @@
 "use client"
 
 import { useRef, useState, type FormEvent } from "react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { SiteLinks } from "@/components/chrome/site-links"
 
 export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean }) {
   const [password, setPassword] = useState("")
@@ -80,11 +80,9 @@ export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean })
           <code className="text-paper">SITE_PASSWORD</code>.
         </p>
       ) : null}
-      <p className="mt-8">
-        <Link href="/" className="text-sm text-muted underline underline-offset-4">
-          Back home
-        </Link>
-      </p>
+      <div className="mt-8">
+        <SiteLinks className="justify-center" />
+      </div>
     </div>
   )
 }

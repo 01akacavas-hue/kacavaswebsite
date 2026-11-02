@@ -92,7 +92,7 @@ export function googleMapsUrl(place: Place): string {
 }
 
 export function brotherLabel(id: BrotherId): string {
-  if (id === "alec") return "Alec"
-  if (id === "eli") return "Eli"
-  return "Niko"
+  if (id === "alec") return "Alexander"
+  if (id === "eli") return "Elias"
+  return "Nicholas"
 }

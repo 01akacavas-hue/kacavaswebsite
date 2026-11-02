@@ -1,6 +1,6 @@
 import { OgImage, ogContentType, ogSize } from "@/lib/og-image"
 
-export const alt = "Kacavas — Eli, Niko, and Alec"
+export const alt = "Kacavas — Elias, Nicholas, and Alexander"
 export const size = ogSize
 export const contentType = ogContentType
 

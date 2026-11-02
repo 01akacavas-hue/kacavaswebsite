@@ -1,5 +1,7 @@
+import Image from "next/image"
 import { ViewTransition } from "react"
-import { nikoPromotion, nikoService } from "@/data/niko"
+import { nikoPromotion, nikoQuotes, nikoService } from "@/data/niko"
+import { nicholasPhotos, nikoTank } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -17,21 +19,21 @@ export function NikoView() {
             United States Army
           </p>
           <h1 className="mt-4 font-serif text-6xl tracking-tight sm:text-8xl">Nicholas</h1>
+          <p className="mt-3 text-sm tracking-[0.14em] text-muted uppercase">Goes by Niko</p>
           <p className="mt-4 max-w-xl text-lg text-muted">
             Captain, U.S. Army. West Point, class of 2022. Cavalry officer.
           </p>
         </div>
         <ViewTransition name="portrait-niko">
-          <div className="relative aspect-[4/5] bg-ink-2">
-            <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 360px" />
+          <div className="relative aspect-[3/2] bg-ink-2">
+            <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 640px" />
           </div>
         </ViewTransition>
       </header>
 
       <Reveal className="mt-14 max-w-2xl space-y-5 text-lg leading-relaxed">
         <p>
-          I grew up in Manchester, New Hampshire, with my identical twin, Elias, and our younger
-          brother, Alec. I studied political science at West Point, with a minor in European regional
+          I grew up in Manchester, New Hampshire, with Elias and our younger brother, Alexander. I studied political science at West Point, with a minor in European regional
           studies, and I graduated in 2022. I serve as a captain and a cavalry officer.
         </p>
         <p className="border-l border-niko pl-5 text-base text-muted">
@@ -39,6 +41,43 @@ export function NikoView() {
           grew up playing the same sports. I love the arts, and in high school I took a summer
           program in political studies.
         </p>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">In his own words</h2>
+        <div className="mt-10 grid max-w-3xl gap-12">
+          {nikoQuotes.map((quote) => (
+            <blockquote key={quote.text} className="border-l-2 border-niko pl-5">
+              <p className="font-serif text-3xl leading-snug text-niko sm:text-5xl">“{quote.text}”</p>
+              {quote.context ? <footer className="mt-4 text-sm text-muted">{quote.context}</footer> : null}
+            </blockquote>
+          ))}
+        </div>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <div className="relative aspect-[4/3] max-w-3xl bg-ink-2">
+          <Image src={nikoTank.src} alt={nikoTank.alt} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
+        </div>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">Photographs</h2>
+        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+          {nicholasPhotos.map((photo, index) => (
+            <li key={photo.src} className={index === nicholasPhotos.length - 1 ? "sm:col-span-2" : ""}>
+              <div className={`relative bg-ink-2 ${photo.width > photo.height ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes={photo.width > photo.height ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 45vw"}
+                  className="object-cover"
+                />
+              </div>
+            </li>
+          ))}
+        </ul>
       </Reveal>
 
       <Reveal className="mt-16">
