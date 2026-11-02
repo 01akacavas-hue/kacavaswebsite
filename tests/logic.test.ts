@@ -9,7 +9,9 @@ import {
   passwordsMatch,
 } from "../lib/auth"
 import { formatPrice } from "../lib/money"
-import { filterPlaces } from "../lib/places"
+import { clusterPoints } from "../lib/cluster"
+import { framePoint } from "../lib/map-camera"
+import { filterPlaces, queryPlaces } from "../lib/places"
 import { spiderfy } from "../lib/spiderfy"
 import type { Place } from "../lib/types"
 
@@ -82,24 +84,22 @@ describe("places and prices", () => {
       name: "A",
       city: "City",
       country: "Country",
-      type: "restaurant",
+      category: "restaurant",
       latitude: 1,
       longitude: 2,
       brothers: ["eli", "alec"],
       notes: "EXAMPLE",
-      example: true,
     },
     {
       id: "b",
       name: "B",
       city: "City",
       country: "Country",
-      type: "place",
+      category: "bar",
       latitude: 3,
       longitude: 4,
       brothers: ["niko"],
       notes: "EXAMPLE",
-      example: true,
     },
   ]
 
@@ -140,5 +140,42 @@ describe("places and prices", () => {
     assert.ok(gap > 8)
     const london = placed.find((pin) => pin.item === "london")
     assert.equal(london?.offset, false)
+  })
+
+  it("clusters nearby pins and leaves distant ones alone", () => {
+    const groups = clusterPoints(
+      [
+        { id: "a", x: 0, y: 0 },
+        { id: "b", x: 2, y: 1 },
+        { id: "c", x: 40, y: 40 },
+      ],
+      8,
+    )
+    const packed = groups.find((group) => group.members.length === 2)
+    const alone = groups.find((group) => group.members.length === 1)
+    assert.ok(packed)
+    assert.equal(alone?.id, "c")
+    assert.equal(packed?.id, "cluster:a|b")
+  })
+
+  it("frames a point by centering it in the map", () => {
+    const camera = framePoint(100, 80, 4, 800, 460, 1, 100)
+    assert.equal(camera.scale, 4)
+    assert.equal(camera.x, -4 * (100 - 400))
+    assert.equal(camera.y, -4 * (80 - 230))
+  })
+
+  it("filters the table by city and search text", () => {
+    const matches = queryPlaces(sample, {
+      text: "example",
+      city: "City",
+      neighborhood: "all",
+      category: "restaurant",
+      brother: "alec",
+    })
+    assert.deepEqual(
+      matches.map((place) => place.id),
+      ["a"],
+    )
   })
 })

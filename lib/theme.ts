@@ -6,9 +6,9 @@ import type { BrotherId } from "./types"
  * Each color is dark enough for text on cream (WCAG AA).
  */
 export const accents: Record<BrotherId, string> = {
-  eli: "#3e4c2c",
-  niko: "#1a365d",
-  alec: "#8c3d28",
+  eli: "#1f6b3a",
+  niko: "#9b2c2c",
+  alec: "#1e4e89",
 }
 
 export const cream = "#f7f3ec"

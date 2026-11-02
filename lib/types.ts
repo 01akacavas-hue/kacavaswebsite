@@ -4,7 +4,26 @@ export type BrotherId = (typeof brotherIds)[number]
 
 export type PlaceFilter = "all" | BrotherId
 
-export type PlaceType = "restaurant" | "place"
+export const placeCategories = [
+  "restaurant",
+  "bar",
+  "cigar lounge",
+  "activity",
+  "museum",
+  "cafe",
+  "brewery",
+  "club",
+  "food hall",
+  "park",
+  "beach",
+  "gallery",
+  "lodging",
+  "comedy",
+] as const
+
+export type PlaceCategory = (typeof placeCategories)[number]
+
+export type PlaceSortKey = "name" | "city" | "neighborhood" | "category" | "price" | "stars"
 
 export type SocialLink = {
   label: string
@@ -15,19 +34,27 @@ export type Place = {
   id: string
   name: string
   city: string
+  neighborhood?: string
   /** Country or territory name, written out. */
   country: string
-  type: PlaceType
+  category: PlaceCategory
   /** Decimal degrees. Positive is north. */
   latitude: number
   /** Decimal degrees. Positive is east. */
   longitude: number
+  /**
+   * True when the pin is a city or neighborhood center because the storefront
+   * could not be confirmed.
+   */
+  approximate?: boolean
   brothers: readonly BrotherId[]
   notes: string
-  /**
-   * Starter pins are examples. Set this to false only after a brother confirms the visit.
-   */
-  example: boolean
+  /** Count of `$` marks in the guide, from 1 to 5. */
+  price?: 1 | 2 | 3 | 4 | 5
+  /** Count of `*` marks used as a rating in the guide, from 1 to 5. */
+  stars?: 1 | 2 | 3 | 4 | 5
+  /** A city still to visit. Drawn as an outline pin, separate from the visits. */
+  wishlist?: boolean
 }
 
 export type Product = {

@@ -19,9 +19,9 @@ export function OgImage() {
         }}
       >
         <div style={{ display: "flex", gap: "14px" }}>
-          <div style={{ width: 84, height: 8, background: "#3e4c2c" }} />
-          <div style={{ width: 84, height: 8, background: "#1a365d" }} />
-          <div style={{ width: 84, height: 8, background: "#8c3d28" }} />
+          <div style={{ width: 84, height: 8, background: "#1f6b3a" }} />
+          <div style={{ width: 84, height: 8, background: "#9b2c2c" }} />
+          <div style={{ width: 84, height: 8, background: "#1e4e89" }} />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 96, letterSpacing: 10, lineHeight: 1 }}>KACAVAS</div>

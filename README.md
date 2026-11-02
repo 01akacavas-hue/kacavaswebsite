@@ -84,7 +84,7 @@ Set a real value before sharing the deployment:
 
 Hobby includes this custom gate. Vercel’s own password-protection feature is not required, and it is not part of Hobby.
 
-The map starts empty. To add a pin, copy the shape in the comment at the top of `data/places.ts`. Nearby pins spread apart when the map is zoomed out, so a cluster in one region stays clickable.
+Pins live in `data/places.ts`. The map groups nearby visits into a count badge until you zoom or tap it, and the Table tab filters the same list.
 
 ## Shop and Stripe
 
