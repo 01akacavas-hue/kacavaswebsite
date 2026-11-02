@@ -34,7 +34,7 @@ h3 {
 }
 
 ::selection {
-  background: rgb(62 76 44 / 0.18);
+  background: rgb(26 23 20 / 0.14);
   color: var(--color-paper);
 }
 
@@ -71,15 +71,15 @@ a {
 }
 
 .home-stage[data-brother="eli"] {
-  --glow: rgb(62 76 44 / 0.08);
+  --glow: rgb(31 107 58 / 0.1);
 }
 
 .home-stage[data-brother="niko"] {
-  --glow: rgb(26 54 93 / 0.08);
+  --glow: rgb(155 44 44 / 0.08);
 }
 
 .home-stage[data-brother="alec"] {
-  --glow: rgb(140 61 40 / 0.08);
+  --glow: rgb(30 78 137 / 0.1);
 }
 
 .marquee {
@@ -112,9 +112,6 @@ a {
     animation-play-state: paused;
   }
 
-  main {
-    animation: enter 0.45s ease both;
-  }
 }
 
 @keyframes marquee {
@@ -126,18 +123,40 @@ a {
   }
 }
 
-@keyframes enter {
-  from {
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page-fade) {
+  animation: 160ms ease-in both page-fade-out;
+}
+
+::view-transition-new(.page-fade) {
+  animation: 280ms ease-out 40ms both page-fade-in;
+}
+
+@keyframes page-fade-out {
+  to {
     opacity: 0;
   }
-  to {
-    opacity: 1;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home-stage {
     transition: none;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
 

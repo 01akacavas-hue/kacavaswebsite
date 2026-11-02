@@ -10,6 +10,7 @@ import {
 } from "../lib/auth"
 import { formatPrice } from "../lib/money"
 import { clusterPoints } from "../lib/cluster"
+import { oxfordJoin } from "../lib/lists"
 import { framePoint } from "../lib/map-camera"
 import { filterPlaces, queryPlaces } from "../lib/places"
 import { spiderfy } from "../lib/spiderfy"
@@ -163,6 +164,11 @@ describe("places and prices", () => {
     assert.equal(camera.scale, 4)
     assert.equal(camera.x, -4 * (100 - 400))
     assert.equal(camera.y, -4 * (80 - 230))
+  })
+
+  it("joins lists with an Oxford comma", () => {
+    assert.equal(oxfordJoin(["Guitar", "piano", "The Vanity"]), "Guitar, piano, and The Vanity")
+    assert.equal(oxfordJoin(["IMDb", "Rotten Tomatoes"]), "IMDb and Rotten Tomatoes")
   })
 
   it("filters the table by city and search text", () => {

@@ -51,6 +51,6 @@ export const nikoService: readonly ServiceEntry[] = [
 
 export const nikoPromotion = {
   year: "2025",
-  detail:
-    "Promoted to captain in 2025. The West Point Association of Graduates lists Nicholas H. Kacavas ’22 on its 2025 captain promotion list. That list does not give the day.",
+    detail:
+      "Promoted to captain in 2025. The West Point Association of Graduates lists Nicholas H. Kacavas ’22. The list does not give the day.",
 }

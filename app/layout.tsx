@@ -14,10 +14,11 @@ const mono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 })
 
 const serif = Cormorant_Garamond({
-  weight: ["500", "600"],
+  weight: ["500"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-instrument",

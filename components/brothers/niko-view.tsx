@@ -1,3 +1,4 @@
+import { ViewTransition } from "react"
 import { nikoPromotion, nikoService } from "@/data/niko"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
@@ -20,16 +21,18 @@ export function NikoView() {
             Captain, U.S. Army. West Point, class of 2022. Cavalry officer.
           </p>
         </div>
-        <div className="relative aspect-[4/5] bg-ink-2">
-          <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 360px" />
-        </div>
+        <ViewTransition name="portrait-niko">
+          <div className="relative aspect-[4/5] bg-ink-2">
+            <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 360px" />
+          </div>
+        </ViewTransition>
       </header>
 
       <Reveal className="mt-14 max-w-2xl space-y-5 text-lg leading-relaxed">
         <p>
           I grew up in Manchester, New Hampshire, with my identical twin, Elias, and our younger
-          brother, Alec. West Point is where I studied political science, with a minor in European
-          regional studies, and I graduated in 2022. I serve as a captain and a cavalry officer.
+          brother, Alec. I studied political science at West Point, with a minor in European regional
+          studies, and I graduated in 2022. I serve as a captain and a cavalry officer.
         </p>
         <p className="border-l border-niko pl-5 text-base text-muted">
           Elias calls me type-A, list-oriented, and logical, and he has said he looks up to me. We
@@ -42,7 +45,7 @@ export function NikoView() {
         <h2 className="font-serif text-4xl">Service</h2>
         <p className="mt-3 max-w-2xl text-muted">
           Promoted to captain in {nikoPromotion.year}. The West Point Association of Graduates lists
-          Nicholas H. Kacavas ’22 on that year’s captain list. The list does not give the day.
+          Nicholas H. Kacavas ’22. The list does not give the day.
         </p>
         <ol className="mt-8 border-l border-line">
           {nikoService.map((entry) => (

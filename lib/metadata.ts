@@ -7,13 +7,17 @@ export function pageMetadata(id: PageId): Metadata {
     title: id === "home" ? { absolute: page.title } : page.title,
     description: page.description,
     alternates: { canonical: page.href },
-    robots: page.index
-      ? { index: true, follow: true }
-      : { index: false, follow: false },
+    robots: page.index ? { index: true, follow: true } : { index: false, follow: false },
     openGraph: {
       title: page.title,
       description: page.description,
       url: page.href,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.description,
     },
   }
 }

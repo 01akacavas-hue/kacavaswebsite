@@ -57,7 +57,7 @@ export function BrotherPanel({
             href={social.href}
             target="_blank"
             rel="noreferrer"
-            className="underline decoration-white/25 underline-offset-4 hover:decoration-current"
+            className="underline decoration-paper/30 underline-offset-4 hover:decoration-current"
           >
             {social.label}
             <span className="sr-only"> (opens in a new tab)</span>

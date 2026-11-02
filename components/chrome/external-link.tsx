@@ -6,7 +6,7 @@ export function ExternalLink({ href, children }: { href: string; children: React
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="underline decoration-white/25 underline-offset-[0.25em] transition-colors hover:decoration-current"
+      className="underline decoration-paper/30 underline-offset-[0.25em] transition-colors hover:decoration-current"
     >
       {children}
       <span className="sr-only"> (opens in a new tab)</span>

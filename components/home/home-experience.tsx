@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
+import { ViewTransition } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { brothers } from "@/data/brothers"
 import { portraits } from "@/data/images"
@@ -21,6 +22,7 @@ export function HomeExperience() {
   const progressRef = useRef(0)
   const parallaxRef = useRef({ x: 0, y: 0 })
   const [mode, setMode] = useState<Mode>("boot")
+  const [sceneOn, setSceneOn] = useState(false)
   const [index, setIndex] = useState(0)
   const brother = brothers[index] ?? brothers[0]
   const portrait = portraits[brother.id]
@@ -41,6 +43,16 @@ export function HomeExperience() {
     reduce.addEventListener("change", decide)
     return () => reduce.removeEventListener("change", decide)
   }, [])
+
+  useEffect(() => {
+    if (mode !== "scroll" || sceneOn) return
+    const start = () => {
+      if (window.scrollY < 24) return
+      setSceneOn(true)
+    }
+    window.addEventListener("scroll", start, { passive: true })
+    return () => window.removeEventListener("scroll", start)
+  }, [mode, sceneOn])
 
   useEffect(() => {
     if (mode !== "scroll") return
@@ -172,16 +184,22 @@ export function HomeExperience() {
           </p>
         </div>
         <div className="relative order-1 h-[34vh] min-h-48 md:order-2 md:h-full">
-          <Image
-            src={portrait.src}
-            alt={mode === "scroll" ? "" : portrait.alt}
-            fill
-            priority={brother.index === 0}
-            sizes="(max-width: 768px) 90vw, 50vw"
-            className={`object-cover ${mode === "scroll" ? "opacity-0" : ""}`}
-          />
-          {mode === "scroll" ? (
-            <div className="absolute inset-0">
+          <ViewTransition name={`portrait-${brother.id}`}>
+            <div className={`absolute inset-0 ${sceneOn ? "pointer-events-none opacity-0" : ""}`} aria-hidden={sceneOn || undefined}>
+              <Image
+                src={portrait.src}
+                alt={sceneOn ? "" : portrait.alt}
+                fill
+                priority={brother.index === 0}
+                fetchPriority={brother.index === 0 ? "high" : "auto"}
+                quality={65}
+                sizes="(max-width: 768px) 80vw, 42vw"
+                className="object-cover"
+              />
+            </div>
+          </ViewTransition>
+          {sceneOn ? (
+            <div className="absolute inset-0" role="img" aria-label={portrait.alt}>
               <WebGLBoundary fallback={null}>
                 <ScrollScene progressRef={progressRef} parallaxRef={parallaxRef} />
               </WebGLBoundary>

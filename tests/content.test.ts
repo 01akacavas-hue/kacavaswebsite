@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { describe, it } from "node:test"
+import { alecRoles } from "../data/alec"
 import { pages } from "../data/nav"
 import { places } from "../data/places"
 import { products } from "../data/products"
@@ -109,11 +110,24 @@ describe("published copy", () => {
     }
   })
 
+  it("writes Alec's page in the first person", () => {
+    const view = readFileSync(join(root, "components/brothers/alec-view.tsx"), "utf8")
+    assert.match(view, /I went to Babson/)
+    assert.equal(view.includes("He loves"), false)
+    assert.equal(view.includes("He attended"), false)
+    for (const role of alecRoles) {
+      assert.equal(/\bHe\b/.test(role.detail), false, role.id)
+    }
+  })
+
   it("keeps the private map out of the menu's public index", () => {
     const restaurants = pages.find((page) => page.id === "restaurants")
     assert.ok(restaurants)
     assert.equal(restaurants?.index, false)
     assert.equal(pages.filter((page) => page.href === "/restaurants").length, 1)
+    const robots = readFileSync(join(root, "app/robots.ts"), "utf8")
+    assert.match(robots, /\/restaurants/)
+    assert.equal(pages.filter((page) => page.index && page.enabled).some((page) => page.href === "/restaurants"), false)
     const hrefs = pages.map((page) => page.href)
     assert.equal(new Set(hrefs).size, hrefs.length)
   })
