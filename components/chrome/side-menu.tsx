@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import Link from "next/link"
-import { pages } from "@/data/nav"
+import { menuPages } from "@/data/nav"
 import { accents } from "@/lib/theme"
 import { useMenu } from "@/components/chrome/menu-context"
 
@@ -108,7 +108,7 @@ export function SideMenu() {
               transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
               <ol className="flex flex-1 flex-col justify-center gap-1">
-                {pages.map((page, index) => {
+                {menuPages.map((page, index) => {
                   const current = pathname === page.href
                   const accent = page.brother ? accents[page.brother] : undefined
                   return (

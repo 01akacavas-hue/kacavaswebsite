@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { describe, it } from "node:test"
+import { alecRoles } from "../data/alec"
 import { pages } from "../data/nav"
 import { places } from "../data/places"
 import { products } from "../data/products"
@@ -66,18 +67,38 @@ describe("published copy", () => {
     assert.ok(readme.includes("kacavas.com"))
   })
 
-  it("ships starter places as labeled examples with valid coordinates", () => {
+  it("keeps place records well formed", () => {
     const ids = new Set<string>()
     for (const place of places) {
       assert.equal(ids.has(place.id), false, place.id)
       ids.add(place.id)
-      assert.equal(place.example, true, place.id)
-      assert.match(place.notes, /EXAMPLE/)
-      assert.ok(place.brothers.length > 0)
+      assert.equal(place.notes.includes("EXAMPLE"), false)
+      assert.equal(place.notes.toLowerCase().includes("in contacts"), false)
+      assert.ok(place.brothers.includes("alec"))
       assert.ok(place.latitude >= -90 && place.latitude <= 90)
       assert.ok(place.longitude >= -180 && place.longitude <= 180)
       assert.ok(place.name.length > 0)
+      assert.ok(place.category.length > 0)
     }
+    assert.ok(places.length > 150)
+    assert.equal(places.filter((place) => place.id === "boston-anchor").length, 1)
+    assert.equal(places.filter((place) => place.name.toLowerCase().includes("tonga")).length, 1)
+    assert.equal(places.filter((place) => place.id === "sf-parklab").length, 1)
+    assert.equal(places.filter((place) => place.id === "sf-alora").length, 1)
+    assert.equal(places.filter((place) => place.wishlist).length, 12)
+    const belt = places.find((place) => place.id === "atlanta-beltline")
+    assert.equal(belt?.category, "activity")
+    const puena = places.find((place) => place.id === "hawaii-puena")
+    assert.equal(puena?.category, "beach")
+  })
+
+  it("hides shop and creative until they are switched on", () => {
+    const shop = pages.find((page) => page.id === "shop")
+    const creative = pages.find((page) => page.id === "creative")
+    assert.equal(shop?.enabled, false)
+    assert.equal(creative?.enabled, false)
+    assert.equal(shop?.index, false)
+    assert.equal(creative?.index, false)
   })
 
   it("ships starter products as examples without Stripe prices", () => {
@@ -89,11 +110,24 @@ describe("published copy", () => {
     }
   })
 
+  it("writes Alec's page in the first person", () => {
+    const view = readFileSync(join(root, "components/brothers/alec-view.tsx"), "utf8")
+    assert.match(view, /I went to Babson/)
+    assert.equal(view.includes("He loves"), false)
+    assert.equal(view.includes("He attended"), false)
+    for (const role of alecRoles) {
+      assert.equal(/\bHe\b/.test(role.detail), false, role.id)
+    }
+  })
+
   it("keeps the private map out of the menu's public index", () => {
     const restaurants = pages.find((page) => page.id === "restaurants")
     assert.ok(restaurants)
     assert.equal(restaurants?.index, false)
     assert.equal(pages.filter((page) => page.href === "/restaurants").length, 1)
+    const robots = readFileSync(join(root, "app/robots.ts"), "utf8")
+    assert.match(robots, /\/restaurants/)
+    assert.equal(pages.filter((page) => page.index && page.enabled).some((page) => page.href === "/restaurants"), false)
     const hrefs = pages.map((page) => page.href)
     assert.equal(new Set(hrefs).size, hrefs.length)
   })

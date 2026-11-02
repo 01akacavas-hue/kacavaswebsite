@@ -16,7 +16,7 @@ export const alecRoles: readonly Role[] = [
     org: "Silent Falcon UAS Technologies",
     place: "Started after Babson",
     detail:
-      "He began in May 2022 as a business development associate, after a Babson Management Consulting Field Experience, then moved into sales. His profile has listed Director of Sales from August 2022 to April 2024. The work included calling small airports, the AAAE Conference in Seattle, and the Farnborough International Airshow. He stayed on part-time through senior year.",
+      "I started in May 2022 as a business development associate, after a Babson Management Consulting Field Experience, then moved into sales. Director of Sales from August 2022 to April 2024. I called small airports, worked the AAAE Conference in Seattle, and went to the Farnborough International Airshow. I stayed on part-time through senior year.",
   },
   {
     id: "blue-water",
@@ -24,7 +24,7 @@ export const alecRoles: readonly Role[] = [
     title: "Growth",
     org: "Blue Water Mortgage",
     place: "Boston",
-    detail: "Cold outreach. The dates overlap his time at Vive Mints, as they do on his public profile.",
+    detail: "Cold outreach in Boston. The dates overlap Vive Mints, the same way my profile lists them.",
   },
   {
     id: "vive",
@@ -32,7 +32,7 @@ export const alecRoles: readonly Role[] = [
     title: "Co-founder and CEO",
     org: "Vive Mints",
     place: "Boston",
-    detail: "He co-founded the company.",
+    detail: "I co-founded the company.",
   },
   {
     id: "rho",
@@ -40,7 +40,7 @@ export const alecRoles: readonly Role[] = [
     title: "GTM, Startup Banking",
     org: "Rho",
     place: "San Francisco",
-    detail: "Account executive for startup banking.",
+    detail: "Account executive for startup banking in San Francisco.",
   },
   {
     id: "lance",
@@ -49,7 +49,7 @@ export const alecRoles: readonly Role[] = [
     org: "Lance",
     place: "San Francisco",
     detail:
-      "Lance, Y Combinator W26, builds AI for hotel operations. Lance Live covers guest calls, staff messaging, housekeeping, work orders, and scheduling. It is live in more than 50 hotels, including properties under the Marriott, Hilton, and Hyatt brands. Backers include Y Combinator, SV Angel, and executives from OpenAI, Expedia, and Marriott. The co-founders are Caleb Chan, Gavin Brennen, and Gatik Trivedi. Alec has been described as the company's first GTM hire.",
+      "Lance is Y Combinator W26. We build AI for hotel operations. Lance Live covers guest calls, staff messaging, housekeeping, work orders, and scheduling. It is live in more than 50 hotels, including Marriott, Hilton, and Hyatt properties. Backers include Y Combinator, SV Angel, and executives from OpenAI, Expedia, and Marriott. The co-founders are Caleb Chan, Gavin Brennen, and Gatik Trivedi. I was the first GTM hire.",
     current: true,
   },
 ]

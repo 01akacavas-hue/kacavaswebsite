@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-label="Placeholder portrait of Alec">
-  <rect width="800" height="1000" fill="#121210"/>
-  <rect width="800" height="10" fill="#e07a52"/>
-  <circle cx="400" cy="390" r="168" fill="none" stroke="#e07a52" stroke-width="2" opacity="0.85"/>
-  <circle cx="400" cy="390" r="132" fill="#1b1b18"/>
-  <text x="400" y="430" text-anchor="middle" fill="#f3efe6" font-family="Georgia, serif" font-size="150">A</text>
-  <text x="400" y="760" text-anchor="middle" fill="#c8c1b4" font-family="Georgia, serif" font-size="42">Alec</text>
-  <text x="400" y="820" text-anchor="middle" fill="#8f897e" font-family="ui-sans-serif, system-ui, sans-serif" font-size="18" letter-spacing="6">PLACEHOLDER</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#f7f3ec"/>
+  <rect width="800" height="8" fill="#8c3d28"/>
+  <circle cx="400" cy="430" r="150" fill="none" stroke="#8c3d28" stroke-width="3"/>
+  <text x="400" y="470" text-anchor="middle" fill="#8c3d28" font-family="Georgia, serif" font-size="150">A</text>
+  <text x="400" y="760" text-anchor="middle" fill="#1a1714" font-family="Georgia, serif" font-size="54">Alec</text>
+  <text x="400" y="820" text-anchor="middle" fill="#5c564e" font-family="system-ui, sans-serif" font-size="18" letter-spacing="6">PLACEHOLDER</text>
 </svg>

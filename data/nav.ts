@@ -13,6 +13,11 @@ export type SitePage = {
   brother?: BrotherId
   /** Public pages are indexed and added to the sitemap. */
   index: boolean
+  /**
+   * Hidden pages stay in the repo but 404, and they drop out of the menu.
+   * Set this to true to publish Shop or Creative again.
+   */
+  enabled: boolean
 }
 
 /**
@@ -24,11 +29,12 @@ export const pages: readonly SitePage[] = [
     id: "home",
     href: "/",
     label: "Home",
-    menuNote: "The cube",
+    menuNote: "Brothers",
     title: "Kacavas — Eli, Niko, and Alec",
     description:
       "Elias, Nicholas, and Alec Kacavas. An actor, a U.S. Army captain, and a GTM lead, from Manchester, New Hampshire.",
     index: true,
+    enabled: true,
   },
   {
     id: "eli",
@@ -40,6 +46,7 @@ export const pages: readonly SitePage[] = [
       "Elias Kacavas is an actor from Manchester, New Hampshire. Credits include Euphoria, Pretty Little Liars: Original Sin, My Big Fat Greek Wedding 3, and Fire Country. He plays in the band The Vanity.",
     brother: "eli",
     index: true,
+    enabled: true,
   },
   {
     id: "niko",
@@ -51,26 +58,29 @@ export const pages: readonly SitePage[] = [
       "Nicholas H. Kacavas is a U.S. Army captain and a cavalry officer. West Point class of 2022. Identical twin of Elias Kacavas.",
     brother: "niko",
     index: true,
+    enabled: true,
   },
   {
     id: "alec",
     href: "/alec",
     label: "Alec",
-    menuNote: "Operator",
+    menuNote: "GTM lead",
     title: "Alec Kacavas",
     description:
-      "Alec Kacavas is GTM lead at Lance, building AI for hotels. Previously Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon. Babson College. San Francisco.",
+      "Alec Kacavas is GTM lead at Lance in San Francisco. He went to Babson, and he loves any sport. Previously Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
     brother: "alec",
     index: true,
+    enabled: true,
   },
   {
     id: "shop",
     href: "/shop",
     label: "Shop",
-    menuNote: "The shelf",
+    menuNote: "Shop",
     title: "Shop",
     description: "Example pieces for a future Kacavas shop. Checkout is not connected yet.",
-    index: true,
+    index: false,
+    enabled: false,
   },
   {
     id: "creative",
@@ -79,16 +89,18 @@ export const pages: readonly SitePage[] = [
     menuNote: "Gallery",
     title: "Creative",
     description: "A gallery placeholder for photographs and work the brothers own.",
-    index: true,
+    index: false,
+    enabled: false,
   },
   {
     id: "restaurants",
     href: "/restaurants",
     label: "Restaurants",
-    menuNote: "Private map",
+    menuNote: "Map",
     title: "Restaurants & places",
     description: "A private map of restaurants and places.",
     index: false,
+    enabled: true,
   },
 ]
 
@@ -97,3 +109,10 @@ export function getPage(id: PageId): SitePage {
   if (!page) throw new Error(`Unknown page: ${id}`)
   return page
 }
+
+export function isPageEnabled(id: PageId): boolean {
+  return getPage(id).enabled
+}
+
+/** Pages that appear in the side menu. */
+export const menuPages = pages.filter((page) => page.enabled)

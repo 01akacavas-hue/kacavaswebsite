@@ -1,3 +1,4 @@
+import { ViewTransition } from "react"
 import { nikoPromotion, nikoService } from "@/data/niko"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
@@ -15,36 +16,37 @@ export function NikoView() {
             </span>
             United States Army
           </p>
-          <h1 className="mt-4 font-serif text-6xl tracking-tight sm:text-8xl">Captain</h1>
+          <h1 className="mt-4 font-serif text-6xl tracking-tight sm:text-8xl">Nicholas</h1>
           <p className="mt-4 max-w-xl text-lg text-muted">
-            Nicholas H. Kacavas. West Point ’22. Cavalry officer. Identical twin of Elias.
+            Captain, U.S. Army. West Point, class of 2022. Cavalry officer.
           </p>
         </div>
-        <div className="relative aspect-[4/5] bg-ink-2">
-          <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 360px" />
-        </div>
+        <ViewTransition name="portrait-niko">
+          <div className="relative aspect-[4/5] bg-ink-2">
+            <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 360px" />
+          </div>
+        </ViewTransition>
       </header>
 
       <Reveal className="mt-14 max-w-2xl space-y-5 text-lg leading-relaxed">
         <p>
-          Nicholas H. Kacavas is a captain in the United States Army and a cavalry officer. He and
-          Elias are identical twins. Alec is their younger brother. They grew up in Manchester, New
-          Hampshire.
-        </p>
-        <p>
-          He graduated from the United States Military Academy at West Point in 2022 with a Bachelor
-          of Science in Political Science and a minor in European Regional Studies.
+          I grew up in Manchester, New Hampshire, with my identical twin, Elias, and our younger
+          brother, Alec. I studied political science at West Point, with a minor in European regional
+          studies, and I graduated in 2022. I serve as a captain and a cavalry officer.
         </p>
         <p className="border-l border-niko pl-5 text-base text-muted">
-          Elias has described him as very type-A, list-oriented, and logical, and has said he looks
-          up to him. They grew up playing the same sports. Elias has said Niko loves the arts, and
-          that in high school he took a summer program in political studies.
+          Elias calls me type-A, list-oriented, and logical, and he has said he looks up to me. We
+          grew up playing the same sports. I love the arts, and in high school I took a summer
+          program in political studies.
         </p>
       </Reveal>
 
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Service</h2>
-        <p className="mt-3 max-w-2xl text-muted">{nikoPromotion.detail}</p>
+        <p className="mt-3 max-w-2xl text-muted">
+          Promoted to captain in {nikoPromotion.year}. The West Point Association of Graduates lists
+          Nicholas H. Kacavas ’22. The list does not give the day.
+        </p>
         <ol className="mt-8 border-l border-line">
           {nikoService.map((entry) => (
             <li key={entry.id} className="grid gap-2 py-5 pl-6 sm:grid-cols-[11rem_minmax(0,1fr)]">
@@ -59,7 +61,7 @@ export function NikoView() {
       </Reveal>
 
       <Reveal className="mt-16 max-w-xl border border-line p-6">
-        <p className="text-xs tracking-[0.18em] text-faint uppercase">Their grandfather</p>
+        <p className="text-xs tracking-[0.18em] text-muted uppercase">Our grandfather</p>
         <p className="mt-3 leading-relaxed">
           Nicholas G. Kacavas, 1927–2012, served in the United States Navy during the Second World War.
         </p>

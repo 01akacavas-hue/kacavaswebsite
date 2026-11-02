@@ -21,6 +21,8 @@ export function Portrait({
       fill
       sizes={sizes}
       priority={priority}
+      fetchPriority={priority ? "high" : "auto"}
+      quality={65}
       className={className ?? "object-cover"}
     />
   )

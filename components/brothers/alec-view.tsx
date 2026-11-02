@@ -1,3 +1,4 @@
+import { ViewTransition } from "react"
 import { alecQuote, alecRoles } from "@/data/alec"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
@@ -13,12 +14,14 @@ export function AlecView() {
           <p className="text-xs tracking-[0.22em] text-alec uppercase">GTM lead</p>
           <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Alec</h1>
           <p className="mt-4 max-w-xl text-lg text-muted">
-            San Francisco. Lance, Y Combinator W26. Younger brother of Elias and Nicholas.
+            GTM lead at Lance, in San Francisco. I went to Babson, and I love any sport.
           </p>
         </div>
-        <div className="relative aspect-[4/5] bg-ink-2">
-          <Portrait id="alec" priority sizes="(max-width: 768px) 100vw, 360px" />
-        </div>
+        <ViewTransition name="portrait-alec">
+          <div className="relative aspect-[4/5] bg-ink-2">
+            <Portrait id="alec" priority sizes="(max-width: 768px) 100vw, 360px" />
+          </div>
+        </ViewTransition>
       </header>
 
       <Reveal className="mt-12 max-w-3xl">
@@ -49,8 +52,7 @@ export function AlecView() {
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Record</h2>
         <p className="mt-3 max-w-2xl text-muted">
-          He attended Babson College, including the Management Consulting Field Experience. Some of
-          the dates below overlap, as they do on his public profile.
+          I went to Babson, including the Management Consulting Field Experience. A few of these dates overlap, the way they do on my profile.
         </p>
         <ol className="mt-8">
           {alecRoles.map((role) => (
@@ -72,9 +74,7 @@ export function AlecView() {
       <Reveal className="mt-12 max-w-2xl">
         <h2 className="font-serif text-3xl">Outside</h2>
         <p className="mt-4 leading-relaxed">
-          He plays and organizes Rho Hoops, a five-on-five run with San Francisco founders. In 2026
-          he moderated a startup fireside chat. He grew up in the same sports-heavy house as his
-          brothers.
+          I play and organize Rho Hoops, a five-on-five run with San Francisco founders. In 2026 I moderated a startup fireside chat. I grew up in a sports-heavy house with my brothers.
         </p>
         <p className="mt-6">
           <ExternalLink href="https://www.linkedin.com/in/aleckacavas">LinkedIn</ExternalLink>

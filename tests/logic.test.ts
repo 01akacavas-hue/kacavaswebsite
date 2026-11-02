@@ -8,9 +8,12 @@ import {
   isUsingPasswordFallback,
   passwordsMatch,
 } from "../lib/auth"
-import { advanceBrother, angleForIndex, indexFromAngle, snapToBrother } from "../lib/cube"
 import { formatPrice } from "../lib/money"
-import { filterPlaces } from "../lib/places"
+import { clusterPoints } from "../lib/cluster"
+import { oxfordJoin } from "../lib/lists"
+import { framePoint } from "../lib/map-camera"
+import { filterPlaces, queryPlaces } from "../lib/places"
+import { spiderfy } from "../lib/spiderfy"
 import type { Place } from "../lib/types"
 
 const previousPassword = process.env.SITE_PASSWORD
@@ -75,59 +78,6 @@ describe("session", () => {
   })
 })
 
-describe("cube", () => {
-  it("cycles forward through three brothers and passes a full turn back to Eli", () => {
-    let state = { index: 0, angle: 0 }
-    state = advanceBrother(state.index, 1, state.angle)
-    assert.deepEqual(state, { index: 1, angle: -Math.PI / 2 })
-    state = advanceBrother(state.index, 1, state.angle)
-    assert.deepEqual(state, { index: 2, angle: -Math.PI })
-    state = advanceBrother(state.index, 1, state.angle)
-    assert.deepEqual(state, { index: 0, angle: -Math.PI * 2 })
-    state = advanceBrother(state.index, 1, state.angle)
-    assert.equal(state.index, 1)
-    assert.ok(Math.abs(state.angle - (-Math.PI * 2 - Math.PI / 2)) < 1e-10)
-  })
-
-  it("steps backward from Eli to Alec without landing on the monogram", () => {
-    const next = advanceBrother(0, -1, 0)
-    assert.equal(next.index, 2)
-    assert.ok(Math.abs(next.angle - Math.PI) < 1e-10)
-    assert.equal(indexFromAngle(next.angle), 2)
-  })
-
-  it("reads the brother facing the camera", () => {
-    assert.equal(indexFromAngle(0), 0)
-    assert.equal(indexFromAngle(-Math.PI / 2), 1)
-    assert.equal(indexFromAngle(-Math.PI), 2)
-    assert.equal(indexFromAngle(-Math.PI * 2), 0)
-    assert.equal(indexFromAngle(Math.PI), 2)
-  })
-
-  it("stays on a face when the drag has no flick", () => {
-    const snapped = snapToBrother(-0.05, 0)
-    assert.equal(snapped.index, 0)
-    assert.equal(snapped.angle, 0)
-  })
-
-  it("commits forward once a drag crosses halfway", () => {
-    const snapped = snapToBrother(-Math.PI / 4, 0)
-    assert.equal(snapped.index, 1)
-  })
-
-  it("uses a flick to carry onto the next face", () => {
-    const snapped = snapToBrother(-0.2, -3)
-    assert.equal(snapped.index, 1)
-    assert.ok(snapped.angle < -0.2)
-  })
-
-  it("jumps to a chosen brother on the nearest turn", () => {
-    const angle = angleForIndex(2, 0)
-    assert.equal(indexFromAngle(angle), 2)
-    assert.ok(Math.abs(Math.abs(angle) - Math.PI) < 1e-10)
-  })
-})
-
 describe("places and prices", () => {
   const sample: Place[] = [
     {
@@ -135,24 +85,22 @@ describe("places and prices", () => {
       name: "A",
       city: "City",
       country: "Country",
-      type: "restaurant",
+      category: "restaurant",
       latitude: 1,
       longitude: 2,
       brothers: ["eli", "alec"],
       notes: "EXAMPLE",
-      example: true,
     },
     {
       id: "b",
       name: "B",
       city: "City",
       country: "Country",
-      type: "place",
+      category: "bar",
       latitude: 3,
       longitude: 4,
       brothers: ["niko"],
       notes: "EXAMPLE",
-      example: true,
     },
   ]
 
@@ -175,5 +123,65 @@ describe("places and prices", () => {
   it("formats whole-dollar and cent prices", () => {
     assert.equal(formatPrice(4800), "$48")
     assert.equal(formatPrice(1899), "$18.99")
+  })
+
+  it("spreads pins that sit on the same point", () => {
+    const placed = spiderfy(
+      [
+        { item: "foundry", x: 10, y: 10 },
+        { item: "fotia", x: 10.4, y: 10.2 },
+        { item: "london", x: 80, y: 20 },
+      ],
+      8,
+    )
+    const near = placed.filter((pin) => pin.item === "foundry" || pin.item === "fotia")
+    assert.equal(near.length, 2)
+    assert.ok(near.every((pin) => pin.offset))
+    const gap = Math.hypot((near[0]?.x ?? 0) - (near[1]?.x ?? 0), (near[0]?.y ?? 0) - (near[1]?.y ?? 0))
+    assert.ok(gap > 8)
+    const london = placed.find((pin) => pin.item === "london")
+    assert.equal(london?.offset, false)
+  })
+
+  it("clusters nearby pins and leaves distant ones alone", () => {
+    const groups = clusterPoints(
+      [
+        { id: "a", x: 0, y: 0 },
+        { id: "b", x: 2, y: 1 },
+        { id: "c", x: 40, y: 40 },
+      ],
+      8,
+    )
+    const packed = groups.find((group) => group.members.length === 2)
+    const alone = groups.find((group) => group.members.length === 1)
+    assert.ok(packed)
+    assert.equal(alone?.id, "c")
+    assert.equal(packed?.id, "cluster:a|b")
+  })
+
+  it("frames a point by centering it in the map", () => {
+    const camera = framePoint(100, 80, 4, 800, 460, 1, 100)
+    assert.equal(camera.scale, 4)
+    assert.equal(camera.x, -4 * (100 - 400))
+    assert.equal(camera.y, -4 * (80 - 230))
+  })
+
+  it("joins lists with an Oxford comma", () => {
+    assert.equal(oxfordJoin(["Guitar", "piano", "The Vanity"]), "Guitar, piano, and The Vanity")
+    assert.equal(oxfordJoin(["IMDb", "Rotten Tomatoes"]), "IMDb and Rotten Tomatoes")
+  })
+
+  it("filters the table by city and search text", () => {
+    const matches = queryPlaces(sample, {
+      text: "example",
+      city: "City",
+      neighborhood: "all",
+      category: "restaurant",
+      brother: "alec",
+    })
+    assert.deepEqual(
+      matches.map((place) => place.id),
+      ["a"],
+    )
   })
 })

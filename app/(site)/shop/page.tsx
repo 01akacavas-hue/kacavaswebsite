@@ -1,11 +1,14 @@
 import type { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { Page } from "@/components/chrome/page"
 import { ShopGrid } from "@/components/shop/shop-grid"
+import { isPageEnabled } from "@/data/nav"
 import { pageMetadata } from "@/lib/metadata"
 
 export const metadata: Metadata = pageMetadata("shop")
 
 export default function ShopPage() {
+  if (!isPageEnabled("shop")) notFound()
   return (
     <Page>
       <p className="text-xs tracking-[0.2em] text-muted uppercase">Shop</p>

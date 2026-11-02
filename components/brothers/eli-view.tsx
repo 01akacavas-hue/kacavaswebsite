@@ -1,4 +1,6 @@
+import { ViewTransition } from "react"
 import { eliCredits, eliMarquee, vanity } from "@/data/eli"
+import { oxfordJoin } from "@/lib/lists"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Marquee } from "@/components/brothers/marquee"
 import { Portrait } from "@/components/portrait"
@@ -20,33 +22,35 @@ export function EliView() {
       <header>
         <p className="text-xs tracking-[0.22em] text-eli uppercase">Actor</p>
         <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Elias</h1>
-        <p className="mt-3 text-lg text-muted">Eli Kacavas. Manchester, New Hampshire. New York, as of 2024.</p>
+        <p className="mt-3 text-lg text-muted">Eli Kacavas. Manchester, New Hampshire. Based in New York, as of June 2024.</p>
       </header>
       <Marquee titles={eliMarquee} />
       <Reveal>
         <div className="grid items-start gap-10 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-          <div className="relative aspect-[4/5] bg-ink-2">
-            <Portrait id="eli" priority sizes="(max-width: 768px) 100vw, 420px" />
-          </div>
+          <ViewTransition name="portrait-eli">
+            <div className="relative aspect-[4/5] bg-ink-2">
+              <Portrait id="eli" priority sizes="(max-width: 768px) 100vw, 420px" />
+            </div>
+          </ViewTransition>
           <div className="space-y-5 text-lg leading-relaxed text-paper/95">
             <p>
               Elias Kacavas grew up in Manchester, New Hampshire, in a Greek Orthodox community: St.
               George Cathedral, the Glendi festival, and Greek school. His grandfather’s family came
               from Megalopolis, near Sparta. He graduated from Manchester Central High. Nicholas is
-              his identical twin. Alec is their younger brother.
+              his identical twin, and Alec is their younger brother.
             </p>
             <p>
-              He planned on medicine, then took a gap year in Bay Ridge, Brooklyn. He slept on a
-              couch, worked at a Dunkin’ Donuts run by two Greek twins, and read Adler, Meisner,
+              He planned on medicine, then spent a gap year in Bay Ridge, Brooklyn, sleeping on a
+              couch and working at a Dunkin’ Donuts run by two Greek twins. He read Adler, Meisner,
               Strasberg, Hagen, and Cohen. In high school his DECA team wrote a business plan for a
               Greek restaurant, placed second in New Hampshire, and went on to the international
               competition in California.
             </p>
             <p>
-              He studied method acting for two years at NYU Tisch, in the Strasberg studio, and left
-              to film Euphoria and Pretty Little Liars: Original Sin. As of a June 2024 interview he
-              was based in New York, and he had talked about living in Los Angeles later. He was
-              grand marshal of Manchester’s Taco Tour.
+              He studied method acting for two years at NYU Tisch, in the Strasberg studio, then left
+              to film Euphoria and Pretty Little Liars: Original Sin. As of June 2024 he was based in
+              New York, and he had talked about living in Los Angeles later. He was grand marshal of
+              Manchester’s Taco Tour.
             </p>
           </div>
         </div>
@@ -55,8 +59,7 @@ export function EliView() {
       <Reveal className="mt-20">
         <h2 className="font-serif text-4xl">Filmography</h2>
         <p className="mt-3 max-w-2xl text-muted">
-          Roles as published on IMDb, Rotten Tomatoes, and the interviews named in the research for
-          this site.
+          Roles as published on IMDb, Rotten Tomatoes, and interviews.
         </p>
         <CreditList credits={released} />
       </Reveal>
@@ -79,11 +82,11 @@ export function EliView() {
         <dl className="mt-8 grid gap-6 sm:grid-cols-2">
           <div>
             <dt className="text-xs tracking-[0.16em] text-faint uppercase">Influences</dt>
-            <dd className="mt-2">{vanity.influences.join(", ")}</dd>
+            <dd className="mt-2">{oxfordJoin(vanity.influences)}</dd>
           </div>
           <div>
             <dt className="text-xs tracking-[0.16em] text-faint uppercase">Stages</dt>
-            <dd className="mt-2">{vanity.venues.join(", ")}</dd>
+            <dd className="mt-2">{oxfordJoin(vanity.venues)}</dd>
           </div>
         </dl>
         <p className="mt-6 text-muted italic">{vanity.aside}</p>

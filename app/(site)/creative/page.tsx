@@ -1,11 +1,14 @@
 import type { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { Gallery } from "@/components/creative/gallery"
 import { Page } from "@/components/chrome/page"
+import { isPageEnabled } from "@/data/nav"
 import { pageMetadata } from "@/lib/metadata"
 
 export const metadata: Metadata = pageMetadata("creative")
 
 export default function CreativePage() {
+  if (!isPageEnabled("creative")) notFound()
   return (
     <Page>
       <p className="text-xs tracking-[0.2em] text-muted uppercase">Creative</p>
