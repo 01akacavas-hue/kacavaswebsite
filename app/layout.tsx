@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
+import { Cormorant_Garamond, Geist_Mono, Source_Sans_3 } from "next/font/google"
 import { JsonLd } from "@/components/seo/json-ld"
 import { SITE_URL } from "@/lib/site"
 import "./globals.css"
 
-const sans = Geist({
+const sans = Source_Sans_3({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   display: "swap",
@@ -16,8 +16,8 @@ const mono = Geist_Mono({
   display: "swap",
 })
 
-const serif = Instrument_Serif({
-  weight: "400",
+const serif = Cormorant_Garamond({
+  weight: ["500", "600"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-instrument",
@@ -44,8 +44,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#090908",
-  colorScheme: "dark",
+  themeColor: "#f7f3ec",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 }

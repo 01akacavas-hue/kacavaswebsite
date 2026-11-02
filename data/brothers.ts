@@ -11,6 +11,8 @@ export type Brother = {
   href: string
   bio: string
   career: string
+  /** Label for the second fact line. Eli uses music; the others use sports. */
+  asideLabel: string
   sports: string
   socials: readonly SocialLink[]
   accent: string
@@ -26,7 +28,8 @@ export const brothers = [
     href: "/eli",
     bio: "Actor from Manchester, New Hampshire. Euphoria, Pretty Little Liars: Original Sin, and My Big Fat Greek Wedding 3.",
     career: "Film and television, after two years at NYU Tisch.",
-    sports: "Basketball growing up. Guitar, piano, and the band The Vanity.",
+    asideLabel: "Music & hobbies",
+    sports: "Guitar, piano, and The Vanity. Basketball growing up.",
     socials: [
       { label: "Instagram", href: "https://www.instagram.com/eliaskacavas/" },
       { label: "IMDb", href: "https://www.imdb.com/name/nm10094535/" },
@@ -43,7 +46,8 @@ export const brothers = [
     href: "/niko",
     bio: "U.S. Army captain. West Point class of 2022, and Elias's identical twin.",
     career: "Captain and cavalry officer.",
-    sports: "Grew up in the same sports as his brothers.",
+    asideLabel: "Sports",
+    sports: "Grew up playing the same sports as his brothers.",
     socials: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/nicholas-kacavas-b65337201" }],
     accent: accents.niko,
   },
@@ -52,11 +56,12 @@ export const brothers = [
     index: 2,
     name: "Alec Kacavas",
     shortName: "Alec",
-    epithet: "The operator",
+    epithet: "GTM lead",
     href: "/alec",
-    bio: "GTM lead at Lance in San Francisco. The younger brother, by way of Babson and Boston.",
-    career: "Lance, Rho, Vive Mints, Blue Water Mortgage, Silent Falcon.",
-    sports: "Plays and organizes Rho Hoops with founders in San Francisco.",
+    bio: "GTM lead at Lance in San Francisco. Babson College. He loves any sport.",
+    career: "Lance, Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
+    asideLabel: "Sports",
+    sports: "Any sport he can get into, including Rho Hoops in San Francisco.",
     socials: [
       { label: "LinkedIn", href: "https://www.linkedin.com/in/aleckacavas" },
       { label: "Lance", href: "https://lance.live" },

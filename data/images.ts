@@ -14,19 +14,21 @@ import type { BrotherId, SiteImage } from "@/lib/types"
 
 export const portraits: Record<BrotherId, SiteImage> = {
   eli: {
-    src: "/images/placeholders/eli.svg",
-    alt: "Placeholder portrait of Elias Kacavas",
-    width: 800,
-    height: 1000,
+    src: "/images/eli/portrait.jpg",
+    alt: "Elias Kacavas, photographed for his own Instagram",
+    width: 1080,
+    height: 1350,
   },
+  // No public photo of Nicholas could be verified without a uniform or a duty location.
   niko: {
-    src: "/images/placeholders/niko.svg",
+    src: "/images/placeholders/niko.png",
     alt: "Placeholder portrait of Nicholas Kacavas",
     width: 800,
     height: 1000,
   },
+  // Alec's Instagram did not return a public photo, and LinkedIn did not expose one.
   alec: {
-    src: "/images/placeholders/alec.svg",
+    src: "/images/placeholders/alec.png",
     alt: "Placeholder portrait of Alec Kacavas",
     width: 800,
     height: 1000,

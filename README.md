@@ -30,7 +30,7 @@ cp .env.example .env.local
 | What | Where |
 | --- | --- |
 | Menu, page titles, sitemap | `data/nav.ts` |
-| Short bios on the home cube | `data/brothers.ts` |
+| Short bios on the home page | `data/brothers.ts` |
 | Eli’s credits and The Vanity | `data/eli.ts` and `components/brothers/eli-view.tsx` |
 | Niko’s service record | `data/niko.ts` and `components/brothers/niko-view.tsx` |
 | Alec’s roles | `data/alec.ts` and `components/brothers/alec-view.tsx` |
@@ -43,13 +43,13 @@ cp .env.example .env.local
 1. Create `app/(site)/your-page/page.tsx`.
 2. Add one object to the `pages` array in `data/nav.ts`.
 
-The side menu and the sitemap both read that array. Set `index: false` for a page that should stay out of search engines.
+The side menu and the sitemap both read that array. Set `enabled: false` to keep a route in the repo without publishing it (Shop and Creative are off this way). Set `index: false` for a page that should stay out of search engines.
 
 ### Photographs
 
-All image paths live in `data/images.ts`. The files in `public/images/placeholders/` are original placeholders, not press photos.
+All image paths live in `data/images.ts`. Eli’s portrait is a photograph from his own public Instagram. Alec and Niko still use placeholders until a photo can be verified.
 
-Drop a photograph the brother owns into `public/`, point `src` at it, and rewrite `alt` so it describes that picture. Set `width` and `height` to the file’s pixel size. Do not commit images from magazines, IMDb, or Instagram.
+Drop a photograph the brother owns into `public/`, point `src` at it, and rewrite `alt` so it describes that picture. Set `width` and `height` to the file’s pixel size. Do not commit magazine or press photos.
 
 ### Niko
 
@@ -74,7 +74,7 @@ If `SITE_PASSWORD` is missing or empty, the site falls back to the placeholder p
 kacavas-local
 ```
 
-That string is public. It is here so `npm run dev` works before anyone sets a secret. It is not a protection. The password screen says so when the fallback is active.
+That string is public. It is here so `npm run dev` works before anyone sets a secret. It is not a protection. The lock screen mentions it only in local development, not on the production site.
 
 Set a real value before sharing the deployment:
 
@@ -84,11 +84,11 @@ Set a real value before sharing the deployment:
 
 Hobby includes this custom gate. Vercel’s own password-protection feature is not required, and it is not part of Hobby.
 
-To add a pin, copy a block in `data/places.ts`. The comment at the top of that file lists every field. Starter pins are all `example: true`, and their notes begin with `EXAMPLE`. Set `example` to `false` only after a brother confirms the visit. `tests/content.test.ts` expects every shipped pin to stay an example until you change the test on purpose.
+The map starts empty. To add a pin, copy the shape in the comment at the top of `data/places.ts`. Nearby pins spread apart when the map is zoomed out, so a cluster in one region stays clickable.
 
 ## Shop and Stripe
 
-The shop is a shelf of example cards. Buttons are disabled. Nothing is charged.
+Shop and Creative stay in the repo with `enabled: false` in `data/nav.ts`, so those URLs 404 until you flip the flag. The shop cards are examples. Buttons are disabled. Nothing is charged.
 
 `app/api/checkout/route.ts` is the place Stripe Checkout will go. The steps are in that file:
 

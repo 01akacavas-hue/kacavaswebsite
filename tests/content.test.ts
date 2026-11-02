@@ -66,18 +66,26 @@ describe("published copy", () => {
     assert.ok(readme.includes("kacavas.com"))
   })
 
-  it("ships starter places as labeled examples with valid coordinates", () => {
+  it("keeps place records well formed", () => {
     const ids = new Set<string>()
     for (const place of places) {
       assert.equal(ids.has(place.id), false, place.id)
       ids.add(place.id)
-      assert.equal(place.example, true, place.id)
-      assert.match(place.notes, /EXAMPLE/)
+      assert.equal(place.notes.includes("EXAMPLE"), false)
       assert.ok(place.brothers.length > 0)
       assert.ok(place.latitude >= -90 && place.latitude <= 90)
       assert.ok(place.longitude >= -180 && place.longitude <= 180)
       assert.ok(place.name.length > 0)
     }
+  })
+
+  it("hides shop and creative until they are switched on", () => {
+    const shop = pages.find((page) => page.id === "shop")
+    const creative = pages.find((page) => page.id === "creative")
+    assert.equal(shop?.enabled, false)
+    assert.equal(creative?.enabled, false)
+    assert.equal(shop?.index, false)
+    assert.equal(creative?.index, false)
   })
 
   it("ships starter products as examples without Stripe prices", () => {

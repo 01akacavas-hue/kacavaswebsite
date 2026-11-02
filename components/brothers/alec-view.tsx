@@ -13,7 +13,7 @@ export function AlecView() {
           <p className="text-xs tracking-[0.22em] text-alec uppercase">GTM lead</p>
           <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Alec</h1>
           <p className="mt-4 max-w-xl text-lg text-muted">
-            San Francisco. Lance, Y Combinator W26. Younger brother of Elias and Nicholas.
+            GTM lead at Lance, San Francisco. Babson College. He loves any sport.
           </p>
         </div>
         <div className="relative aspect-[4/5] bg-ink-2">

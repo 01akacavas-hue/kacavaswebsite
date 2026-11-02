@@ -67,10 +67,7 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
           Lock
         </button>
       </header>
-      <p className="mt-5 max-w-2xl text-muted">
-        Tables, towns, and rooms. Every pin that shipped with the site is an example. Add a real
-        visit in <code className="text-paper">data/places.ts</code>.
-      </p>
+      <p className="mt-5 max-w-2xl text-muted">Tables, towns, and rooms the brothers have been.</p>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         <div role="tablist" aria-label="Filter by brother" className="flex flex-wrap gap-2" onKeyDown={onTabKey}>
@@ -113,7 +110,12 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
         className="mt-5"
       >
         <WorldMap places={visible} selectedId={selected?.id ?? null} onSelect={setSelectedId} />
-        <PlaceDetail place={selected} reduce={Boolean(reduce)} onClear={() => setSelectedId(null)} />
+        <PlaceDetail
+          place={selected}
+          empty={visible.length === 0}
+          reduce={Boolean(reduce)}
+          onClear={() => setSelectedId(null)}
+        />
         <PlaceList places={visible} selectedId={selected?.id ?? null} onSelect={setSelectedId} />
       </div>
     </div>
@@ -122,10 +124,12 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
 
 function PlaceDetail({
   place,
+  empty,
   reduce,
   onClear,
 }: {
   place: Place | null
+  empty: boolean
   reduce: boolean
   onClear: () => void
 }) {
@@ -143,9 +147,8 @@ function PlaceDetail({
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p className="text-[0.68rem] tracking-[0.16em] text-faint uppercase">
+                <p className="text-[0.68rem] tracking-[0.16em] text-muted uppercase">
                   {place.type === "restaurant" ? "Restaurant" : "Place"}
-                  {place.example ? " · Example" : ""}
                 </p>
                 <h2 className="mt-1 font-serif text-3xl">{place.name}</h2>
                 <p className="mt-1 text-muted">
@@ -158,17 +161,19 @@ function PlaceDetail({
             </div>
             <p className="mt-4 max-w-2xl leading-relaxed">{place.notes}</p>
             <p className="mt-4 text-sm">
-              <span className="text-faint">Who went </span>
+              <span className="text-muted">Who went </span>
               {place.brothers.map((id, index) => (
                 <span key={id}>
-                  {index > 0 ? ", " : ""}
+                  {index === 0 ? "" : index === place.brothers.length - 1 ? ", and " : ", "}
                   <span style={{ color: accents[id] }}>{nameFor(id)}</span>
                 </span>
               ))}
             </p>
           </motion.article>
         ) : (
-          <p className="text-sm text-faint">Select a pin, or a name in the list.</p>
+          <p className="text-sm text-muted">
+            {empty ? "Nothing pinned yet." : "Select a pin, or a name in the list."}
+          </p>
         )}
       </AnimatePresence>
     </div>
@@ -185,7 +190,7 @@ function PlaceList({
   onSelect: (id: string) => void
 }) {
   if (places.length === 0) {
-    return <p className="mt-6 text-muted">No places for this filter yet. Add some in data/places.ts.</p>
+    return <p className="mt-8 text-muted">Nothing pinned yet.</p>
   }
   return (
     <ul className="mt-6 divide-y divide-line border-y border-line">
@@ -205,7 +210,6 @@ function PlaceList({
                   {place.city}, {place.country}
                   <span className="px-2 text-faint">·</span>
                   {place.type === "restaurant" ? "Restaurant" : "Place"}
-                  {place.example ? " · Example" : ""}
                 </span>
               </span>
               <span className="flex gap-2" aria-hidden="true">

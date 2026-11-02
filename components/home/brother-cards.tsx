@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react"
 import { brothers } from "@/data/brothers"
 import { BrotherPanel } from "@/components/home/brother-panel"
-import type { TurnDirection } from "@/lib/cube"
 
 export function BrotherCards({
   index,
@@ -20,35 +19,6 @@ export function BrotherCards({
   useEffect(() => {
     onIndexRef.current = onIndex
   }, [onIndex])
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat) return
-      if (document.querySelector("[role='dialog']")) return
-      const target = event.target
-      if (
-        target instanceof HTMLElement &&
-        (target.isContentEditable ||
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT")
-      ) {
-        return
-      }
-      const direction: TurnDirection | null =
-        event.key === "ArrowRight" || event.key === "ArrowDown"
-          ? 1
-          : event.key === "ArrowLeft" || event.key === "ArrowUp"
-            ? -1
-            : null
-      if (!direction) return
-      event.preventDefault()
-      const next = (index + direction + brothers.length) % brothers.length
-      onIndexRef.current(next)
-    }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [index])
 
   useEffect(() => {
     if (presentation !== "snap") return

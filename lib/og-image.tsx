@@ -13,22 +13,22 @@ export function OgImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#090908",
-          color: "#f3efe6",
+          background: "#f7f3ec",
+          color: "#1a1714",
           padding: "72px",
         }}
       >
         <div style={{ display: "flex", gap: "14px" }}>
-          <div style={{ width: 84, height: 8, background: "#e0b15c" }} />
-          <div style={{ width: 84, height: 8, background: "#a3b896" }} />
-          <div style={{ width: 84, height: 8, background: "#e07a52" }} />
+          <div style={{ width: 84, height: 8, background: "#3e4c2c" }} />
+          <div style={{ width: 84, height: 8, background: "#1a365d" }} />
+          <div style={{ width: 84, height: 8, background: "#8c3d28" }} />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 96, letterSpacing: 10, lineHeight: 1 }}>KACAVAS</div>
-          <div style={{ marginTop: 18, fontSize: 34, color: "#c8c1b4" }}>Eli · Niko · Alec</div>
+          <div style={{ marginTop: 18, fontSize: 34, color: "#3f3a34" }}>Eli · Niko · Alec</div>
         </div>
-        <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: "#c8c1b4" }}>
-          ACTOR · CAPTAIN · OPERATOR
+        <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, color: "#3f3a34" }}>
+          ACTOR · CAPTAIN · GTM LEAD
         </div>
       </div>
     ),

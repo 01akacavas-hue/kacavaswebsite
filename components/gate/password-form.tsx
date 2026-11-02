@@ -4,7 +4,7 @@ import { useRef, useState, type FormEvent } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-export function PasswordForm({ usingFallback }: { usingFallback: boolean }) {
+export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean }) {
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -36,11 +36,11 @@ export function PasswordForm({ usingFallback }: { usingFallback: boolean }) {
   }
 
   return (
-    <div className="w-full max-w-md">
+    <div className="mx-auto w-full max-w-md text-center">
       <p className="text-xs tracking-[0.22em] text-muted uppercase">Private</p>
-      <h1 className="mt-3 font-serif text-5xl tracking-tight">Restaurants & places</h1>
+      <h1 className="mt-3 font-serif text-5xl tracking-tight sm:text-6xl">Restaurants & places</h1>
       <p className="mt-4 text-muted">A map of tables and towns. Ask a brother for the password.</p>
-      <form className="mt-8" onSubmit={(event) => void onSubmit(event)}>
+      <form className="mt-8 text-left" aria-busy={pending} onSubmit={(event) => void onSubmit(event)}>
         <label htmlFor="site-password" className="text-xs tracking-[0.16em] text-faint uppercase">
           Password
         </label>
@@ -55,26 +55,29 @@ export function PasswordForm({ usingFallback }: { usingFallback: boolean }) {
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? "password-error" : undefined}
           disabled={pending}
-          className="mt-2 h-12 w-full border border-line bg-ink px-3 text-paper outline-none"
+          className="mt-2 h-12 w-full border border-line bg-ink-2 px-3 text-paper outline-none"
           onChange={(event) => setPassword(event.target.value)}
         />
+        <p role="status" className="mt-3 min-h-5 text-sm text-paper">
+          {pending ? "Checking the password…" : error ? "" : ""}
+        </p>
         {error ? (
-          <p id="password-error" role="alert" className="mt-3 text-sm text-alec">
+          <p id="password-error" role="alert" className="text-sm text-alec">
             {error}
           </p>
         ) : null}
         <button
           type="submit"
           disabled={pending}
-          className="mt-5 h-12 w-full bg-paper text-sm tracking-[0.16em] text-ink uppercase disabled:opacity-60"
+          className="mt-2 h-12 w-full bg-paper text-sm tracking-[0.16em] text-ink uppercase disabled:opacity-60"
         >
-          {pending ? "Checking" : "Enter"}
+          {pending ? "Checking…" : "Enter"}
         </button>
       </form>
-      {usingFallback ? (
-        <p className="mt-6 text-sm leading-relaxed text-muted">
-          This deployment has no <code className="text-paper">SITE_PASSWORD</code> set, so it is using
-          the placeholder documented in the README. Set the variable in Vercel before sharing the site.
+      {showDevHint ? (
+        <p className="mt-6 text-left text-sm leading-relaxed text-muted">
+          Local development is using the placeholder password from the README. Production should set{" "}
+          <code className="text-paper">SITE_PASSWORD</code>.
         </p>
       ) : null}
       <p className="mt-8">

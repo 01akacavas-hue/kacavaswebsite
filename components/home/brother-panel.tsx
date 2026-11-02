@@ -14,26 +14,22 @@ export function BrotherPanel({
     <article
       className={
         compact
-          ? "w-[300px] border bg-ink-2 p-3.5 text-paper shadow-[0_20px_60px_rgb(0_0_0/0.35)]"
+          ? "w-[440px] border border-t-2 bg-ink-2 p-0 text-paper"
           : "w-full max-w-md border bg-ink-2 p-5 text-paper sm:p-7"
       }
-      style={{ borderColor: `${brother.accent}66` }}
+      style={{ borderColor: brother.accent }}
     >
       <div
-        className={`relative overflow-hidden bg-ink ${compact ? "h-28" : "h-36 sm:aspect-[4/5] sm:h-auto sm:max-h-[22rem]"}`}
+        className={`relative overflow-hidden bg-ink ${compact ? "h-[250px]" : "h-44 sm:aspect-[4/5] sm:h-auto sm:max-h-[22rem]"}`}
       >
         <Portrait
           id={brother.id}
           priority={brother.index === 0}
-          sizes={compact ? "300px" : "(max-width: 768px) 90vw, 420px"}
-        />
-        <span
-          className="absolute inset-x-0 top-0 h-0.5"
-          style={{ background: brother.accent }}
-          aria-hidden="true"
+          sizes={compact ? "440px" : "(max-width: 768px) 90vw, 420px"}
         />
       </div>
-      <p className="mt-3 text-[0.68rem] tracking-[0.2em] text-muted uppercase">
+      <div className={compact ? "px-4 pt-3 pb-4" : ""}>
+      <p className={`${compact ? "mt-0" : "mt-3"} text-[0.68rem] tracking-[0.2em] text-muted uppercase`}>
         0{brother.index + 1}
         <span className="px-2 text-faint">/</span>
         {brother.epithet}
@@ -50,7 +46,7 @@ export function BrotherPanel({
           <dd className="mt-0.5 leading-snug">{brother.career}</dd>
         </div>
         <div>
-          <dt className="text-[0.65rem] tracking-[0.16em] text-faint uppercase">Sports</dt>
+          <dt className="text-[0.65rem] tracking-[0.16em] text-faint uppercase">{brother.asideLabel}</dt>
           <dd className="mt-0.5 leading-snug">{brother.sports}</dd>
         </div>
       </dl>
@@ -71,6 +67,7 @@ export function BrotherPanel({
           Enter
           <span aria-hidden="true"> →</span>
         </Link>
+      </div>
       </div>
     </article>
   )

@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return pages
-    .filter((page) => page.index)
+    .filter((page) => page.enabled && page.index)
     .map((page) => ({
       url: new URL(page.href, SITE_URL).toString(),
       changeFrequency: "monthly",

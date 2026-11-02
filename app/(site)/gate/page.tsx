@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function GatePage() {
   return (
-    <div className="flex min-h-dvh items-center px-5 py-24">
-      <PasswordForm usingFallback={isUsingPasswordFallback()} />
+    <div className="grid min-h-dvh place-items-center px-6 py-24">
+      <PasswordForm showDevHint={process.env.NODE_ENV === "development" && isUsingPasswordFallback()} />
     </div>
   )
 }
