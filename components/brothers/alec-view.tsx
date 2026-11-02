@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
-import { alecQuote, alecRoles } from "@/data/alec"
-import { alexanderPhotos } from "@/data/images"
+import { academyAwardPhoto, alecQuote, alecRoles } from "@/data/alec"
+import { alexanderGrill, alexanderPhotos } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -53,6 +53,59 @@ export function AlecView() {
       ) : null}
 
       <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">Highlights</h2>
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <article className="border border-line">
+            <div className="relative aspect-[3/2] bg-ink-2">
+              <Image
+                src={academyAwardPhoto.src}
+                alt={academyAwardPhoto.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6 sm:p-8">
+              <p className="text-xs tracking-[0.18em] text-alec uppercase">Film</p>
+              <h3 className="mt-2 font-serif text-4xl">CODA</h3>
+              <p className="mt-4 leading-relaxed">
+                I was in the movie CODA, which won Best Picture at the Oscars, the 94th Academy Awards, in 2022.
+              </p>
+              <p className="mt-4 text-xs leading-relaxed text-faint">
+                {academyAwardPhoto.depicted}. Photo by <ExternalLink href={academyAwardPhoto.authorUrl}>{academyAwardPhoto.author}</ExternalLink>,{" "}
+                <ExternalLink href={academyAwardPhoto.licenseUrl}>{academyAwardPhoto.license}</ExternalLink>, via{" "}
+                <ExternalLink href={academyAwardPhoto.sourceUrl}>Wikimedia Commons</ExternalLink>.
+              </p>
+            </div>
+          </article>
+          <article className="flex flex-col justify-between border border-line p-6 sm:p-8">
+            <p className="text-xs tracking-[0.18em] text-alec uppercase">World record</p>
+            <p className="mt-8 font-serif text-7xl tracking-tight sm:text-8xl">1,430</p>
+            <div className="mt-8">
+              <h3 className="font-serif text-3xl">Longest continuous shotski</h3>
+              <p className="mt-4 leading-relaxed">I hold a world record: the longest continuous shotski, with 1,430 people, in Park City, Utah.</p>
+            </div>
+          </article>
+          <article className="grid border border-line lg:col-span-2 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]">
+            <div className="relative aspect-[3/4] min-h-72 bg-ink-2 lg:aspect-auto lg:h-full">
+              <Image
+                src={alexanderGrill.src}
+                alt={alexanderGrill.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 280px"
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-8">
+              <p className="text-xs tracking-[0.18em] text-alec uppercase">Grill</p>
+              <h3 className="mt-2 font-serif text-4xl">Resident grillmaster.</h3>
+              <p className="mt-4 max-w-xl leading-relaxed">I am the resident grillmaster.</p>
+            </div>
+          </article>
+        </div>
+      </Reveal>
+
+      <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Record</h2>
         <p className="mt-3 max-w-2xl text-muted">
           I went to Babson, including the Management Consulting Field Experience. A few of these dates overlap, the way they do on my profile.
@@ -77,17 +130,20 @@ export function AlecView() {
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Photographs</h2>
         <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-          {alexanderPhotos.map((photo, index) => (
-            <li key={photo.src} className={index === 0 ? "sm:col-span-3" : ""}>
-              <div className={`relative bg-ink-2 ${index === 0 ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes={index === 0 ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 30vw"}
-                  className="object-cover"
-                />
-              </div>
+          {alexanderPhotos.map((photo) => (
+            <li key={photo.src} className={photo.wide ? "sm:col-span-3" : ""}>
+              <figure>
+                <div className={`relative bg-ink-2 ${photo.wide ? "aspect-[8/5]" : "aspect-[3/4]"}`}>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes={photo.wide ? "(max-width: 768px) 100vw, 1100px" : "(max-width: 640px) 100vw, 30vw"}
+                    className="object-cover"
+                  />
+                </div>
+                {photo.caption ? <figcaption className="mt-3 text-sm text-muted">{photo.caption}</figcaption> : null}
+              </figure>
             </li>
           ))}
         </ul>

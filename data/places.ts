@@ -1,4 +1,7 @@
 import type { Place, PlaceCategory } from "@/lib/types"
+import { nikoPlaces } from "./niko-places"
+
+export { cityTables, type CityTable } from "./niko-places"
 
 type Pin = {
   id: string
@@ -13,22 +16,24 @@ type Pin = {
   notes: string
   price?: 1 | 2 | 3 | 4 | 5
   stars?: 1 | 2 | 3 | 4 | 5
+  /** Michelin stars named in the note. Omit when the note does not give a star. */
+  michelin?: 1 | 2 | 3
   wishlist?: boolean
 }
 
-function pin(input: Pin): Place {
+function pin(input: Pin & { brothers?: Place["brothers"] }): Place {
   return {
     ...input,
     country: input.country ?? "United States",
-    brothers: ["alec"],
+    brothers: input.brothers ?? ["alec"],
   }
 }
 
 /**
- * Alec's travel guide. Storefront coordinates are used when the address is
- * known. `approximate` marks a city or neighborhood center.
+ * Alexander's travel guide. Storefront coordinates are used when the address is
+ * known. `approximate` marks a city or neighborhood center. Notes stay in his words.
  */
-export const places: readonly Place[] = [
+const alecPlaces: readonly Place[] = [
   pin({
     id: "atlanta-beltline",
     name: "The Belt Line",
@@ -850,6 +855,7 @@ export const places: readonly Place[] = [
     longitude: -70.5912,
     approximate: true,
     notes: "Great vibe tapas restaurant by Nubble Lighthouse.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "kittery-pepperell",
@@ -889,7 +895,8 @@ export const places: readonly Place[] = [
     latitude: 43.0778,
     longitude: -70.7588,
     approximate: true,
-    notes: "Tapas and cocktails. Cute downtown spot, with a wide range of dishes. Small, but six to eight dishes does the trick.",
+    notes: "Tapas and cocktails. Cute downtown spot, with a wide range of dishes. Small, but six to eight dishes does the trick. Niko lists it as a recommendation and has not tried it.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "portsmouth-friendly-toast",
@@ -900,6 +907,7 @@ export const places: readonly Place[] = [
     longitude: -70.7592,
     approximate: true,
     notes: "Great breakfast and drinks.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "portsmouth-row-34",
@@ -920,6 +928,7 @@ export const places: readonly Place[] = [
     longitude: -70.7604,
     approximate: true,
     notes: "Nice bar area. Good as a cocktail place, with outside seating.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "portsmouth-cava",
@@ -1011,6 +1020,7 @@ export const places: readonly Place[] = [
     longitude: -70.7554,
     approximate: true,
     notes: "Live show and great food, high end. Bar downstairs, and they take walk-ins. Monthly Sunday brunch. A must do.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "portsmouth-massimos",
@@ -1211,6 +1221,7 @@ export const places: readonly Place[] = [
     longitude: -73.9872,
     approximate: true,
     notes: "Best Greek restaurant, more casual. Transports you.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "nyc-carnegie-club",
@@ -1242,6 +1253,7 @@ export const places: readonly Place[] = [
     longitude: -73.9982,
     price: 2,
     notes: "Terrific and traditional French breakfast and lunch.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "nyc-soho-cigar",
@@ -1764,6 +1776,7 @@ export const places: readonly Place[] = [
     category: "restaurant",
     latitude: 37.7954,
     longitude: -122.3936,
+    michelin: 1,
     notes: "One Michelin star, by the Ferry Building. Best whiskey sour and sea bream.",
   }),
   pin({
@@ -2280,6 +2293,7 @@ export const places: readonly Place[] = [
     longitude: -81.0964,
     approximate: true,
     notes: "Terrific cafe and lunch spot. Big outdoor seating in the back, and cool seating all over. Practically self-serve, but great food.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "savannah-alligator-soul",
@@ -2290,6 +2304,7 @@ export const places: readonly Place[] = [
     longitude: -81.0904,
     approximate: true,
     notes: "Reserve way ahead. Extremely nice, and awesome exotic food.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "savannah-perry-lane",
@@ -2320,6 +2335,7 @@ export const places: readonly Place[] = [
     longitude: -81.0912,
     approximate: true,
     notes: "Chef's table restaurant. Great house-like sitting area, with excellent traditional southern dishes.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "savannah-sorry-charlies",
@@ -2340,6 +2356,7 @@ export const places: readonly Place[] = [
     longitude: -81.0954,
     approximate: true,
     notes: "Great hole in the wall Cuban spot.",
+    brothers: ["alec", "niko"],
   }),
   pin({
     id: "savannah-congress",
@@ -2697,3 +2714,5 @@ export const places: readonly Place[] = [
     notes: "Next up.",
   }),
 ]
+
+export const places: readonly Place[] = [...alecPlaces, ...nikoPlaces]

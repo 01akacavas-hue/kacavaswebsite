@@ -123,7 +123,34 @@ export const nikoTank: SiteImage = {
   height: 758,
 }
 
-export const alexanderPhotos: readonly SiteImage[] = [
+export const alexanderGrill: SiteImage = {
+  src: "/images/alec/grill.jpg",
+  alt: "A board of steaks off the grill.",
+  width: 768,
+  height: 1024,
+}
+
+export const alexanderPhotos: readonly (SiteImage & { caption?: string; wide?: boolean })[] = [
+  {
+    src: "/images/alec/rho-lock-in.jpg",
+    alt: "Alexander standing in front of a truck wrapped in an advertisement.",
+    width: 1120,
+    height: 702,
+    wide: true,
+    caption: "I did GTM at Rho, in San Francisco.",
+  },
+  {
+    src: "/images/alec/golden-gate.jpg",
+    alt: "Alexander on the water, with a bridge behind him.",
+    width: 1200,
+    height: 1600,
+  },
+  {
+    src: "/images/alec/race.jpg",
+    alt: "Alexander running a race.",
+    width: 932,
+    height: 1400,
+  },
   {
     src: "/images/alec/surfboard.jpg",
     alt: "Alexander on a beach, holding a wooden surfboard.",

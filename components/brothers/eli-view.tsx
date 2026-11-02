@@ -1,6 +1,7 @@
 import { ViewTransition } from "react"
 import Image from "next/image"
-import { eliCredits, eliMarquee, vanity } from "@/data/eli"
+import { achievements, type Credit } from "@/data/achievements"
+import { eliMarquee, vanity } from "@/data/eli"
 import { eliasPhotos } from "@/data/images"
 import { oxfordJoin } from "@/lib/lists"
 import { ExternalLink } from "@/components/chrome/external-link"
@@ -10,14 +11,16 @@ import { Reveal } from "@/components/motion/reveal"
 
 const kindLabel = {
   series: "Series",
-  film: "Film",
+  movie: "Film",
   short: "Short",
-  commercial: "Commercial",
 } as const
 
+const imdb = "https://www.imdb.com/name/nm10094535/"
+
 export function EliView() {
-  const released = eliCredits.filter((credit) => !credit.releaseUnconfirmed)
-  const unconfirmed = eliCredits.filter((credit) => credit.releaseUnconfirmed)
+  const record = achievements.eli
+  const shows = record.shows ?? []
+  const movies = record.movies ?? []
 
   return (
     <>
@@ -52,19 +55,18 @@ export function EliView() {
             <p>
               Elias Kacavas grew up in Manchester, New Hampshire, in a Greek Orthodox community: St.
               George Cathedral, the Glendi festival, and Greek school. His grandfather’s family came
-              from Megalopolis, near Sparta. He graduated from Manchester Central High. Nicholas is
-              his identical twin, and Alexander is their younger brother.
+              from Megalopolis, near Sparta. He graduated from Manchester Central High. Alexander is
+              his younger brother.
             </p>
             <p>
               He planned on medicine, then spent a gap year in Bay Ridge, Brooklyn, sleeping on a
-              couch and working at a Dunkin’ Donuts run by two Greek twins. He read Adler, Meisner,
+              couch and working at a Dunkin’ Donuts. He read Adler, Meisner,
               Strasberg, Hagen, and Cohen. In high school his DECA team wrote a business plan for a
               Greek restaurant, placed second in New Hampshire, and went on to the international
               competition in California.
             </p>
             <p>
-              He studied method acting for two years at NYU Tisch, in the Strasberg studio, then left
-              to film Euphoria and Pretty Little Liars: Original Sin. As of June 2024 he was based in
+              He left to film Euphoria and Pretty Little Liars: Original Sin. As of June 2024 he was based in
               New York, and he had talked about living in Los Angeles later. He was grand marshal of
               Manchester’s Taco Tour.
             </p>
@@ -75,21 +77,18 @@ export function EliView() {
       <Reveal className="mt-20">
         <h2 className="font-serif text-4xl">Filmography</h2>
         <p className="mt-3 max-w-2xl text-muted">
-          Roles as published on IMDb, Rotten Tomatoes, and interviews.
+          Series and films, then shorts. Shorts are listed and are not counted as movies. Oscars won: 0.
         </p>
-        <CreditList credits={released} />
+        <p className="mt-4">
+          <ExternalLink href={imdb}>IMDb</ExternalLink>
+        </p>
+        <h3 className="mt-10 font-serif text-2xl">Television</h3>
+        <CreditList credits={shows} />
+        <h3 className="mt-10 font-serif text-2xl">Film</h3>
+        <CreditList credits={movies} />
+        <h3 className="mt-10 font-serif text-2xl">Shorts</h3>
+        <CreditList credits={record.shorts} />
       </Reveal>
-
-      {unconfirmed.length > 0 ? (
-        <Reveal className="mt-14">
-          <h2 className="font-serif text-3xl">Release unconfirmed</h2>
-          <p className="mt-3 max-w-2xl text-muted">
-            IMDb lists these as completed or upcoming. A release was not confirmed in the sources
-            used here.
-          </p>
-          <CreditList credits={unconfirmed} />
-        </Reveal>
-      ) : null}
 
       <Reveal className="mt-20 border border-line p-6 sm:p-10">
         <p className="text-xs tracking-[0.2em] text-eli uppercase">Music</p>
@@ -129,17 +128,17 @@ export function EliView() {
   )
 }
 
-function CreditList({ credits }: { credits: typeof eliCredits }) {
+function CreditList({ credits }: { credits: readonly Credit[] }) {
   return (
-    <ol className="mt-8 divide-y divide-line border-y border-line">
+    <ol className="mt-4 divide-y divide-line border-y border-line">
       {credits.map((credit) => (
         <li key={credit.id} className="grid gap-2 py-5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-8">
           <p className="font-mono text-sm text-muted">{credit.year}</p>
           <div>
             <p className="text-[0.68rem] tracking-[0.16em] text-faint uppercase">{kindLabel[credit.kind]}</p>
             <h3 className="mt-1 font-serif text-2xl">{credit.title}</h3>
-            {credit.role ? <p className="mt-1 text-eli">{credit.role}</p> : null}
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{credit.detail}</p>
+            <p className="mt-1 text-eli">{credit.role ?? "Role not listed"}</p>
+            {credit.note ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{credit.note}</p> : null}
           </div>
         </li>
       ))}

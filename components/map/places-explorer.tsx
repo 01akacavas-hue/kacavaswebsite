@@ -1,78 +1,87 @@
 "use client"
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react"
+import dynamic from "next/dynamic"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { PlaceSheet } from "@/components/map/place-sheet"
-import { PlaceTable } from "@/components/map/place-table"
-import { WorldMap, type MapHandle } from "@/components/map/world-map"
-import { brotherLabel, filterPlaces } from "@/lib/places"
-import { accents } from "@/lib/theme"
-import type { BrotherId, Place, PlaceFilter } from "@/lib/types"
+import { FilterBar } from "@/components/map/filter-bar"
+import { Leaderboard } from "@/components/map/leaderboard"
+import { PlaceCard } from "@/components/map/place-card"
+import { PlaceList } from "@/components/map/place-list"
+import { useMapFilters } from "@/components/map/use-map-filters"
+import { supportsWebGL, usePhone, usePrefersReducedMotion, useWideScreen } from "@/components/map/use-viewport"
+import { cityOptions, visiblePlaces, type MapView } from "@/lib/map-filters"
+import { uniqueValues } from "@/lib/places"
+import { citiesForBrother, type CityStop } from "@/lib/trails"
+import type { CityTable } from "@/data/places"
+import type { Place, PlaceCategory } from "@/lib/types"
 
-const filters = [
-  { id: "all", label: "All" },
-  { id: "alec", label: brotherLabel("alec") },
-  { id: "eli", label: brotherLabel("eli") },
-  { id: "niko", label: brotherLabel("niko") },
-] as const satisfies readonly { id: PlaceFilter; label: string }[]
+const GlobeMap = dynamic(() => import("@/components/map/globe-map").then((mod) => mod.GlobeMap), {
+  ssr: false,
+  loading: () => <div className="h-[70vh] min-h-[28rem] border border-line bg-ink" role="status" aria-label="Loading the globe" />,
+})
 
-type Mode = "map" | "table"
-
-export function PlacesExplorer({ places }: { places: readonly Place[] }) {
-  const [filter, setFilter] = useState<PlaceFilter>("all")
-  const [mode, setMode] = useState<Mode>("map")
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const tabsRef = useRef<Array<HTMLButtonElement | null>>([])
-  const mapRef = useRef<MapHandle>(null)
-  const pending = useRef<Place | null>(null)
+export function PlacesExplorer({ places, cityTables }: { places: readonly Place[]; cityTables: readonly CityTable[] }) {
   const router = useRouter()
-  const visible = filterPlaces(places, filter)
-  const selected = places.find((place) => place.id === selectedId) ?? null
-  const wishlist = places.filter((place) => place.wishlist)
+  const reducedMotion = usePrefersReducedMotion()
+  const phone = usePhone()
+  const wide = useWideScreen()
+  const [booted, setBooted] = useState(false)
+  const [webgl, setWebgl] = useState(true)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [cityFocus, setCityFocus] = useState<{ longitude: number; latitude: number; token: number } | null>(null)
+  const [tour, setTour] = useState<{ stops: CityStop[]; token: number } | null>(null)
+  const [playing, setPlaying] = useState(false)
+  const placeIds = useMemo(() => new Set(places.map((place) => place.id)), [places])
+  const { filters, update } = useMapFilters(placeIds)
+  const visible = useMemo(() => visiblePlaces(places, filters), [places, filters])
+  const categories = useMemo(() => uniqueValues(places, "category") as PlaceCategory[], [places])
+  const cities = useMemo(() => cityOptions(places, filters), [places, filters])
+  const selected = places.find((place) => place.id === filters.placeId) ?? null
+  const hovered = visible.find((place) => place.id === hoveredId) ?? null
+  const tables = cityTables.filter((table) => !filters.city || table.city === filters.city || table.country === filters.city)
 
   useEffect(() => {
-    if (mode !== "map" || !pending.current) return
-    const place = pending.current
-    pending.current = null
-    mapRef.current?.flyTo(place.latitude, place.longitude, place.wishlist ? 320 : 4200)
-  }, [mode, selectedId])
+    const timer = window.setTimeout(() => {
+      setWebgl(supportsWebGL())
+      setBooted(true)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [])
 
-  function chooseFilter(next: PlaceFilter, focus = false) {
-    setFilter(next)
-    setSelectedId((current) => {
-      if (!current) return null
-      return filterPlaces(places, next).some((place) => place.id === current) ? current : null
-    })
-    if (focus) {
-      const index = filters.findIndex((item) => item.id === next)
-      tabsRef.current[index]?.focus()
+  useEffect(() => {
+    if (!filters.placeId) return
+    if (visible.some((place) => place.id === filters.placeId)) return
+    update({ placeId: null })
+  }, [filters.placeId, update, visible])
+
+  const endTour = useCallback(() => {
+    setPlaying(false)
+    setTour(null)
+  }, [])
+
+  function choose(id: string | null) {
+    endTour()
+    update({ placeId: id, view: wide ? filters.view : "map" })
+  }
+
+  function chooseCity(city: string) {
+    endTour()
+    update({ city, placeId: null })
+    if (!city) {
+      setCityFocus(null)
+      return
     }
+    const match = cities.find((option) => option.city === city) ?? cityOptions(places, { ...filters, city: "", query: "" }).find((option) => option.city === city)
+    if (!match) return
+    setCityFocus({ longitude: match.longitude, latitude: match.latitude, token: Date.now() })
   }
 
-  function onTabKey(event: KeyboardEvent) {
-    const current = filters.findIndex((item) => item.id === filter)
-    let next = current
-    if (event.key === "ArrowRight") next = (current + 1) % filters.length
-    else if (event.key === "ArrowLeft") next = (current - 1 + filters.length) % filters.length
-    else if (event.key === "Home") next = 0
-    else if (event.key === "End") next = filters.length - 1
-    else return
-    event.preventDefault()
-    const id = filters[next]?.id
-    if (id) chooseFilter(id, true)
-  }
-
-  function openFromTable(place: Place) {
-    setFilter("all")
-    pending.current = place
-    setSelectedId(place.id)
-    setMode("map")
-  }
-
-  function stepTo(id: string) {
-    const place = places.find((item) => item.id === id)
-    setSelectedId(id)
-    if (place && mode === "map") mapRef.current?.flyTo(place.latitude, place.longitude, place.wishlist ? 320 : 4200)
+  function play() {
+    const stops = filters.trails.flatMap((id) => citiesForBrother(places, id))
+    if (stops.length === 0) return
+    setPlaying(true)
+    setTour({ stops, token: Date.now() })
+    if (!wide) update({ view: "map" })
   }
 
   async function lock() {
@@ -80,6 +89,15 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
     router.push("/restaurants")
     router.refresh()
   }
+
+  const board = filters.view === "board"
+  const showMap = !board && booted && webgl && (wide || filters.view === "map")
+  const showList = !board && (!booted || !webgl || wide || filters.view === "list")
+  const views = [
+    { id: "map", label: "Map" },
+    { id: "list", label: "List" },
+    { id: "board", label: "Leaderboard" },
+  ] as const satisfies readonly { id: MapView; label: string }[]
 
   return (
     <div>
@@ -92,72 +110,98 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
           Lock
         </button>
       </header>
-      <p className="mt-5 max-w-2xl text-muted">Alexander&apos;s list, from the rooms he has been to the cities still ahead.</p>
+      <p className="mt-5 max-w-2xl text-muted">
+        Alexander&apos;s guide and Nicholas&apos;s, on one globe. Filled pins are visits. Open rings are recommendations, including cities still ahead.
+      </p>
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-        <div role="tablist" aria-label="Map or table" className="flex gap-2">
-          {(["map", "table"] as const).map((item) => (
-            <button
-              key={item}
-              type="button"
-              role="tab"
-              aria-selected={mode === item}
-              className={`h-11 border px-4 text-xs tracking-[0.16em] uppercase ${mode === item ? "border-paper bg-paper text-ink" : "border-line"}`}
-              onClick={() => setMode(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
-        <div role="tablist" aria-label="Filter by brother" className="flex flex-wrap gap-2" onKeyDown={onTabKey}>
-          {filters.map((item, index) => {
-            const selectedTab = item.id === filter
-            const color = item.id === "all" ? undefined : accents[item.id as BrotherId]
-            return (
-              <button
-                key={item.id}
-                ref={(node) => {
-                  tabsRef.current[index] = node
-                }}
-                type="button"
-                role="tab"
-                aria-selected={selectedTab}
-                tabIndex={selectedTab ? 0 : -1}
-                className={`inline-flex h-11 items-center gap-2 border px-3 text-xs tracking-[0.16em] uppercase ${selectedTab ? "border-paper" : "border-line"}`}
-                onClick={() => chooseFilter(item.id)}
-              >
-                {color ? <span className="size-2 rounded-full" style={{ background: color }} /> : null}
-                {item.label}
-              </button>
-            )
-          })}
-        </div>
+      <div role="tablist" aria-label="Map, list, or leaderboard" className="mt-8 flex gap-2 overflow-x-auto">
+        {views.map((view) => (
+          <button
+            key={view.id}
+            type="button"
+            role="tab"
+            aria-selected={filters.view === view.id}
+            className={`h-11 shrink-0 border px-4 text-xs tracking-[0.16em] uppercase ${filters.view === view.id ? "border-paper bg-paper text-ink" : "border-line"}`}
+            onClick={() => update({ view: view.id })}
+          >
+            {view.label}
+          </button>
+        ))}
       </div>
 
-      <div className="relative mt-4">
-        {mode === "map" ? (
-          <WorldMap ref={mapRef} places={visible} selectedId={selectedId} onSelect={setSelectedId} />
-        ) : (
-          <PlaceTable places={places} onOpen={openFromTable} />
-        )}
-        {mode === "map" && selected ? <PlaceSheet place={selected} places={visible} onClose={() => setSelectedId(null)} onSelect={stepTo} /> : null}
-      </div>
+      {board ? <Leaderboard places={places} /> : null}
 
-      <section className="mt-10" aria-labelledby="next-up">
-        <h2 id="next-up" className="font-serif text-3xl tracking-tight">
-          Next up
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">Cities still on the list. The outline pins sit on the map.</p>
-        <ul className="mt-4 flex flex-wrap gap-2">
-          {wishlist.map((place) => (
-            <li key={place.id}>
-              <button type="button" className="h-11 border border-line px-3 text-sm" onClick={() => openFromTable(place)}>
-                {place.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {board ? null : (
+      <FilterBar
+        places={places}
+        filters={filters}
+        categories={categories}
+        cities={cities}
+        playing={playing}
+        onChange={update}
+        onCity={chooseCity}
+        onPlay={play}
+      />
+      )}
+
+      {!board && booted && !webgl ? (
+        <p className="mt-4 max-w-xl text-sm text-muted" role="status">
+          This browser can&apos;t draw the globe. The list still has every place.
+        </p>
+      ) : null}
+
+      {!board ? (
+      <div className={`relative mt-4 ${showList && showMap ? "lg:grid lg:grid-cols-[20.5rem_minmax(0,1fr)] lg:items-start lg:gap-3" : ""}`}>
+        {showList ? (
+          <PlaceList places={visible} selectedId={selected?.id ?? null} hoveredId={hovered?.id ?? null} onSelect={(id) => choose(id)} onHover={setHoveredId} />
+        ) : null}
+        {showMap ? (
+          <div className="relative">
+            <GlobeMap
+              places={visible}
+              catalog={places}
+              trailBrothers={filters.trails}
+              selected={selected}
+              hovered={hovered}
+              cityFocus={cityFocus}
+              tour={tour}
+              reducedMotion={reducedMotion}
+              phone={phone}
+              visible={showMap}
+              onSelect={choose}
+              onHover={setHoveredId}
+              onTourEnd={endTour}
+            />
+            {selected ? <PlaceCard place={selected} places={visible} reducedMotion={reducedMotion} onClose={() => choose(null)} onSelect={(id) => choose(id)} /> : null}
+          </div>
+        ) : null}
+      </div>
+      ) : null}
+
+      {!board && tables.length > 0 ? (
+        <section className="mt-12" aria-labelledby="at-the-table">
+          <h2 id="at-the-table" className="font-serif text-3xl tracking-tight">
+            At the table
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted">Dishes Nicholas noted for a city. They stay off the map.</p>
+          <ul className="mt-6 grid gap-4 md:grid-cols-2">
+            {tables.map((table) => (
+              <li key={table.id} className="border border-line p-5">
+                <h3 className="font-serif text-2xl">
+                  {table.city}
+                  <span className="text-muted">, {table.country}</span>
+                </h3>
+                {table.note ? <p className="mt-3 text-sm leading-relaxed text-muted">{table.note}</p> : null}
+                <ul className="mt-3 list-disc pl-5 text-sm leading-relaxed">
+                  {table.dishes.map((dish) => (
+                    <li key={dish}>{dish}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </div>
   )
 }
