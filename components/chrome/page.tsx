@@ -15,9 +15,9 @@ export function Page({
 }: {
   children: ReactNode
   tone?: BrotherId
-  width?: "default" | "wide"
+  width?: "default" | "wide" | "map"
 }) {
-  const max = width === "wide" ? "max-w-[1120px]" : "max-w-6xl"
+  const max = width === "map" ? "max-w-[1320px]" : width === "wide" ? "max-w-[1120px]" : "max-w-6xl"
   return (
     <article
       className={`mx-auto w-full border-t-2 ${max} px-5 pt-24 pb-16 sm:px-8 ${tone ? toneClass[tone] : "border-transparent"}`}

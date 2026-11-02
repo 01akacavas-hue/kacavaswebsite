@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
-import { alecQuote, alecRoles } from "@/data/alec"
+import { academyAwardPhoto, alecQuote, alecRoles } from "@/data/alec"
 import { alexanderPhotos } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
@@ -51,6 +51,43 @@ export function AlecView() {
           </p>
         </Reveal>
       ) : null}
+
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">Highlights</h2>
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          <article className="border border-line">
+            <div className="relative aspect-[3/2] bg-ink-2">
+              <Image
+                src={academyAwardPhoto.src}
+                alt={academyAwardPhoto.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover"
+              />
+            </div>
+            <div className="p-6 sm:p-8">
+              <p className="text-xs tracking-[0.18em] text-alec uppercase">Film</p>
+              <h3 className="mt-2 font-serif text-4xl">CODA</h3>
+              <p className="mt-4 leading-relaxed">
+                I was in the movie CODA, which won Best Picture at the Oscars, the 94th Academy Awards, in 2022.
+              </p>
+              <p className="mt-4 text-xs leading-relaxed text-faint">
+                {academyAwardPhoto.depicted}. Photo by <ExternalLink href={academyAwardPhoto.authorUrl}>{academyAwardPhoto.author}</ExternalLink>,{" "}
+                <ExternalLink href={academyAwardPhoto.licenseUrl}>{academyAwardPhoto.license}</ExternalLink>, via{" "}
+                <ExternalLink href={academyAwardPhoto.sourceUrl}>Wikimedia Commons</ExternalLink>.
+              </p>
+            </div>
+          </article>
+          <article className="flex flex-col justify-between border border-line p-6 sm:p-8">
+            <p className="text-xs tracking-[0.18em] text-alec uppercase">World record</p>
+            <p className="mt-8 font-serif text-7xl tracking-tight sm:text-8xl">1,430</p>
+            <div className="mt-8">
+              <h3 className="font-serif text-3xl">Longest continuous shotski</h3>
+              <p className="mt-4 leading-relaxed">I hold a world record: the longest continuous shotski, with 1,430 people, in Park City, Utah.</p>
+            </div>
+          </article>
+        </div>
+      </Reveal>
 
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Record</h2>
