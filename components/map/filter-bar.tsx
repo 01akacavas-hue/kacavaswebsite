@@ -85,23 +85,7 @@ export function FilterBar({
 
   return (
     <div className="mt-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div role="tablist" aria-label="Map or list" className="flex gap-2 lg:hidden">
-          {(["map", "list"] as const).map((view) => (
-            <button
-              key={view}
-              type="button"
-              role="tab"
-              aria-selected={filters.view === view}
-              className={`h-11 border px-4 text-xs tracking-[0.16em] uppercase ${filters.view === view ? "border-paper bg-paper text-ink" : "border-line"}`}
-              onClick={() => onChange({ view })}
-            >
-              {view}
-            </button>
-          ))}
-        </div>
-        <p className="text-sm text-muted">Filled is a visit. A ring is a recommendation. A second ring means another brother.</p>
-      </div>
+      <p className="text-sm text-muted">Filled is a visit. A ring is a recommendation. A second ring means another brother.</p>
 
       <div className="mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Brothers">
         {brotherIds.map((id) => {

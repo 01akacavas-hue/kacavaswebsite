@@ -4,11 +4,12 @@ import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { FilterBar } from "@/components/map/filter-bar"
+import { Leaderboard } from "@/components/map/leaderboard"
 import { PlaceCard } from "@/components/map/place-card"
 import { PlaceList } from "@/components/map/place-list"
 import { useMapFilters } from "@/components/map/use-map-filters"
 import { supportsWebGL, usePhone, usePrefersReducedMotion, useWideScreen } from "@/components/map/use-viewport"
-import { cityOptions, visiblePlaces } from "@/lib/map-filters"
+import { cityOptions, visiblePlaces, type MapView } from "@/lib/map-filters"
 import { uniqueValues } from "@/lib/places"
 import { citiesForBrother, type CityStop } from "@/lib/trails"
 import type { CityTable } from "@/data/places"
@@ -89,8 +90,14 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
     router.refresh()
   }
 
-  const showMap = booted && webgl && (wide || filters.view === "map")
-  const showList = !booted || !webgl || wide || filters.view === "list"
+  const board = filters.view === "board"
+  const showMap = !board && booted && webgl && (wide || filters.view === "map")
+  const showList = !board && (!booted || !webgl || wide || filters.view === "list")
+  const views = [
+    { id: "map", label: "Map" },
+    { id: "list", label: "List" },
+    { id: "board", label: "Leaderboard" },
+  ] as const satisfies readonly { id: MapView; label: string }[]
 
   return (
     <div>
@@ -107,6 +114,24 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
         Alexander&apos;s guide and Nicholas&apos;s, on one globe. Filled pins are visits. Open rings are recommendations, including cities still ahead.
       </p>
 
+      <div role="tablist" aria-label="Map, list, or leaderboard" className="mt-8 flex gap-2 overflow-x-auto">
+        {views.map((view) => (
+          <button
+            key={view.id}
+            type="button"
+            role="tab"
+            aria-selected={filters.view === view.id}
+            className={`h-11 shrink-0 border px-4 text-xs tracking-[0.16em] uppercase ${filters.view === view.id ? "border-paper bg-paper text-ink" : "border-line"}`}
+            onClick={() => update({ view: view.id })}
+          >
+            {view.label}
+          </button>
+        ))}
+      </div>
+
+      {board ? <Leaderboard places={places} /> : null}
+
+      {board ? null : (
       <FilterBar
         places={places}
         filters={filters}
@@ -117,13 +142,15 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
         onCity={chooseCity}
         onPlay={play}
       />
+      )}
 
-      {booted && !webgl ? (
+      {!board && booted && !webgl ? (
         <p className="mt-4 max-w-xl text-sm text-muted" role="status">
           This browser can&apos;t draw the globe. The list still has every place.
         </p>
       ) : null}
 
+      {!board ? (
       <div className={`relative mt-4 ${showList && showMap ? "lg:grid lg:grid-cols-[20.5rem_minmax(0,1fr)] lg:items-start lg:gap-3" : ""}`}>
         {showList ? (
           <PlaceList places={visible} selectedId={selected?.id ?? null} hoveredId={hovered?.id ?? null} onSelect={(id) => choose(id)} onHover={setHoveredId} />
@@ -149,8 +176,9 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
           </div>
         ) : null}
       </div>
+      ) : null}
 
-      {tables.length > 0 ? (
+      {!board && tables.length > 0 ? (
         <section className="mt-12" aria-labelledby="at-the-table">
           <h2 id="at-the-table" className="font-serif text-3xl tracking-tight">
             At the table

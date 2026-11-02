@@ -29,7 +29,7 @@ export const brothers = [
     epithet: "The actor",
     href: "/eli",
     bio: "Actor from Manchester, New Hampshire. Euphoria, Pretty Little Liars: Original Sin, and My Big Fat Greek Wedding 3.",
-    career: "Film and television, after two years at NYU Tisch.",
+    career: "Film and television.",
     asideLabel: "Music & hobbies",
     sports: "Guitar, piano, and The Vanity. Basketball growing up.",
     socials: [
@@ -47,7 +47,7 @@ export const brothers = [
     knownAs: "Niko",
     epithet: "The captain",
     href: "/niko",
-    bio: "U.S. Army captain. West Point class of 2022, and Elias's identical twin.",
+    bio: "U.S. Army captain. West Point class of 2022.",
     career: "Captain and cavalry officer.",
     asideLabel: "Sports",
     sports: "Grew up playing the same sports as his brothers.",

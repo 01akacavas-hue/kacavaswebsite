@@ -2,7 +2,7 @@ import { brotherIds, placeCategories, type BrotherId, type Place, type PlaceCate
 
 export type VisitState = "visited" | "recommended"
 
-export type MapView = "map" | "list"
+export type MapView = "map" | "list" | "board"
 
 export type MapFilters = {
   /** Brothers currently drawn. Empty means none. */
@@ -127,7 +127,8 @@ function parseCategories(value: string | null): PlaceCategory[] | null {
 
 export function parseMapFilters(params: URLSearchParams, placeIds?: ReadonlySet<string>): MapFilters {
   const placeId = params.get("place")
-  const view = params.get("view") === "list" ? "list" : "map"
+  const viewParam = params.get("view")
+  const view: MapView = viewParam === "list" || viewParam === "board" ? viewParam : "map"
   return {
     brothers: parseBrothers(params.get("brothers")),
     visits: parseVisits(params.get("visit")),
@@ -149,7 +150,7 @@ export function serializeMapFilters(filters: MapFilters): string {
   if (filters.categories) params.set("types", filters.categories.length ? filters.categories.join(",") : "none")
   if (filters.city) params.set("city", filters.city)
   if (filters.query.trim()) params.set("q", filters.query.trim())
-  if (filters.view === "list") params.set("view", "list")
+  if (filters.view !== "map") params.set("view", filters.view)
   if (filters.trails.length) params.set("trails", filters.trails.join(","))
   if (filters.placeId) params.set("place", filters.placeId)
   return params.toString()

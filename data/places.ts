@@ -16,6 +16,8 @@ type Pin = {
   notes: string
   price?: 1 | 2 | 3 | 4 | 5
   stars?: 1 | 2 | 3 | 4 | 5
+  /** Michelin stars named in the note. Omit when the note does not give a star. */
+  michelin?: 1 | 2 | 3
   wishlist?: boolean
 }
 
@@ -1774,6 +1776,7 @@ const alecPlaces: readonly Place[] = [
     category: "restaurant",
     latitude: 37.7954,
     longitude: -122.3936,
+    michelin: 1,
     notes: "One Michelin star, by the Ferry Building. Best whiskey sour and sea bream.",
   }),
   pin({

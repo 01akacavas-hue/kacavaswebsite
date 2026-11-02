@@ -33,8 +33,7 @@ export function NikoView() {
 
       <Reveal className="mt-14 max-w-2xl space-y-5 text-lg leading-relaxed">
         <p>
-          I grew up in Manchester, New Hampshire, with my identical twin, Elias, and our younger
-          brother, Alexander. I studied political science at West Point, with a minor in European regional
+          I grew up in Manchester, New Hampshire, with Elias and our younger brother, Alexander. I studied political science at West Point, with a minor in European regional
           studies, and I graduated in 2022. I serve as a captain and a cavalry officer.
         </p>
         <p className="border-l border-niko pl-5 text-base text-muted">
