@@ -257,6 +257,19 @@ a {
   transform: perspective(900px) rotateX(0deg) translateY(-6px);
 }
 
+.yearbook-ribbon {
+  min-width: 11.5rem;
+  padding: 0.9rem 1.7rem;
+  color: #f7f3ec;
+  text-align: center;
+  clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 12px 100%, 0 50%);
+  transition: transform 280ms ease;
+}
+
+.yearbook-ribbon:hover {
+  transform: rotate(-1.5deg) translateY(-3px);
+}
+
 @keyframes race-fill {
   to {
     transform: scaleX(1);
@@ -277,7 +290,9 @@ a {
   }
 
   .trophy-card,
-  .trophy-card:hover {
+  .trophy-card:hover,
+  .yearbook-ribbon,
+  .yearbook-ribbon:hover {
     transform: none;
     transition: none;
   }

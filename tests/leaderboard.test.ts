@@ -56,6 +56,10 @@ describe("leaderboard", () => {
     assert.equal(oscarCount(eli.movies), 0)
     assert.equal(eli.shorts.length, 4)
     assert.equal(eli.trophies.length, 0)
+    assert.deepEqual(
+      eli.superlatives.map((item) => item.title),
+      ["Dog Dad"],
+    )
     assert.equal(eli.movies?.some((credit) => credit.kind === "short"), false)
   })
 
@@ -69,6 +73,16 @@ describe("leaderboard", () => {
     assert.equal(achievements.niko.movies, null)
     assert.equal(achievements.niko.shows, null)
     assert.equal(achievements.niko.trophies.length, 0)
+    assert.deepEqual(
+      achievements.niko.superlatives.map((item) => item.title),
+      ["The Fattest", "Overly Angry"],
+    )
+    assert.deepEqual(
+      achievements.alec.superlatives.map((item) => item.title),
+      ["Best Scooter Driver"],
+    )
+    const titles = ["eli", "niko", "alec"].flatMap((id) => achievements[id as "eli" | "niko" | "alec"].superlatives.map((item) => item.title))
+    assert.deepEqual(titles, ["Dog Dad", "The Fattest", "Overly Angry", "Best Scooter Driver"])
   })
 
   it("flags only Michelin stars the notes name", () => {

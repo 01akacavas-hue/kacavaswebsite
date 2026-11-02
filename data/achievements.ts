@@ -21,6 +21,12 @@ export type Trophy = {
   detail: string
 }
 
+/** A joke vote. Not a real award. */
+export type Superlative = {
+  id: string
+  title: string
+}
+
 /**
  * `null` means the list has not been filled in.
  * An empty array means none are confirmed.
@@ -34,6 +40,8 @@ export type BrotherRecord = {
   /** Listed on the page. Never counted as movies. */
   shorts: readonly Credit[]
   trophies: readonly Trophy[]
+  /** Yearbook jokes. Add another object to give a brother one more. */
+  superlatives: readonly Superlative[]
 }
 
 const coda: Credit = {
@@ -97,12 +105,17 @@ export const achievements: Record<BrotherId, BrotherRecord> = {
       { id: "matriarch", title: "The Death of a Matriarch", year: "2019", role: null, kind: "short" },
     ],
     trophies: [],
+    superlatives: [{ id: "dog-dad", title: "Dog Dad" }],
   },
   niko: {
     movies: null,
     shows: null,
     shorts: [],
     trophies: [],
+    superlatives: [
+      { id: "fattest", title: "The Fattest" },
+      { id: "angry", title: "Overly Angry" },
+    ],
   },
   alec: {
     movies: [coda],
@@ -122,6 +135,7 @@ export const achievements: Record<BrotherId, BrotherRecord> = {
         detail: "1,430 people, Park City, Utah.",
       },
     ],
+    superlatives: [{ id: "scooter", title: "Best Scooter Driver" }],
   },
 }
 

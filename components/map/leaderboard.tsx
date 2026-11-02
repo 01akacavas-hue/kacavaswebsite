@@ -138,7 +138,32 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
             )
           })}
         </div>
+        <Superlatives />
       </section>
+    </div>
+  )
+}
+
+const superlativeOrder: BrotherId[] = ["niko", "alec", "eli"]
+
+function Superlatives() {
+  const ribbons = superlativeOrder.flatMap((brother) =>
+    achievements[brother].superlatives.map((item) => ({ brother, ...item })),
+  )
+  return (
+    <div className="mt-14 border border-dashed border-line p-5 sm:p-8">
+      <h3 className="font-serif text-3xl tracking-tight">Superlatives</h3>
+      <p className="mt-2 max-w-xl text-sm text-muted">Superlatives, as voted by the brothers. No refunds.</p>
+      <ul className="mt-6 flex flex-wrap gap-4">
+        {ribbons.map((ribbon) => (
+          <li key={ribbon.id}>
+            <p className="yearbook-ribbon" style={{ background: accents[ribbon.brother] }}>
+              <span className="block text-[0.62rem] tracking-[0.18em] uppercase">{brotherLabel(ribbon.brother)}</span>
+              <span className="mt-1 block font-serif text-xl leading-tight">{ribbon.title}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
