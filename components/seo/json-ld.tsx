@@ -8,12 +8,11 @@ const graph = {
       name: "Kacavas",
       url: SITE_URL,
       description:
-        "Elias, Nicholas, and Alec Kacavas. An actor, a U.S. Army captain, and a GTM lead.",
+        "Elias, Nicholas, and Alexander Kacavas. An actor, a U.S. Army captain, and a GTM lead.",
     },
     {
       "@type": "Person",
       name: "Elias Kacavas",
-      alternateName: "Eli Kacavas",
       jobTitle: "Actor",
       url: `${SITE_URL}/eli`,
       homeLocation: "Manchester, New Hampshire",
@@ -26,7 +25,7 @@ const graph = {
     {
       "@type": "Person",
       name: "Nicholas H. Kacavas",
-      alternateName: ["Niko Kacavas", "Nicholas Kacavas"],
+      alternateName: "Niko Kacavas",
       jobTitle: "Captain, United States Army",
       url: `${SITE_URL}/niko`,
       alumniOf: {
@@ -37,7 +36,8 @@ const graph = {
     },
     {
       "@type": "Person",
-      name: "Alec Kacavas",
+      name: "Alexander Kacavas",
+      alternateName: "Alec Kacavas",
       jobTitle: "GTM Lead",
       url: `${SITE_URL}/alec`,
       worksFor: {

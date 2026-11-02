@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation"
 import { PlaceSheet } from "@/components/map/place-sheet"
 import { PlaceTable } from "@/components/map/place-table"
 import { WorldMap, type MapHandle } from "@/components/map/world-map"
-import { filterPlaces } from "@/lib/places"
+import { brotherLabel, filterPlaces } from "@/lib/places"
 import { accents } from "@/lib/theme"
 import type { BrotherId, Place, PlaceFilter } from "@/lib/types"
 
 const filters = [
   { id: "all", label: "All" },
-  { id: "alec", label: "Alec" },
-  { id: "eli", label: "Eli" },
-  { id: "niko", label: "Niko" },
+  { id: "alec", label: brotherLabel("alec") },
+  { id: "eli", label: brotherLabel("eli") },
+  { id: "niko", label: brotherLabel("niko") },
 ] as const satisfies readonly { id: PlaceFilter; label: string }[]
 
 type Mode = "map" | "table"
@@ -92,7 +92,7 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
           Lock
         </button>
       </header>
-      <p className="mt-5 max-w-2xl text-muted">Alec&apos;s list, from the rooms he has been to the cities still ahead.</p>
+      <p className="mt-5 max-w-2xl text-muted">Alexander&apos;s list, from the rooms he has been to the cities still ahead.</p>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         <div role="tablist" aria-label="Map or table" className="flex gap-2">

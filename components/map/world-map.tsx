@@ -5,6 +5,7 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, 
 import { clusterPoints } from "@/lib/cluster"
 import { clampCamera, frameBounds, framePoint, zoomAt, type Camera } from "@/lib/map-camera"
 import { spiderfy } from "@/lib/spiderfy"
+import { brotherLabel } from "@/lib/places"
 import { accents } from "@/lib/theme"
 import type { Place } from "@/lib/types"
 import { MAP_HEIGHT, MAP_WIDTH, countries } from "@/lib/world"
@@ -287,13 +288,13 @@ export const WorldMap = forwardRef<MapHandle, Props>(function WorldMap({ places,
       </div>
       <ul className="absolute bottom-3 left-3 flex flex-wrap gap-x-3 gap-y-1 bg-ink/90 px-3 py-2 text-[0.7rem] tracking-[0.12em] uppercase">
         <li className="flex items-center gap-1.5">
-          <span className="size-2.5 rounded-full bg-alec" /> Alec
+          <span className="size-2.5 rounded-full bg-alec" /> {brotherLabel("alec")}
         </li>
         <li className="flex items-center gap-1.5">
-          <span className="size-2.5 rounded-full bg-eli" /> Eli
+          <span className="size-2.5 rounded-full bg-eli" /> {brotherLabel("eli")}
         </li>
         <li className="flex items-center gap-1.5">
-          <span className="size-2.5 rounded-full bg-niko" /> Niko
+          <span className="size-2.5 rounded-full bg-niko" /> {brotherLabel("niko")}
         </li>
         <li className="flex items-center gap-1.5">
           <span className="size-2.5 rounded-full border border-ink bg-transparent" /> Next up

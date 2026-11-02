@@ -44,15 +44,22 @@ export function HomeExperience() {
     return () => reduce.removeEventListener("change", decide)
   }, [])
 
+  const [inView, setInView] = useState(false)
+
   useEffect(() => {
-    if (mode !== "scroll" || sceneOn) return
-    const start = () => {
-      if (window.scrollY < 24) return
-      setSceneOn(true)
-    }
-    window.addEventListener("scroll", start, { passive: true })
-    return () => window.removeEventListener("scroll", start)
-  }, [mode, sceneOn])
+    const section = sectionRef.current
+    if (!section) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = Boolean(entry?.isIntersecting)
+        setInView(visible)
+        if (visible && mode === "scroll") setSceneOn(true)
+      },
+      { rootMargin: "160px", threshold: 0.2 },
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [mode])
 
   useEffect(() => {
     if (mode !== "scroll") return
@@ -119,6 +126,7 @@ export function HomeExperience() {
       ) {
         return
       }
+      if (!inView) return
       if (event.key === "ArrowRight" || event.key === "ArrowDown") {
         event.preventDefault()
         goTo(index + 1)
@@ -129,15 +137,15 @@ export function HomeExperience() {
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [goTo, index])
+  }, [goTo, index, inView])
 
   const frame = (
     <div className="sticky top-0 z-0 flex h-dvh flex-col px-5 pt-20 pb-4 sm:px-8">
       <header className="pointer-events-none grid grid-cols-[1fr_auto_1fr] items-center">
         <span />
-        <h1 id="home-title" className="font-serif text-sm tracking-[0.42em]">
-          KACAVAS
-        </h1>
+        <h2 id="portraits-title" className="font-serif text-sm tracking-[0.42em]">
+          Portraits
+        </h2>
         <p className="justify-self-end font-mono text-xs text-muted">
           0{brother.index + 1}
           <span> / 03</span>
@@ -190,8 +198,6 @@ export function HomeExperience() {
                 src={portrait.src}
                 alt={sceneOn ? "" : portrait.alt}
                 fill
-                priority={brother.index === 0}
-                fetchPriority={brother.index === 0 ? "high" : "auto"}
                 quality={65}
                 sizes="(max-width: 768px) 80vw, 42vw"
                 className="object-cover"
@@ -208,7 +214,7 @@ export function HomeExperience() {
         </div>
       </div>
       <div className="relative z-40 mx-auto flex w-full max-w-6xl flex-col items-center gap-3 pt-2">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <button
             type="button"
             className="grid size-11 place-items-center border border-line text-lg"
@@ -242,7 +248,7 @@ export function HomeExperience() {
           </button>
         </div>
         <p id="cube-help" className="text-center text-[0.7rem] tracking-[0.16em] text-muted uppercase">
-          {mode === "scroll" ? "Scroll, or use the arrow keys" : "Use the arrow keys"}
+          {mode === "scroll" ? "Scroll this section, or use the arrow keys" : "Use the arrow keys"}
         </p>
       </div>
     </div>
@@ -253,15 +259,15 @@ export function HomeExperience() {
       <section
         className="home-stage"
         data-brother={brother.id}
-        aria-labelledby="home-title"
+        aria-labelledby="portraits-title"
         aria-describedby="cube-help"
       >
-        <div className="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center px-5 py-24">
-          <h1 id="home-title" className="mb-8 text-center font-serif text-sm tracking-[0.42em]">
-            KACAVAS
-          </h1>
+        <div className="mx-auto flex max-w-3xl flex-col justify-center px-5 py-16">
+          <h2 id="portraits-title" className="mb-8 text-center font-serif text-sm tracking-[0.42em]">
+            Portraits
+          </h2>
           <BrotherCards index={index} presentation="stage" onIndex={setIndex} />
-          <div className="mt-6 flex items-center justify-center gap-2">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             <button type="button" className="grid size-11 place-items-center border border-line" aria-label="Previous brother" onClick={() => goTo(index - 1)}>
               ←
             </button>
@@ -289,9 +295,9 @@ export function HomeExperience() {
   return (
     <section
       ref={sectionRef}
-      className="home-stage relative h-[320vh]"
+      className="home-stage relative mt-16 h-[240vh]"
       data-brother={brother.id}
-      aria-labelledby="home-title"
+      aria-labelledby="portraits-title"
       aria-describedby="cube-help"
     >
       {frame}

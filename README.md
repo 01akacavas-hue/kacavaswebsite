@@ -1,8 +1,8 @@
 # Kacavas
 
-A portfolio for three brothers: Elias “Eli”, Nicholas “Niko”, and Alec Kacavas. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
+A portfolio for three brothers: Elias, Nicholas, and Alexander Kacavas. Nicholas goes by Niko. Alexander goes by Alec. The pages stay at `/eli`, `/niko`, and `/alec`. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
 
-Eli is an actor. Niko is a U.S. Army captain, West Point class of 2022. Alec is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
+Elias is an actor. Nicholas is a U.S. Army captain, West Point class of 2022. Alexander is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
 
 ## Local development
 
@@ -47,7 +47,7 @@ The side menu and the sitemap both read that array. Set `enabled: false` to keep
 
 ### Photographs
 
-All image paths live in `data/images.ts`. Eli’s portrait is a photograph from his own public Instagram. Alec and Niko still use placeholders until a photo can be verified.
+All image paths live in `data/images.ts`. Elias’s portrait is a photograph from his own public Instagram. Nicholas’s portrait is a field photograph. Alexander’s portrait is him on a balcony under the northern lights.
 
 Drop a photograph the brother owns into `public/`, point `src` at it, and rewrite `alt` so it describes that picture. Set `width` and `height` to the file’s pixel size. Do not commit magazine or press photos.
 
@@ -55,7 +55,7 @@ Drop a photograph the brother owns into `public/`, point `src` at it, and rewrit
 
 He is on active duty. The public page keeps general role titles, West Point, and the rank of captain. Do not add his unit, his base, or a deployment. That includes Fort Stewart and any overseas rotation. A West Point pin on the map is school, class of 2022, and the note should say so.
 
-The small note about Nicholas G. Kacavas (1927–2012) is their grandfather, a World War II Navy veteran. He is not Niko.
+The small note about Nicholas G. Kacavas (1927–2012) is their grandfather, a World War II Navy veteran. He is not Nicholas.
 
 ## Restaurants map
 

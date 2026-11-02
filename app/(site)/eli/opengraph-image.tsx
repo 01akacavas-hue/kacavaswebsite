@@ -6,7 +6,7 @@ export const contentType = ogContentType
 
 export default function OpenGraphImage() {
   return OgImage({
-    eyebrow: "Eli",
+    eyebrow: "Elias",
     title: "Elias Kacavas",
     footer: "Actor, from Manchester, New Hampshire",
     accent: "#1f6b3a",

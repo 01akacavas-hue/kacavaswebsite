@@ -12,6 +12,41 @@ import type { BrotherId, SiteImage } from "@/lib/types"
  * does not jump.
  */
 
+/** The three brothers together. Who is who in the frame is not confirmed. */
+export const familyPhoto: SiteImage = {
+  src: "/images/home/brothers.jpg",
+  alt: "The three Kacavas brothers in the backyard.",
+  width: 1600,
+  height: 1200,
+}
+
+export const familyMoments: readonly SiteImage[] = [
+  {
+    src: "/images/home/boat-skyline.jpg",
+    alt: "The three Kacavas brothers, seen from behind, looking at the San Francisco skyline from a boat.",
+    width: 768,
+    height: 1024,
+  },
+  {
+    src: "/images/home/golden-gate.jpg",
+    alt: "The three Kacavas brothers in white linen on a boat, with the Golden Gate Bridge behind them.",
+    width: 768,
+    height: 1024,
+  },
+  {
+    src: "/images/home/nyc-suits.jpg",
+    alt: "The three Kacavas brothers in suits on a lawn, with the Lower Manhattan skyline behind them.",
+    width: 1400,
+    height: 1867,
+  },
+  {
+    src: "/images/niko/brunch.jpg",
+    alt: "The three Kacavas brothers at brunch.",
+    width: 1024,
+    height: 768,
+  },
+]
+
 export const portraits: Record<BrotherId, SiteImage> = {
   eli: {
     src: "/images/eli/portrait.jpg",
@@ -19,21 +54,101 @@ export const portraits: Record<BrotherId, SiteImage> = {
     width: 1080,
     height: 1350,
   },
-  // No public photo of Nicholas could be verified without a uniform or a duty location.
   niko: {
-    src: "/images/placeholders/niko.png",
-    alt: "Placeholder portrait of Nicholas Kacavas",
-    width: 800,
-    height: 1000,
+    src: "/images/niko/field.jpg",
+    alt: "Nicholas in the field.",
+    width: 1024,
+    height: 682,
   },
-  // Alec's Instagram did not return a public photo, and LinkedIn did not expose one.
   alec: {
-    src: "/images/placeholders/alec.png",
-    alt: "Placeholder portrait of Alec Kacavas",
-    width: 800,
-    height: 1000,
+    src: "/images/alec/aurora.jpg",
+    alt: "Alexander smiling on a balcony under the northern lights.",
+    width: 1400,
+    height: 1867,
   },
 }
+
+export const nicholasPhotos: readonly SiteImage[] = [
+  {
+    src: "/images/niko/dress.jpg",
+    alt: "Nicholas in dress uniform.",
+    width: 768,
+    height: 1024,
+  },
+  {
+    src: "/images/niko/ballpark.jpg",
+    alt: "Two brothers at a ballpark.",
+    width: 1400,
+    height: 1867,
+  },
+  {
+    src: "/images/niko/dessert.jpg",
+    alt: "Nicholas eating dessert.",
+    width: 1080,
+    height: 1920,
+  },
+  {
+    src: "/images/niko/bar.jpg",
+    alt: "Nicholas in a white shirt.",
+    width: 1400,
+    height: 1867,
+  },
+  {
+    src: "/images/niko/brunch.jpg",
+    alt: "The three Kacavas brothers at brunch.",
+    width: 1024,
+    height: 768,
+  },
+]
+
+export const eliasPhotos: readonly SiteImage[] = [
+  {
+    src: "/images/eli/window.jpg",
+    alt: "Elias sitting in a window overlooking the water.",
+    width: 360,
+    height: 480,
+  },
+  {
+    src: "/images/eli/flag.jpg",
+    alt: "Two brothers holding a folded flag.",
+    width: 360,
+    height: 450,
+  },
+]
+
+export const nikoTank: SiteImage = {
+  src: "/images/niko/tank.jpg",
+  alt: "Tank crew during training.",
+  width: 993,
+  height: 758,
+}
+
+export const alexanderPhotos: readonly SiteImage[] = [
+  {
+    src: "/images/alec/surfboard.jpg",
+    alt: "Alexander on a beach, holding a wooden surfboard.",
+    width: 1600,
+    height: 1165,
+  },
+  {
+    src: "/images/alec/fleece.jpg",
+    alt: "Alexander smiling in beach grass.",
+    width: 1400,
+    height: 2103,
+  },
+  {
+    src: "/images/alec/champagne.jpg",
+    alt: "Alexander opening a bottle of champagne.",
+    width: 1400,
+    height: 2100,
+  },
+  {
+    src: "/images/alec/wetsuit.jpg",
+    alt: "Alexander in a wetsuit beside a surfboard.",
+    width: 724,
+    height: 1086,
+  },
+]
 
 export type GalleryItem = SiteImage & {
   id: string
@@ -45,19 +160,19 @@ export const gallery: readonly GalleryItem[] = [
   {
     id: "eli-portrait",
     ...portraits.eli,
-    caption: "Eli. Replace with a photograph he owns.",
+    caption: "Elias. Replace with a photograph he owns.",
     group: "Portraits",
   },
   {
     id: "niko-portrait",
     ...portraits.niko,
-    caption: "Niko. Replace with a photograph he is willing to publish.",
+    caption: "Nicholas in the field.",
     group: "Portraits",
   },
   {
     id: "alec-portrait",
     ...portraits.alec,
-    caption: "Alec. Replace with a photograph he owns.",
+    caption: "Alexander. Replace with a photograph he owns.",
     group: "Portraits",
   },
   {

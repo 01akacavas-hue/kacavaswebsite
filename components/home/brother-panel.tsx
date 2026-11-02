@@ -37,6 +37,7 @@ export function BrotherPanel({
       <h2 className={`font-serif leading-none tracking-tight ${compact ? "mt-1 text-4xl" : "mt-2 text-5xl"}`}>
         {brother.shortName}
       </h2>
+      {brother.knownAs ? <p className="mt-1 text-sm text-muted">Goes by {brother.knownAs}.</p> : null}
       <p className={`text-muted ${compact ? "mt-2 line-clamp-3 text-[0.82rem] leading-snug" : "mt-4 text-base leading-relaxed"}`}>
         {brother.bio}
       </p>

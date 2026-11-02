@@ -1,5 +1,7 @@
+import Image from "next/image"
 import { ViewTransition } from "react"
 import { alecQuote, alecRoles } from "@/data/alec"
+import { alexanderPhotos } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -12,7 +14,8 @@ export function AlecView() {
       <header className="grid items-end gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
         <div>
           <p className="text-xs tracking-[0.22em] text-alec uppercase">GTM lead</p>
-          <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Alec</h1>
+          <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Alexander</h1>
+          <p className="mt-3 text-sm tracking-[0.14em] text-muted uppercase">Goes by Alec</p>
           <p className="mt-4 max-w-xl text-lg text-muted">
             GTM lead at Lance, in San Francisco. I went to Babson, and I love any sport.
           </p>
@@ -69,6 +72,25 @@ export function AlecView() {
             </li>
           ))}
         </ol>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">Photographs</h2>
+        <ul className="mt-8 grid gap-3 sm:grid-cols-3">
+          {alexanderPhotos.map((photo, index) => (
+            <li key={photo.src} className={index === 0 ? "sm:col-span-3" : ""}>
+              <div className={`relative bg-ink-2 ${index === 0 ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes={index === 0 ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 30vw"}
+                  className="object-cover"
+                />
+              </div>
+            </li>
+          ))}
+        </ul>
       </Reveal>
 
       <Reveal className="mt-12 max-w-2xl">

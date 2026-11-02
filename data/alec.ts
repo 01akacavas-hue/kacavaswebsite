@@ -56,6 +56,6 @@ export const alecRoles: readonly Role[] = [
 
 export const alecQuote = {
   text: "From hosting family and friends at home to traveling around the world. Taking care of others is how I believe people should operate.",
-  source: "Alec, on joining Lance",
+  source: "Alexander, on joining Lance",
   href: "https://www.linkedin.com/posts/aleckacavas_i-have-a-new-hotel-key-it-unlocks-my-role-activity-7519067663931752448-WxTb",
 }

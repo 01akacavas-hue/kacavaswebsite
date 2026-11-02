@@ -1,5 +1,7 @@
 import { ViewTransition } from "react"
+import Image from "next/image"
 import { eliCredits, eliMarquee, vanity } from "@/data/eli"
+import { eliasPhotos } from "@/data/images"
 import { oxfordJoin } from "@/lib/lists"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Marquee } from "@/components/brothers/marquee"
@@ -22,9 +24,23 @@ export function EliView() {
       <header>
         <p className="text-xs tracking-[0.22em] text-eli uppercase">Actor</p>
         <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Elias</h1>
-        <p className="mt-3 text-lg text-muted">Eli Kacavas. Manchester, New Hampshire. Based in New York, as of June 2024.</p>
+        <p className="mt-3 text-lg text-muted">Elias Kacavas. Manchester, New Hampshire. Based in New York, as of June 2024.</p>
       </header>
       <Marquee titles={eliMarquee} />
+      <ul className="mt-8 flex flex-wrap gap-4">
+        {eliasPhotos.map((photo) => (
+          <li key={photo.src} className="w-[min(100%,220px)] sm:w-[220px]">
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              width={photo.width}
+              height={photo.height}
+              sizes="220px"
+              className="h-auto w-full"
+            />
+          </li>
+        ))}
+      </ul>
       <Reveal>
         <div className="grid items-start gap-10 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
           <ViewTransition name="portrait-eli">
@@ -37,7 +53,7 @@ export function EliView() {
               Elias Kacavas grew up in Manchester, New Hampshire, in a Greek Orthodox community: St.
               George Cathedral, the Glendi festival, and Greek school. His grandfather’s family came
               from Megalopolis, near Sparta. He graduated from Manchester Central High. Nicholas is
-              his identical twin, and Alec is their younger brother.
+              his identical twin, and Alexander is their younger brother.
             </p>
             <p>
               He planned on medicine, then spent a gap year in Bay Ridge, Brooklyn, sleeping on a
