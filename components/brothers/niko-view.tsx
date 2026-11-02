@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
-import { nikoPromotion, nikoService } from "@/data/niko"
+import { nikoPromotion, nikoQuotes, nikoService } from "@/data/niko"
 import { nicholasPhotos, nikoTank } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
@@ -41,6 +41,18 @@ export function NikoView() {
           grew up playing the same sports. I love the arts, and in high school I took a summer
           program in political studies.
         </p>
+      </Reveal>
+
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">In his own words</h2>
+        <div className="mt-10 grid max-w-3xl gap-12">
+          {nikoQuotes.map((quote) => (
+            <blockquote key={quote.text} className="border-l-2 border-niko pl-5">
+              <p className="font-serif text-3xl leading-snug text-niko sm:text-5xl">“{quote.text}”</p>
+              {quote.context ? <footer className="mt-4 text-sm text-muted">{quote.context}</footer> : null}
+            </blockquote>
+          ))}
+        </div>
       </Reveal>
 
       <Reveal className="mt-16">

@@ -49,6 +49,21 @@ export const nikoService: readonly ServiceEntry[] = [
   },
 ]
 
+export const nikoQuotes = [
+  {
+    text: "I'm too big for this world.",
+    context: "While taking his shirt off.",
+  },
+  {
+    text: "I essentially won a medal for being me.",
+    context: "On receiving an award.",
+  },
+  {
+    text: "Never stop dreaming, and never stop at dreaming.",
+    context: "",
+  },
+] as const
+
 export const nikoPromotion = {
   year: "2025",
     detail:

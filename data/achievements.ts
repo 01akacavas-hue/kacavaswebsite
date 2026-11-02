@@ -134,6 +134,12 @@ export const achievements: Record<BrotherId, BrotherRecord> = {
         kicker: "Longest continuous shotski",
         detail: "1,430 people, Park City, Utah.",
       },
+      {
+        id: "grillmaster",
+        title: "Grillmaster",
+        kicker: "Resident grillmaster",
+        detail: "A board of steaks off the grill.",
+      },
     ],
     superlatives: [{ id: "scooter", title: "Best Scooter Driver" }],
   },

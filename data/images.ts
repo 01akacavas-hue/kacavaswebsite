@@ -123,6 +123,13 @@ export const nikoTank: SiteImage = {
   height: 758,
 }
 
+export const alexanderGrill: SiteImage = {
+  src: "/images/alec/grill.jpg",
+  alt: "A board of steaks off the grill.",
+  width: 768,
+  height: 1024,
+}
+
 export const alexanderPhotos: readonly (SiteImage & { caption?: string; wide?: boolean })[] = [
   {
     src: "/images/alec/rho-lock-in.jpg",

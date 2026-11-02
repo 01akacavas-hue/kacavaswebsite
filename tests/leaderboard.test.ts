@@ -81,6 +81,10 @@ describe("leaderboard", () => {
       achievements.alec.superlatives.map((item) => item.title),
       ["Best Scooter Driver"],
     )
+    assert.deepEqual(
+      achievements.alec.trophies.map((item) => item.title),
+      ["CODA", "1,430", "Grillmaster"],
+    )
     const titles = ["eli", "niko", "alec"].flatMap((id) => achievements[id as "eli" | "niko" | "alec"].superlatives.map((item) => item.title))
     assert.deepEqual(titles, ["Dog Dad", "The Fattest", "Overly Angry", "Best Scooter Driver"])
   })

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
 import { academyAwardPhoto, alecQuote, alecRoles } from "@/data/alec"
-import { alexanderPhotos } from "@/data/images"
+import { alexanderGrill, alexanderPhotos } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -84,6 +84,22 @@ export function AlecView() {
             <div className="mt-8">
               <h3 className="font-serif text-3xl">Longest continuous shotski</h3>
               <p className="mt-4 leading-relaxed">I hold a world record: the longest continuous shotski, with 1,430 people, in Park City, Utah.</p>
+            </div>
+          </article>
+          <article className="grid border border-line lg:col-span-2 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]">
+            <div className="relative aspect-[3/4] min-h-72 bg-ink-2 lg:aspect-auto lg:h-full">
+              <Image
+                src={alexanderGrill.src}
+                alt={alexanderGrill.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 280px"
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-8">
+              <p className="text-xs tracking-[0.18em] text-alec uppercase">Grill</p>
+              <h3 className="mt-2 font-serif text-4xl">Resident grillmaster.</h3>
+              <p className="mt-4 max-w-xl leading-relaxed">I am the resident grillmaster.</p>
             </div>
           </article>
         </div>
