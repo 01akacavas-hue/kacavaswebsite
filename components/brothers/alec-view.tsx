@@ -114,17 +114,20 @@ export function AlecView() {
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Photographs</h2>
         <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-          {alexanderPhotos.map((photo, index) => (
-            <li key={photo.src} className={index === 0 ? "sm:col-span-3" : ""}>
-              <div className={`relative bg-ink-2 ${index === 0 ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes={index === 0 ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 30vw"}
-                  className="object-cover"
-                />
-              </div>
+          {alexanderPhotos.map((photo) => (
+            <li key={photo.src} className={photo.wide ? "sm:col-span-3" : ""}>
+              <figure>
+                <div className={`relative bg-ink-2 ${photo.wide ? "aspect-[8/5]" : "aspect-[3/4]"}`}>
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes={photo.wide ? "(max-width: 768px) 100vw, 1100px" : "(max-width: 640px) 100vw, 30vw"}
+                    className="object-cover"
+                  />
+                </div>
+                {photo.caption ? <figcaption className="mt-3 text-sm text-muted">{photo.caption}</figcaption> : null}
+              </figure>
             </li>
           ))}
         </ul>
