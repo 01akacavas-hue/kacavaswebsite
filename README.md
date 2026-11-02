@@ -1,8 +1,8 @@
 # Kacavas
 
-A portfolio for three brothers: Elias, Nicholas, and Alexander Kacavas. Nicholas goes by Niko. Alexander goes by Alec. The pages stay at `/eli`, `/niko`, and `/alec`. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
+A portfolio for three brothers: Nicholas, Elias, and Alexander Kacavas. Nicholas goes by Niko. Alexander goes by Alec. The pages stay at `/niko`, `/eli`, and `/alec`. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
 
-Elias is an actor. Nicholas is a U.S. Army captain, West Point class of 2022. Alexander is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
+Nicholas is a U.S. Army captain, West Point class of 2022. Elias is an actor. Alexander is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
 
 ## Local development
 

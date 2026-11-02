@@ -4,10 +4,7 @@ import { brothers } from "@/data/brothers"
 import { familyMoments, familyPhoto } from "@/data/images"
 import { SiteLinks } from "@/components/chrome/site-links"
 
-const order = ["alec", "eli", "niko"] as const
-
 export function HomeLanding() {
-  const cards = order.map((id) => brothers.find((brother) => brother.id === id)).filter((brother) => brother != null)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 pt-24 sm:px-8">
@@ -18,7 +15,7 @@ export function HomeLanding() {
             Kacavas
           </h1>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-muted">
-            Elias, Nicholas, and Alexander. Three brothers, one house on the internet, and the places they keep.
+            Nicholas, Elias, and Alexander. Three brothers, one house on the internet, and the places they keep.
           </p>
           <p className="mt-8">
             <a href="#brothers" className="text-xs tracking-[0.16em] uppercase underline decoration-line underline-offset-4">
@@ -55,7 +52,7 @@ export function HomeLanding() {
         </h2>
         <p className="mt-3 max-w-xl text-muted">Each keeps his own page. Start with whichever one you came for.</p>
         <ul className="mt-8 grid gap-4 md:grid-cols-3">
-          {cards.map((brother) => (
+          {brothers.map((brother) => (
             <li key={brother.id}>
               <article className="flex h-full flex-col border border-line border-t-2 p-5" style={{ borderTopColor: brother.accent }}>
                 <p className="text-xs tracking-[0.18em] uppercase" style={{ color: brother.accent }}>

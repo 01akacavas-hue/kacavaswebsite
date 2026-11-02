@@ -3,7 +3,7 @@ import type { BrotherId, SocialLink } from "@/lib/types"
 
 export type Brother = {
   id: BrotherId
-  /** Face order on the home cube: 0 Elias, 1 Nicholas, 2 Alec. */
+  /** Scroll order on the home scene: 0 Nicholas, 1 Elias, 2 Alexander. */
   index: number
   name: string
   shortName: string
@@ -22,8 +22,23 @@ export type Brother = {
 
 export const brothers = [
   {
-    id: "eli",
+    id: "niko",
     index: 0,
+    name: "Nicholas Kacavas",
+    shortName: "Nicholas",
+    knownAs: "Niko",
+    epithet: "The captain",
+    href: "/niko",
+    bio: "U.S. Army captain. West Point class of 2022.",
+    career: "Captain and cavalry officer.",
+    asideLabel: "Sports",
+    sports: "Grew up playing the same sports as his brothers.",
+    socials: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/nicholas-kacavas-b65337201" }],
+    accent: accents.niko,
+  },
+  {
+    id: "eli",
+    index: 1,
     name: "Elias Kacavas",
     shortName: "Elias",
     epithet: "The actor",
@@ -38,21 +53,6 @@ export const brothers = [
       { label: "Rotten Tomatoes", href: "https://www.rottentomatoes.com/celebrity/elias_kacavas" },
     ],
     accent: accents.eli,
-  },
-  {
-    id: "niko",
-    index: 1,
-    name: "Nicholas Kacavas",
-    shortName: "Nicholas",
-    knownAs: "Niko",
-    epithet: "The captain",
-    href: "/niko",
-    bio: "U.S. Army captain. West Point class of 2022.",
-    career: "Captain and cavalry officer.",
-    asideLabel: "Sports",
-    sports: "Grew up playing the same sports as his brothers.",
-    socials: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/nicholas-kacavas-b65337201" }],
-    accent: accents.niko,
   },
   {
     id: "alec",

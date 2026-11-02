@@ -85,8 +85,8 @@ describe("leaderboard", () => {
       achievements.alec.trophies.map((item) => item.title),
       ["CODA", "1,430", "Grillmaster"],
     )
-    const titles = ["eli", "niko", "alec"].flatMap((id) => achievements[id as "eli" | "niko" | "alec"].superlatives.map((item) => item.title))
-    assert.deepEqual(titles, ["Dog Dad", "The Fattest", "Overly Angry", "Best Scooter Driver"])
+    const titles = ["niko", "eli", "alec"].flatMap((id) => achievements[id as "niko" | "eli" | "alec"].superlatives.map((item) => item.title))
+    assert.deepEqual(titles, ["The Fattest", "Overly Angry", "Dog Dad", "Best Scooter Driver"])
   })
 
   it("flags only Michelin stars the notes name", () => {

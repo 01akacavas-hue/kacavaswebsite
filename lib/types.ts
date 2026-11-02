@@ -1,4 +1,4 @@
-export const brotherIds = ["eli", "niko", "alec"] as const
+export const brotherIds = ["niko", "eli", "alec"] as const
 
 export type BrotherId = (typeof brotherIds)[number]
 

@@ -28,11 +28,11 @@ const serif = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kacavas — Elias, Nicholas, and Alexander",
+    default: "Kacavas — Nicholas, Elias, and Alexander",
     template: "%s — Kacavas",
   },
   description:
-    "Elias, Nicholas, and Alexander Kacavas. An actor, a U.S. Army captain, and a GTM lead, from Manchester, New Hampshire.",
+    "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",
   applicationName: "Kacavas",
   openGraph: {
     type: "website",

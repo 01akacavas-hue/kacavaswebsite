@@ -1,4 +1,4 @@
-import type { BrotherId, Place, PlaceFilter, PlaceSortKey } from "./types"
+import { brotherIds, type BrotherId, type Place, type PlaceFilter, type PlaceSortKey } from "./types"
 
 export function filterPlaces(places: readonly Place[], filter: PlaceFilter): Place[] {
   if (filter === "all") return [...places]
@@ -95,4 +95,9 @@ export function brotherLabel(id: BrotherId): string {
   if (id === "alec") return "Alexander"
   if (id === "eli") return "Elias"
   return "Nicholas"
+}
+
+/** Nicholas, then Elias, then Alexander. */
+export function brothersInOrder(ids: readonly BrotherId[]): BrotherId[] {
+  return [...ids].sort((a, b) => brotherIds.indexOf(a) - brotherIds.indexOf(b))
 }

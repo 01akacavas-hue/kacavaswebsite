@@ -144,7 +144,7 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
   )
 }
 
-const superlativeOrder: BrotherId[] = ["niko", "alec", "eli"]
+const superlativeOrder: readonly BrotherId[] = brotherIds
 
 function Superlatives() {
   const ribbons = superlativeOrder.flatMap((brother) =>

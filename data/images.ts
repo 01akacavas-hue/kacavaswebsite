@@ -48,17 +48,17 @@ export const familyMoments: readonly SiteImage[] = [
 ]
 
 export const portraits: Record<BrotherId, SiteImage> = {
-  eli: {
-    src: "/images/eli/portrait.jpg",
-    alt: "Elias Kacavas, photographed for his own Instagram",
-    width: 1080,
-    height: 1350,
-  },
   niko: {
     src: "/images/niko/field.jpg",
     alt: "Nicholas in the field.",
     width: 1024,
     height: 682,
+  },
+  eli: {
+    src: "/images/eli/portrait.jpg",
+    alt: "Elias Kacavas, photographed for his own Instagram",
+    width: 1080,
+    height: 1350,
   },
   alec: {
     src: "/images/alec/aurora.jpg",
@@ -185,15 +185,15 @@ export type GalleryItem = SiteImage & {
 
 export const gallery: readonly GalleryItem[] = [
   {
-    id: "eli-portrait",
-    ...portraits.eli,
-    caption: "Elias. Replace with a photograph he owns.",
-    group: "Portraits",
-  },
-  {
     id: "niko-portrait",
     ...portraits.niko,
     caption: "Nicholas in the field.",
+    group: "Portraits",
+  },
+  {
+    id: "eli-portrait",
+    ...portraits.eli,
+    caption: "Elias. Replace with a photograph he owns.",
     group: "Portraits",
   },
   {

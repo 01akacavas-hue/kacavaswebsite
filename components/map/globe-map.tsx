@@ -11,7 +11,7 @@ import { loadEditorialStyle, type RecolorableStyle } from "@/lib/globe-style"
 import { placesToGeoJSON, trailsToGeoJSON } from "@/lib/pins"
 import { accents } from "@/lib/theme"
 import type { CityStop } from "@/lib/trails"
-import type { BrotherId, Place } from "@/lib/types"
+import { brotherIds, type BrotherId, type Place } from "@/lib/types"
 
 type ClusterMark = {
   id: number
@@ -358,7 +358,7 @@ export function GlobeMap({
         onMouseLeave={() => onHover(null)}
       >
         <Source id="trails" type="geojson" data={trails}>
-          {(["alec", "niko", "eli"] as const).map((id) => (
+          {brotherIds.map((id) => (
             <Layer
               key={id}
               id={`trail-${id}`}
