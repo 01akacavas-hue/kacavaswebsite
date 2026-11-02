@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { PlaceSheet } from "@/components/map/place-sheet"
 import { PlaceTable } from "@/components/map/place-table"
 import { WorldMap, type MapHandle } from "@/components/map/world-map"
+import { cityTables } from "@/data/places"
 import { filterPlaces } from "@/lib/places"
 import { accents } from "@/lib/theme"
 import type { BrotherId, Place, PlaceFilter } from "@/lib/types"
@@ -92,7 +93,7 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
           Lock
         </button>
       </header>
-      <p className="mt-5 max-w-2xl text-muted">Alec&apos;s list, from the rooms he has been to the cities still ahead.</p>
+      <p className="mt-5 max-w-2xl text-muted">Tables and towns the brothers have been to, and the places still ahead.</p>
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         <div role="tablist" aria-label="Map or table" className="flex gap-2">
@@ -142,6 +143,24 @@ export function PlacesExplorer({ places }: { places: readonly Place[] }) {
         )}
         {mode === "map" && selected ? <PlaceSheet place={selected} places={visible} onClose={() => setSelectedId(null)} onSelect={stepTo} /> : null}
       </div>
+
+      <section className="mt-10" aria-labelledby="what-to-eat">
+        <h2 id="what-to-eat" className="font-serif text-3xl tracking-tight">
+          What to eat
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">Dishes, not places. They stay off the map.</p>
+        <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+          {cityTables.map((table) => (
+            <li key={table.id} className="border border-line p-4">
+              <p className="text-xs tracking-[0.16em] text-muted uppercase">
+                {table.city}, {table.country}
+              </p>
+              {table.note ? <p className="mt-2 text-sm leading-relaxed">{table.note}</p> : null}
+              <p className="mt-2 text-sm leading-relaxed">{table.dishes.join(". ")}.</p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="mt-10" aria-labelledby="next-up">
         <h2 id="next-up" className="font-serif text-3xl tracking-tight">

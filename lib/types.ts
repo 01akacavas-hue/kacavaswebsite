@@ -25,6 +25,10 @@ export type PlaceCategory = (typeof placeCategories)[number]
 
 export type PlaceSortKey = "name" | "city" | "neighborhood" | "category" | "price" | "stars"
 
+export const placeGrades = ["A+", "A", "A-", "B+"] as const
+
+export type PlaceGrade = (typeof placeGrades)[number]
+
 export type SocialLink = {
   label: string
   href: string
@@ -53,6 +57,16 @@ export type Place = {
   price?: 1 | 2 | 3 | 4 | 5
   /** Count of `*` marks used as a rating in the guide, from 1 to 5. */
   stars?: 1 | 2 | 3 | 4 | 5
+  /** A letter grade from Niko's notes. */
+  grade?: PlaceGrade
+  /** Michelin stars, kept apart from a personal star rating. */
+  michelin?: 1 | 2 | 3
+  /** Marked "must try" in the notes. */
+  mustTry?: boolean
+  /**
+   * A recommendation he has not tried. Drawn as an open ring, not a visit.
+   */
+  recommended?: boolean
   /** A city still to visit. Drawn as an outline pin, separate from the visits. */
   wishlist?: boolean
 }

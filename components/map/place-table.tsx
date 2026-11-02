@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { brotherLabel, emptyPlaceQuery, priceLabel, queryPlaces, sortPlaces, starLabel, uniqueValues, type PlaceQuery } from "@/lib/places"
+import { accents } from "@/lib/theme"
 import { brotherIds, type Place, type PlaceSortKey } from "@/lib/types"
 
 const columns: { key: PlaceSortKey; label: string }[] = [
@@ -104,7 +105,25 @@ export function PlaceTable({ places, onOpen }: { places: readonly Place[]; onOpe
               >
                 <th scope="row" className="px-3 py-3 text-left font-normal">
                   <span className="font-serif text-base">{place.name}</span>
-                  {place.wishlist ? <span className="mt-1 block text-[0.68rem] tracking-[0.14em] text-muted uppercase">Next up</span> : null}
+                  <span className="mt-1 flex flex-wrap items-center gap-2 text-[0.68rem] tracking-[0.14em] text-muted uppercase">
+                    {place.brothers.map((id) => (
+                      <span key={id} className="inline-flex items-center gap-1">
+                        <span
+                          className="size-2 rounded-full"
+                          style={{
+                            background: place.recommended || place.wishlist ? "transparent" : accents[id],
+                            boxShadow: place.recommended || place.wishlist ? `inset 0 0 0 1.5px ${accents[id]}` : undefined,
+                          }}
+                        />
+                        {brotherLabel(id)}
+                      </span>
+                    ))}
+                    {place.grade ? <span>{place.grade}</span> : null}
+                    {place.michelin ? <span>Michelin</span> : null}
+                    {place.mustTry ? <span>Must try</span> : null}
+                    {place.recommended ? <span>Not tried</span> : null}
+                    {place.wishlist ? <span>Next up</span> : null}
+                  </span>
                 </th>
                 <td className="px-3 py-3">{place.city}</td>
                 <td className="px-3 py-3 text-muted">{place.neighborhood ?? "—"}</td>

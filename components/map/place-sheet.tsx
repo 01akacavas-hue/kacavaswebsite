@@ -29,7 +29,9 @@ export function PlaceSheet({
     >
       <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line sm:hidden" />
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[0.68rem] tracking-[0.16em] text-muted uppercase">{place.wishlist ? "Next up" : place.category}</p>
+        <p className="text-[0.68rem] tracking-[0.16em] text-muted uppercase">
+          {place.wishlist ? "Next up" : place.recommended ? "Recommendation" : place.category}
+        </p>
         <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase" onClick={onClose}>
           Close
         </button>
@@ -43,10 +45,16 @@ export function PlaceSheet({
             {starLabel(place.stars)}
           </span>
         ) : null}
+        {place.grade ? <span>{place.grade}</span> : null}
+        {place.michelin ? (
+          <span>{place.michelin === 1 ? "Michelin star" : `${place.michelin} Michelin stars`}</span>
+        ) : null}
+        {place.mustTry ? <span className="text-xs tracking-[0.12em] uppercase">Must try</span> : null}
+        {place.recommended ? <span className="text-xs tracking-[0.12em] text-faint uppercase">Not tried yet</span> : null}
         {place.approximate ? <span className="text-xs tracking-[0.12em] text-faint uppercase">Approximate pin</span> : null}
       </div>
       <p className="mt-4 leading-relaxed">{place.notes}</p>
-      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Who has been">
+      <ul className="mt-4 flex flex-wrap gap-2" aria-label={place.recommended ? "Who recommends it" : "Who has been"}>
         {place.brothers.map((id) => (
           <li key={id} className="inline-flex h-8 items-center gap-2 border border-line px-2.5 text-xs tracking-[0.12em] uppercase">
             <span className="size-2 rounded-full" style={{ background: place.wishlist ? "transparent" : accents[id], boxShadow: place.wishlist ? `inset 0 0 0 1.5px ${accents[id]}` : undefined }} />

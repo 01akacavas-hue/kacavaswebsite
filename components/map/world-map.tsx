@@ -298,6 +298,9 @@ export const WorldMap = forwardRef<MapHandle, Props>(function WorldMap({ places,
         <li className="flex items-center gap-1.5">
           <span className="size-2.5 rounded-full border border-ink bg-transparent" /> Next up
         </li>
+        <li className="flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full border-2 border-niko bg-transparent" /> Not tried
+        </li>
       </ul>
     </div>
   )
@@ -369,6 +372,7 @@ function Pin({
 }) {
   const colors = place.brothers.map((id) => accents[id])
   const fill = colors[0] ?? "#1a1714"
+  const hollow = Boolean(place.wishlist || place.recommended)
   const radius = (selected ? 7.5 : 5.5) / scale
   const hit = 14 / scale
 
@@ -402,9 +406,9 @@ function Pin({
       ))}
       <circle
         r={radius}
-        fill={place.wishlist ? "none" : fill}
-        stroke={selected ? "#1a1714" : place.wishlist ? fill : "#fffdf8"}
-        strokeWidth={(place.wishlist ? 2 : 1.4) / scale}
+        fill={hollow ? "none" : fill}
+        stroke={selected ? "#1a1714" : hollow ? fill : "#fffdf8"}
+        strokeWidth={(hollow ? 2 : 1.4) / scale}
       />
     </g>
   )
