@@ -9,7 +9,7 @@ import {
   serializeMapFilters,
   visiblePlaces,
 } from "../lib/map-filters"
-import { placesToGeoJSON } from "../lib/pins"
+import { placeIdFromMapFeatures, placesToGeoJSON } from "../lib/pins"
 import { citiesForBrother, greatCircle, splitDateline, trailLines } from "../lib/trails"
 import type { Place } from "../lib/types"
 
@@ -114,6 +114,18 @@ describe("trails and pins", () => {
       { city: "B", country: "United States", latitude: 21, longitude: -170 },
     ])
     assert.ok(lines.length >= 2)
+  })
+
+  it("reads a place id from a map click and ignores clusters", () => {
+    assert.equal(
+      placeIdFromMapFeatures([
+        { properties: { cluster: true, id: "cluster-1" } },
+        { id: "boston-224", properties: {} },
+      ]),
+      "boston-224",
+    )
+    assert.equal(placeIdFromMapFeatures([{ properties: { id: "sf-angler", cluster: false } }]), "sf-angler")
+    assert.equal(placeIdFromMapFeatures([]), null)
   })
 
   it("marks a shared recommendation with two brothers and an open ring", () => {

@@ -8,7 +8,7 @@ setWorkerUrl("/workers/maplibre")
 import "maplibre-gl/dist/maplibre-gl.css"
 import { ClusterDonut } from "@/components/map/cluster-donut"
 import { loadEditorialStyle, type RecolorableStyle } from "@/lib/globe-style"
-import { placesToGeoJSON, trailsToGeoJSON } from "@/lib/pins"
+import { placeIdFromMapFeatures, placesToGeoJSON, trailsToGeoJSON } from "@/lib/pins"
 import { accents } from "@/lib/theme"
 import type { CityStop } from "@/lib/trails"
 import { brotherIds, type BrotherId, type Place } from "@/lib/types"
@@ -61,7 +61,8 @@ function readClusters(map: MaplibreMap): ClusterMark[] {
 async function expandCluster(map: MaplibreMap, mark: ClusterMark, reducedMotion: boolean) {
   const source = map.getSource("places")
   if (!source || source.type !== "geojson") return
-  const zoom = await (source as GeoJSONSource).getClusterExpansionZoom(mark.id)
+  const expanded = await (source as GeoJSONSource).getClusterExpansionZoom(mark.id)
+  const zoom = Math.max(expanded, map.getZoom() + 1.25)
   map.easeTo({
     center: [mark.longitude, mark.latitude],
     zoom,
@@ -219,7 +220,7 @@ export function GlobeMap({
   useEffect(() => {
     if (!map || !cityFocus) return
     spinPaused.current = true
-    void fly(map, cityFocus.longitude, cityFocus.latitude, phone ? 9.5 : 10.5, phone || reducedMotion ? 0 : 28, reducedMotion ? 0 : 1500)
+    void fly(map, cityFocus.longitude, cityFocus.latitude, phone ? 12.6 : 13.2, phone || reducedMotion ? 0 : 28, reducedMotion ? 0 : 1500)
   }, [map, cityFocus, phone, reducedMotion])
 
   useEffect(() => {
@@ -313,8 +314,30 @@ export function GlobeMap({
   }
 
   function onClick(event: MapLayerMouseEvent) {
-    const feature = event.features?.find((item) => item.properties && !item.properties.cluster && item.properties.id)
-    onSelect(feature?.properties?.id ? String(feature.properties.id) : null)
+    const map = event.target
+    const layers = ["pins-hit", "pins", "pins-shared"].filter((id) => map.getLayer(id))
+    const pad = phone ? 28 : 16
+    const box: [[number, number], [number, number]] = [
+      [event.point.x - pad, event.point.y - pad],
+      [event.point.x + pad, event.point.y + pad],
+    ]
+    const features = layers.length ? map.queryRenderedFeatures(box, { layers }) : []
+    let bestId: string | null = null
+    let best = Number.POSITIVE_INFINITY
+    const seen = new Set<string>()
+    for (const feature of features) {
+      const id = placeIdFromMapFeatures([feature])
+      if (!id || seen.has(id) || feature.geometry.type !== "Point") continue
+      seen.add(id)
+      const [lng, lat] = feature.geometry.coordinates
+      const projected = map.project([lng ?? 0, lat ?? 0])
+      const distance = Math.hypot(projected.x - event.point.x, projected.y - event.point.y)
+      if (distance < best) {
+        best = distance
+        bestId = id
+      }
+    }
+    onSelect(bestId)
   }
 
   function onMove(event: MapLayerMouseEvent) {
@@ -351,7 +374,7 @@ export function GlobeMap({
         touchPitch={false}
         pixelRatio={pixelRatio}
         cursor={hovered ? "pointer" : "grab"}
-        interactiveLayerIds={["pins", "pins-shared"]}
+        interactiveLayerIds={["pins-hit", "pins", "pins-shared"]}
         onLoad={onLoad}
         onClick={onClick}
         onMouseMove={onMove}
@@ -389,6 +412,16 @@ export function GlobeMap({
           promoteId="id"
         >
           <Layer
+            id="pins-hit"
+            type="circle"
+            filter={unclustered}
+            paint={{
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 2, 18, 8, 22, 14, 28],
+              "circle-color": "#000000",
+              "circle-opacity": 0,
+            }}
+          />
+          <Layer
             id="pins"
             type="circle"
             filter={unclustered}
@@ -420,8 +453,9 @@ export function GlobeMap({
               type="button"
               className="rounded-full"
               aria-label={`${mark.count} places. Zoom in.`}
-              onClick={(event) => {
+              onPointerUp={(event) => {
                 event.stopPropagation()
+                event.preventDefault()
                 if (map) void expandCluster(map, mark, reducedMotion)
               }}
             >

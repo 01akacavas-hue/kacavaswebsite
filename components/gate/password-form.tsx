@@ -40,7 +40,7 @@ export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean })
       <p className="text-xs tracking-[0.22em] text-muted uppercase">Private</p>
       <h1 className="mt-3 font-serif text-5xl tracking-tight sm:text-6xl">Restaurants & places</h1>
       <p className="mt-4 text-muted">A map of tables and towns. Ask a brother for the password.</p>
-      <form className="mt-8 text-left" aria-busy={pending} onSubmit={(event) => void onSubmit(event)}>
+      <form method="post" action="/gate" className="mt-8 text-left" aria-busy={pending} onSubmit={(event) => void onSubmit(event)}>
         <label htmlFor="site-password" className="text-xs tracking-[0.16em] text-faint uppercase">
           Password
         </label>
