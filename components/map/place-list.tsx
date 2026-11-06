@@ -55,7 +55,7 @@ export function PlaceList({
                 <span>
                   <span className="block font-serif text-lg leading-tight">{place.name}</span>
                   <span className={`mt-1 block text-xs tracking-[0.08em] uppercase ${active ? "text-ink/70" : "text-muted"}`}>
-                    {place.city} · {placeStateLabel(place)} · {brothersInOrder(place.brothers).map((id) => brotherLabel(id)).join(", ")}
+                    {place.countryPin ? "Country" : place.city} · {placeStateLabel(place)} · {brothersInOrder(place.brothers).map((id) => brotherLabel(id)).join(", ")}
                   </span>
                 </span>
               </button>

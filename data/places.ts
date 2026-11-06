@@ -1,4 +1,5 @@
 import type { Place, PlaceCategory } from "@/lib/types"
+import { countryPinsFor } from "./country-pins"
 import { nikoPlaces } from "./niko-places"
 
 export { cityTables, type CityTable } from "./niko-places"
@@ -2715,4 +2716,6 @@ const alecPlaces: readonly Place[] = [
   }),
 ]
 
-export const places: readonly Place[] = [...alecPlaces, ...nikoPlaces]
+const guidePlaces: readonly Place[] = [...alecPlaces, ...nikoPlaces]
+
+export const places: readonly Place[] = [...guidePlaces, ...countryPinsFor(guidePlaces)]

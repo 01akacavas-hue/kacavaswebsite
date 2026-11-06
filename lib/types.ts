@@ -19,6 +19,7 @@ export const placeCategories = [
   "gallery",
   "lodging",
   "comedy",
+  "country",
 ] as const
 
 export type PlaceCategory = (typeof placeCategories)[number]
@@ -47,8 +48,7 @@ export type Place = {
   /** Decimal degrees. Positive is east. */
   longitude: number
   /**
-   * True when the pin is a city or neighborhood center because the storefront
-   * could not be confirmed.
+   * True when the pin is a country, city, or neighborhood center rather than a confirmed door.
    */
   approximate?: boolean
   brothers: readonly BrotherId[]
@@ -69,6 +69,11 @@ export type Place = {
   recommended?: boolean
   /** A city still to visit. Drawn as an outline pin, separate from the visits. */
   wishlist?: boolean
+  /**
+   * The country itself, used only when this brother has no specific place in that country.
+   * It is not a restaurant, a city, or a stand-in for either.
+   */
+  countryPin?: boolean
 }
 
 export type Product = {

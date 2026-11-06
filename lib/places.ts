@@ -51,12 +51,12 @@ function comparePlaces(a: Place, b: Place, key: PlaceSortKey): number {
     const bv = b[key] ?? -1
     if (av !== bv) return av - bv
   } else {
-    const av = (key === "neighborhood" ? a.neighborhood : a[key]) ?? ""
-    const bv = (key === "neighborhood" ? b.neighborhood : b[key]) ?? ""
+    const av = sortText(a, key)
+    const bv = sortText(b, key)
     const result = av.localeCompare(bv, undefined, { sensitivity: "base" })
     if (result !== 0) return result
   }
-  const city = a.city.localeCompare(b.city, undefined, { sensitivity: "base" })
+  const city = sortText(a, "city").localeCompare(sortText(b, "city"), undefined, { sensitivity: "base" })
   if (city !== 0) return city
   return a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
 }
@@ -71,8 +71,9 @@ export function uniqueValues(places: readonly Place[], key: "city" | "neighborho
 }
 
 export function placesInCity(places: readonly Place[], place: Place): Place[] {
+  if (place.countryPin) return []
   return places
-    .filter((item) => item.city === place.city && Boolean(item.wishlist) === Boolean(place.wishlist))
+    .filter((item) => !item.countryPin && item.city === place.city && Boolean(item.wishlist) === Boolean(place.wishlist))
     .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
 }
 
@@ -86,8 +87,16 @@ export function starLabel(stars: Place["stars"]): string {
   return "★".repeat(stars)
 }
 
+function sortText(place: Place, key: Exclude<PlaceSortKey, "price" | "stars">): string {
+  if (key === "neighborhood") return place.neighborhood ?? ""
+  if (key === "city" && place.countryPin) return place.country
+  return place[key] ?? ""
+}
+
 export function googleMapsUrl(place: Place): string {
-  const query = [place.name, place.neighborhood, place.city, place.country].filter(Boolean).join(", ")
+  const query = place.countryPin
+    ? place.country
+    : [place.name, place.neighborhood, place.city, place.country].filter(Boolean).join(", ")
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
 }
 

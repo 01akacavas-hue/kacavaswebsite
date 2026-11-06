@@ -49,7 +49,10 @@ describe("published copy", () => {
       for (const phrase of forbidden) {
         if (text.includes(phrase)) hits.push(`${file} contains “${phrase}”`)
       }
-      const travelGuide = file.endsWith(join("data", "places.ts")) || file.endsWith(join("data", "niko-places.ts"))
+      const travelGuide =
+        file.endsWith(join("data", "places.ts")) ||
+        file.endsWith(join("data", "niko-places.ts")) ||
+        file.endsWith(join("data", "niko-countries.ts"))
       if (!travelGuide && text.includes("poland")) hits.push(`${file} contains “poland”`)
     }
     assert.deepEqual(hits, [])
