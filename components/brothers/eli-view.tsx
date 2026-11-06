@@ -2,7 +2,7 @@ import { ViewTransition } from "react"
 import Image from "next/image"
 import { achievements, type Credit } from "@/data/achievements"
 import { eliMarquee, vanity } from "@/data/eli"
-import { eliasPhotos } from "@/data/images"
+import { eliasPhotos, portraits } from "@/data/images"
 import { oxfordJoin } from "@/lib/lists"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Marquee } from "@/components/brothers/marquee"
@@ -30,27 +30,16 @@ export function EliView() {
         <p className="mt-3 text-lg text-muted">Elias Kacavas. Manchester, New Hampshire. Based in New York, as of June 2024.</p>
       </header>
       <Marquee titles={eliMarquee} />
-      <ul className="mt-8 flex flex-wrap gap-4">
-        {eliasPhotos.map((photo) => (
-          <li key={photo.src} className="w-[min(100%,220px)] sm:w-[220px]">
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              width={photo.width}
-              height={photo.height}
-              sizes="220px"
-              className="h-auto w-full"
-            />
-          </li>
-        ))}
-      </ul>
-      <Reveal>
+      <Reveal className="mt-10">
         <div className="grid items-start gap-10 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-          <ViewTransition name="portrait-eli">
-            <div className="relative aspect-[4/5] bg-ink-2">
-              <Portrait id="eli" priority sizes="(max-width: 768px) 100vw, 420px" />
-            </div>
-          </ViewTransition>
+          <figure>
+            <ViewTransition name="portrait-eli">
+              <div className="relative aspect-[4/5] bg-ink-2">
+                <Portrait id="eli" priority sizes="(max-width: 768px) 100vw, 480px" />
+              </div>
+            </ViewTransition>
+            <figcaption className="mt-2 text-sm text-muted">{portraits.eli.caption}</figcaption>
+          </figure>
           <div className="space-y-5 text-lg leading-relaxed text-paper/95">
             <p>
               Elias Kacavas grew up in Manchester, New Hampshire, in a Greek Orthodox community: St.
@@ -74,10 +63,27 @@ export function EliView() {
         </div>
       </Reveal>
 
+      <Reveal className="mt-16">
+        <h2 className="font-serif text-4xl">Photographs</h2>
+        <p className="mt-3 max-w-2xl text-muted">A window over the water, and a folded flag in the garden.</p>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+          {eliasPhotos.map((photo) => (
+            <li key={photo.src}>
+              <figure>
+                <div className="relative bg-ink-2" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+                  <Image src={photo.src} alt={photo.alt} fill sizes="(max-width: 640px) 100vw, 45vw" className="object-cover object-center" />
+                </div>
+                {photo.caption ? <figcaption className="mt-2 text-sm text-muted">{photo.caption}</figcaption> : null}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
       <Reveal className="mt-20">
         <h2 className="font-serif text-4xl">Filmography</h2>
         <p className="mt-3 max-w-2xl text-muted">
-          Series and films, then shorts. Shorts are listed and are not counted as movies. Oscars won: 0.
+          The series, the films, and then the shorts. Shorts stay on the page, and they are not counted as movies. Oscars won: none.
         </p>
         <p className="mt-4">
           <ExternalLink href={imdb}>IMDb</ExternalLink>

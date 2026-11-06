@@ -2,7 +2,6 @@
 
 import { useRef, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
-import { SiteLinks } from "@/components/chrome/site-links"
 
 export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean }) {
   const [password, setPassword] = useState("")
@@ -27,8 +26,8 @@ export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean })
         inputRef.current?.focus()
         return
       }
-      router.push("/restaurants")
-      router.refresh()
+      if (window.location.pathname === "/gate") router.push("/")
+      else router.refresh()
     } catch {
       setError("The request did not go through. Try again.")
       setPending(false)
@@ -38,9 +37,9 @@ export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean })
   return (
     <div className="mx-auto w-full max-w-md text-center">
       <p className="text-xs tracking-[0.22em] text-muted uppercase">Private</p>
-      <h1 className="mt-3 font-serif text-5xl tracking-tight sm:text-6xl">Restaurants & places</h1>
-      <p className="mt-4 text-muted">A map of tables and towns. Ask a brother for the password.</p>
-      <form className="mt-8 text-left" aria-busy={pending} onSubmit={(event) => void onSubmit(event)}>
+      <h1 className="mt-3 font-serif text-5xl tracking-tight sm:text-6xl">Kacavas</h1>
+      <p className="mt-4 text-muted">Nicholas, Elias, and Alexander. Ask a brother for the password.</p>
+      <form method="post" action="/gate" className="mt-8 text-left" aria-busy={pending} onSubmit={(event) => void onSubmit(event)}>
         <label htmlFor="site-password" className="text-xs tracking-[0.16em] text-faint uppercase">
           Password
         </label>
@@ -80,9 +79,6 @@ export function PasswordForm({ showDevHint = false }: { showDevHint?: boolean })
           <code className="text-paper">SITE_PASSWORD</code>.
         </p>
       ) : null}
-      <div className="mt-8">
-        <SiteLinks className="justify-center" />
-      </div>
     </div>
   )
 }

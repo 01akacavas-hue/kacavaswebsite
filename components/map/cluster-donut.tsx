@@ -1,7 +1,7 @@
 import { accents } from "@/lib/theme"
-import type { BrotherId } from "@/lib/types"
+import { brotherIds, type BrotherId } from "@/lib/types"
 
-const order: BrotherId[] = ["alec", "niko", "eli"]
+const order: readonly BrotherId[] = brotherIds
 
 function slicesFor(counts: Record<BrotherId, number>) {
   const parts = order

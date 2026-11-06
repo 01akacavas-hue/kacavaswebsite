@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next"
 import { Cormorant_Garamond, Geist_Mono, Source_Sans_3 } from "next/font/google"
-import { JsonLd } from "@/components/seo/json-ld"
 import { SITE_URL } from "@/lib/site"
 import "./globals.css"
 
@@ -28,11 +27,11 @@ const serif = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kacavas — Elias, Nicholas, and Alexander",
-    template: "%s — Kacavas",
+    default: "Kacavas: Nicholas, Elias, and Alexander",
+    template: "%s, Kacavas",
   },
   description:
-    "Elias, Nicholas, and Alexander Kacavas. An actor, a U.S. Army captain, and a GTM lead, from Manchester, New Hampshire.",
+    "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",
   applicationName: "Kacavas",
   openGraph: {
     type: "website",
@@ -42,6 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  robots: { index: false, follow: false },
 }
 
 export const viewport: Viewport = {
@@ -54,10 +54,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable} h-full antialiased`}>
-      <body className="min-h-full bg-ink text-paper">
-        <JsonLd />
-        {children}
-      </body>
+      <body className="min-h-full bg-ink text-paper">{children}</body>
     </html>
   )
 }

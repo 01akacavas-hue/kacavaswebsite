@@ -8,19 +8,7 @@ const graph = {
       name: "Kacavas",
       url: SITE_URL,
       description:
-        "Elias, Nicholas, and Alexander Kacavas. An actor, a U.S. Army captain, and a GTM lead.",
-    },
-    {
-      "@type": "Person",
-      name: "Elias Kacavas",
-      jobTitle: "Actor",
-      url: `${SITE_URL}/eli`,
-      homeLocation: "Manchester, New Hampshire",
-      sameAs: [
-        "https://www.imdb.com/name/nm10094535/",
-        "https://www.instagram.com/eliaskacavas/",
-        "https://www.rottentomatoes.com/celebrity/elias_kacavas",
-      ],
+        "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead.",
     },
     {
       "@type": "Person",
@@ -33,6 +21,18 @@ const graph = {
         name: "United States Military Academy",
       },
       sameAs: ["https://www.linkedin.com/in/nicholas-kacavas-b65337201"],
+    },
+    {
+      "@type": "Person",
+      name: "Elias Kacavas",
+      jobTitle: "Actor",
+      url: `${SITE_URL}/eli`,
+      homeLocation: "Manchester, New Hampshire",
+      sameAs: [
+        "https://www.imdb.com/name/nm10094535/",
+        "https://www.instagram.com/eliaskacavas/",
+        "https://www.rottentomatoes.com/celebrity/elias_kacavas",
+      ],
     },
     {
       "@type": "Person",

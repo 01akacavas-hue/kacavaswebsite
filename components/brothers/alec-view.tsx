@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
 import { academyAwardPhoto, alecQuote, alecRoles } from "@/data/alec"
-import { alexanderGrill, alexanderPhotos } from "@/data/images"
+import { alexanderGrill, alexanderPhotos, portraits } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -20,11 +20,14 @@ export function AlecView() {
             GTM lead at Lance, in San Francisco. I went to Babson, and I love any sport.
           </p>
         </div>
-        <ViewTransition name="portrait-alec">
-          <div className="relative aspect-[4/5] bg-ink-2">
-            <Portrait id="alec" priority sizes="(max-width: 768px) 100vw, 360px" />
-          </div>
-        </ViewTransition>
+        <figure>
+          <ViewTransition name="portrait-alec">
+            <div className="relative aspect-[4/5] bg-ink-2">
+              <Portrait id="alec" priority sizes="(max-width: 768px) 100vw, 420px" />
+            </div>
+          </ViewTransition>
+          <figcaption className="mt-2 text-sm text-muted">{portraits.alec.caption}</figcaption>
+        </figure>
       </header>
 
       <Reveal className="mt-12 max-w-3xl">
@@ -99,7 +102,7 @@ export function AlecView() {
             <div className="flex flex-col justify-center p-6 sm:p-8">
               <p className="text-xs tracking-[0.18em] text-alec uppercase">Grill</p>
               <h3 className="mt-2 font-serif text-4xl">Resident grillmaster.</h3>
-              <p className="mt-4 max-w-xl leading-relaxed">I am the resident grillmaster.</p>
+              <p className="mt-4 max-w-xl leading-relaxed">I am the resident grillmaster. If there is a board of steaks, I cooked them.</p>
             </div>
           </article>
         </div>
@@ -129,11 +132,14 @@ export function AlecView() {
 
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Photographs</h2>
-        <ul className="mt-8 grid gap-3 sm:grid-cols-3">
-          {alexanderPhotos.map((photo) => (
-            <li key={photo.src} className={photo.wide ? "sm:col-span-3" : ""}>
+        <p className="mt-3 max-w-2xl text-muted">San Francisco, the water, a race bib, and the bottle still closed.</p>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+          {alexanderPhotos.map((photo) => {
+            const frame = photoFrame(photo)
+            return (
+            <li key={photo.src} className={frame.item}>
               <figure>
-                <div className={`relative bg-ink-2 ${photo.wide ? "aspect-[8/5]" : "aspect-[3/4]"}`}>
+                <div className={`relative bg-ink-2 ${frame.frame}`}>
                   <Image
                     src={photo.src}
                     alt={photo.alt}
@@ -142,10 +148,11 @@ export function AlecView() {
                     className="object-cover"
                   />
                 </div>
-                {photo.caption ? <figcaption className="mt-3 text-sm text-muted">{photo.caption}</figcaption> : null}
+                {photo.caption ? <figcaption className="mt-2 max-w-2xl text-sm text-muted">{photo.caption}</figcaption> : null}
               </figure>
             </li>
-          ))}
+            )
+          })}
         </ul>
       </Reveal>
 
@@ -160,4 +167,15 @@ export function AlecView() {
       </Reveal>
     </>
   )
+}
+
+function photoFrame(photo: { width: number; height: number; wide?: boolean }) {
+  const ratio = photo.width / photo.height
+  if (photo.wide || ratio >= 1.15) {
+    return {
+      item: "sm:col-span-3",
+      frame: ratio >= 1.5 ? "aspect-[8/5]" : "aspect-[4/3]",
+    }
+  }
+  return { item: "", frame: "aspect-[3/4]" }
 }

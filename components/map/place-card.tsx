@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { animate, motion, useMotionValue } from "framer-motion"
-import { brotherLabel, googleMapsUrl, priceLabel, starLabel } from "@/lib/places"
+import { brotherLabel, brothersInOrder, googleMapsUrl, priceLabel, starLabel } from "@/lib/places"
 import { placeStateLabel } from "@/lib/map-filters"
 import { accents } from "@/lib/theme"
 import type { Place } from "@/lib/types"
@@ -18,13 +18,15 @@ function CardBody({
   onClose: () => void
   onSelect: (id: string) => void
 }) {
-  const cityPlaces = places
-    .filter((item) => item.city === place.city)
-    .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
+  const cityPlaces = place.countryPin
+    ? []
+    : places
+        .filter((item) => !item.countryPin && item.city === place.city)
+        .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
   const index = cityPlaces.findIndex((item) => item.id === place.id)
   const previous = index > 0 ? cityPlaces[index - 1] : undefined
   const next = index >= 0 && index < cityPlaces.length - 1 ? cityPlaces[index + 1] : undefined
-  const where = [place.neighborhood, place.city, place.country].filter(Boolean).join(" · ")
+  const where = place.countryPin ? "Country" : [place.neighborhood, place.city, place.country].filter(Boolean).join(" · ")
   const open = placeStateLabel(place) !== "Visited"
 
   return (
@@ -40,7 +42,7 @@ function CardBody({
         <h2 className="font-serif text-3xl tracking-tight">{place.name}</h2>
         <p className="mt-1 text-sm text-muted">{where}</p>
         <ul className="mt-3 flex flex-wrap gap-2" aria-label="Brothers">
-          {place.brothers.map((id) => (
+          {brothersInOrder(place.brothers).map((id) => (
             <li key={id} className="inline-flex h-8 items-center gap-2 border border-line px-2.5 text-xs tracking-[0.12em] uppercase">
               <span
                 className="size-2.5 rounded-full"
@@ -70,17 +72,19 @@ function CardBody({
         <a className="mt-4 inline-flex h-11 items-center text-sm underline decoration-line underline-offset-4" href={googleMapsUrl(place)} target="_blank" rel="noreferrer">
           Open in Maps
         </a>
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
-          <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase disabled:opacity-30" disabled={!previous} onClick={() => previous && onSelect(previous.id)}>
-            Previous
-          </button>
-          <p className="text-xs text-muted">
-            {Math.max(index, 0) + 1} of {cityPlaces.length} in {place.city}
-          </p>
-          <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase disabled:opacity-30" disabled={!next} onClick={() => next && onSelect(next.id)}>
-            Next
-          </button>
-        </div>
+        {place.countryPin ? null : (
+          <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
+            <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase disabled:opacity-30" disabled={!previous} onClick={() => previous && onSelect(previous.id)}>
+              Previous
+            </button>
+            <p className="text-xs text-muted">
+              {Math.max(index, 0) + 1} of {cityPlaces.length} in {place.city}
+            </p>
+            <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase disabled:opacity-30" disabled={!next} onClick={() => next && onSelect(next.id)}>
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

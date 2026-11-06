@@ -86,7 +86,7 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
 
   async function lock() {
     await fetch("/api/unlock", { method: "DELETE" })
-    router.push("/restaurants")
+    router.push("/gate")
     router.refresh()
   }
 
@@ -111,7 +111,7 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
         </button>
       </header>
       <p className="mt-5 max-w-2xl text-muted">
-        Alexander&apos;s guide and Nicholas&apos;s, on one globe. Filled pins are visits. Open rings are recommendations, including cities still ahead.
+        Nicholas&apos;s guide and Alexander&apos;s, on one globe. A filled pin is a visit. An open ring is a recommendation, or a city still ahead.
       </p>
 
       <div role="tablist" aria-label="Map, list, or leaderboard" className="mt-8 flex gap-2 overflow-x-auto">

@@ -3,7 +3,7 @@ import { PasswordForm } from "@/components/gate/password-form"
 import { isUsingPasswordFallback } from "@/lib/auth"
 
 export const metadata: Metadata = {
-  title: "Private map",
+  title: "Private",
   description: "A password is required.",
   robots: { index: false, follow: false },
 }

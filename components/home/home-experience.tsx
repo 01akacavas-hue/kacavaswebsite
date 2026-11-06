@@ -200,7 +200,7 @@ export function HomeExperience() {
                 fill
                 quality={65}
                 sizes="(max-width: 768px) 80vw, 42vw"
-                className="object-cover"
+                className="object-cover object-center"
               />
             </div>
           </ViewTransition>

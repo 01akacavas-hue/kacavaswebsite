@@ -3,6 +3,23 @@ import type { BrotherId, Place } from "./types"
 import { isOpenRing } from "./map-filters"
 import { citiesForBrother, trailLines } from "./trails"
 
+export type MapFeatureLike = {
+  id?: string | number
+  properties?: Record<string, unknown> | null
+}
+
+/** The place id under a map click, ignoring clusters. */
+export function placeIdFromMapFeatures(features: readonly MapFeatureLike[]): string | null {
+  for (const feature of features) {
+    const props = feature.properties
+    if (props?.cluster) continue
+    const raw = props?.id ?? feature.id
+    if (typeof raw === "string" && raw.length > 0) return raw
+    if (typeof raw === "number" && Number.isFinite(raw)) return String(raw)
+  }
+  return null
+}
+
 export type PinProperties = {
   id: string
   primary: BrotherId

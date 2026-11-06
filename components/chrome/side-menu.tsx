@@ -1,6 +1,6 @@
 "use client"
 
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import Link from "next/link"
@@ -13,6 +13,7 @@ const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabi
 export function SideMenu() {
   const { open, setOpen, triggerRef } = useMenu()
   const pathname = usePathname()
+  const router = useRouter()
   const reduce = useReducedMotion()
   const trapRef = useRef<HTMLDivElement>(null)
 
@@ -143,6 +144,18 @@ export function SideMenu() {
                   )
                 })}
               </ol>
+              <button
+                type="button"
+                className="mb-6 h-11 self-start text-xs tracking-[0.16em] uppercase"
+                onClick={() => {
+                  void fetch("/api/unlock", { method: "DELETE" }).then(() => {
+                    router.push("/gate")
+                    router.refresh()
+                  })
+                }}
+              >
+                Lock
+              </button>
               <p className="text-xs tracking-[0.16em] text-faint uppercase">Kacavas</p>
             </motion.nav>
           </>

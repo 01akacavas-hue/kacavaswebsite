@@ -30,22 +30,10 @@ export const pages: readonly SitePage[] = [
     href: "/",
     label: "Home",
     menuNote: "Brothers",
-    title: "Kacavas — Elias, Nicholas, and Alexander",
+    title: "Kacavas: Nicholas, Elias, and Alexander",
     description:
-      "Elias, Nicholas, and Alexander Kacavas. An actor, a U.S. Army captain, and a GTM lead, from Manchester, New Hampshire.",
-    index: true,
-    enabled: true,
-  },
-  {
-    id: "eli",
-    href: "/eli",
-    label: "Elias",
-    menuNote: "Actor",
-    title: "Elias Kacavas",
-    description:
-      "Elias Kacavas is an actor from Manchester, New Hampshire. Credits include Euphoria, Pretty Little Liars: Original Sin, My Big Fat Greek Wedding 3, and Fire Country. He plays in the band The Vanity.",
-    brother: "eli",
-    index: true,
+      "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",
+    index: false,
     enabled: true,
   },
   {
@@ -57,7 +45,19 @@ export const pages: readonly SitePage[] = [
     description:
       "Nicholas H. Kacavas is a U.S. Army captain and a cavalry officer. He goes by Niko. West Point class of 2022. Identical twin of Elias Kacavas.",
     brother: "niko",
-    index: true,
+    index: false,
+    enabled: true,
+  },
+  {
+    id: "eli",
+    href: "/eli",
+    label: "Elias",
+    menuNote: "Actor",
+    title: "Elias Kacavas",
+    description:
+      "Elias Kacavas is an actor from Manchester, New Hampshire. Credits include Euphoria, Pretty Little Liars: Original Sin, My Big Fat Greek Wedding 3, and Fire Country. He plays in the band The Vanity.",
+    brother: "eli",
+    index: false,
     enabled: true,
   },
   {
@@ -69,7 +69,7 @@ export const pages: readonly SitePage[] = [
     description:
       "Alexander Kacavas is GTM lead at Lance in San Francisco. He goes by Alec. He went to Babson, and he loves any sport. Previously Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
     brother: "alec",
-    index: true,
+    index: false,
     enabled: true,
   },
   {

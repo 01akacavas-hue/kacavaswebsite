@@ -1,6 +1,6 @@
 "use client"
 
-import { brotherLabel, sortPlaces } from "@/lib/places"
+import { brotherLabel, brothersInOrder, sortPlaces } from "@/lib/places"
 import { placeStateLabel } from "@/lib/map-filters"
 import { accents } from "@/lib/theme"
 import type { Place } from "@/lib/types"
@@ -40,7 +40,7 @@ export function PlaceList({
                 onBlur={() => onHover(null)}
               >
                 <span className="mt-1 flex shrink-0">
-                  {place.brothers.map((id, index) => (
+                  {brothersInOrder(place.brothers).map((id, index) => (
                     <span
                       key={id}
                       className="size-2.5 rounded-full border"
@@ -55,7 +55,7 @@ export function PlaceList({
                 <span>
                   <span className="block font-serif text-lg leading-tight">{place.name}</span>
                   <span className={`mt-1 block text-xs tracking-[0.08em] uppercase ${active ? "text-ink/70" : "text-muted"}`}>
-                    {place.city} · {placeStateLabel(place)} · {place.brothers.map((id) => brotherLabel(id)).join(", ")}
+                    {place.countryPin ? "Country" : place.city} · {placeStateLabel(place)} · {brothersInOrder(place.brothers).map((id) => brotherLabel(id)).join(", ")}
                   </span>
                 </span>
               </button>

@@ -77,7 +77,7 @@ export function cityOptions(places: readonly Place[], filters: MapFilters): City
   const widened: MapFilters = { ...filters, city: "" }
   const grouped = new Map<string, { count: number; latitude: number; longitude: number }>()
   for (const place of places) {
-    if (!placeMatches(place, widened)) continue
+    if (!placeMatches(place, widened) || place.countryPin) continue
     const current = grouped.get(place.city) ?? { count: 0, latitude: 0, longitude: 0 }
     current.count += 1
     current.latitude += place.latitude

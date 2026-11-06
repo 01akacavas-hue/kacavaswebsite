@@ -1,8 +1,8 @@
 # Kacavas
 
-A portfolio for three brothers: Elias, Nicholas, and Alexander Kacavas. Nicholas goes by Niko. Alexander goes by Alec. The pages stay at `/eli`, `/niko`, and `/alec`. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
+A portfolio for three brothers: Nicholas, Elias, and Alexander Kacavas. Nicholas goes by Niko. Alexander goes by Alec. The pages stay at `/niko`, `/eli`, and `/alec`. It is a Next.js app meant for Vercel’s free Hobby plan, on [kacavas.com](https://kacavas.com).
 
-Elias is an actor. Nicholas is a U.S. Army captain, West Point class of 2022. Alexander is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
+Nicholas is a U.S. Army captain, West Point class of 2022. Elias is an actor. Alexander is GTM lead at Lance. The copy on the site comes from public sources gathered for this project. Do not add credits, roles, or places that are not confirmed.
 
 ## Local development
 
@@ -57,12 +57,13 @@ He is on active duty. The public page keeps general role titles, West Point, and
 
 The small note about Nicholas G. Kacavas (1927–2012) is their grandfather, a World War II Navy veteran. He is not Nicholas.
 
-## Restaurants map
+## Password
 
-`/restaurants` is private. The password is checked on the server.
+The whole site is private. The password is checked on the server.
 
-- `proxy.ts` is the Next.js 16 middleware (the file was renamed from `middleware.ts`). It does not see the password. It checks a signed httpOnly cookie and, if that cookie is missing or bad, rewrites `/restaurants` to the password screen. The address bar stays `/restaurants`.
-- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets the cookie. `DELETE` clears it. The Lock button on the map calls that.
+- `proxy.ts` is the Next.js 16 middleware (the file was renamed from `middleware.ts`). It does not see the password. It checks a signed httpOnly cookie. If that cookie is missing or bad, the request is rewritten to the password screen, and the address bar stays on the page they asked for.
+- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets the cookie for the whole site. `DELETE` clears it. Lock, in the menu and on the map, calls that.
+- The password screen, the static files it needs, `robots.txt`, and a health check are the only routes that answer without the cookie.
 
 ### `SITE_PASSWORD` and the placeholder
 

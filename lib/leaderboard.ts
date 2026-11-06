@@ -1,4 +1,5 @@
 import { creditCount, oscarCount, type BrotherRecord } from "@/data/achievements"
+import { canonicalCountry, nikoVisitedCountries } from "@/data/niko-countries"
 import { isOpenRing } from "./map-filters"
 import { stateForCity } from "./us-states"
 import { brotherIds, type BrotherId, type Place } from "./types"
@@ -19,27 +20,46 @@ export type BrotherScore = {
 export type StatKey = "countries" | "cities" | "states" | "michelin" | "movies" | "shows" | "oscars"
 
 export const statRows: readonly { key: StatKey; label: string; hint: string }[] = [
-  { key: "countries", label: "Countries", hint: "Visited places, counted once per country." },
-  { key: "cities", label: "Cities", hint: "Visited places, counted once per city." },
-  { key: "states", label: "States", hint: "U.S. visits. Washington is counted as the District of Columbia." },
-  { key: "michelin", label: "Michelin dinners", hint: "A star is counted only when the note names it, and only after he has been." },
-  { key: "movies", label: "Movies", hint: "Shorts are listed on the page and are not counted here." },
+  { key: "countries", label: "Countries", hint: "Counted once per country, and only after a visit. A country pin stands in when Nicholas has no specific place there yet." },
+  { key: "cities", label: "Cities", hint: "Counted once per city, and only after a visit." },
+  { key: "states", label: "States", hint: "U.S. visits only. Washington is counted as the District of Columbia." },
+  { key: "michelin", label: "Michelin dinners", hint: "A star counts when the note names it, and only if he has been." },
+  { key: "movies", label: "Movies", hint: "Shorts stay on the filmography. They are not counted here." },
   { key: "shows", label: "TV shows", hint: "Series he appeared in." },
-  { key: "oscars", label: "Oscars", hint: "Films he appeared in that won Best Picture. Not a personal award." },
+  { key: "oscars", label: "Oscars", hint: "Best Picture films he appeared in. Not a personal award." },
 ]
 
 function visitedBy(place: Place, brother: BrotherId): boolean {
   return place.brothers.includes(brother) && !isOpenRing(place)
 }
 
+/**
+ * Visited countries for one brother.
+ * Alexander and Elias come from visited pins.
+ * Nicholas starts from the country list, then adds any visited pin country that is not already on it.
+ */
+export function countriesVisited(places: readonly Place[], brother: BrotherId): readonly string[] {
+  const fromPins = new Set<string>()
+  for (const place of places) {
+    if (!visitedBy(place, brother)) continue
+    fromPins.add(canonicalCountry(place.country))
+  }
+  if (brother !== "niko") {
+    return [...fromPins].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+  }
+  const listed = nikoVisitedCountries.map((country) => canonicalCountry(country))
+  const seen = new Set(listed)
+  const extras = [...fromPins].filter((country) => !seen.has(country)).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
+  return [...listed, ...extras]
+}
+
 export function scoreBrother(places: readonly Place[], brother: BrotherId, record: BrotherRecord): BrotherScore {
-  const countries = new Set<string>()
+  const countries = countriesVisited(places, brother)
   const cities = new Set<string>()
   const states = new Set<string>()
   let michelin = 0
   for (const place of places) {
-    if (!visitedBy(place, brother)) continue
-    countries.add(place.country)
+    if (!visitedBy(place, brother) || place.countryPin) continue
     cities.add(`${place.city}\u0000${place.country}`)
     if (place.country === "United States") {
       const state = stateForCity(place.city)
@@ -49,7 +69,7 @@ export function scoreBrother(places: readonly Place[], brother: BrotherId, recor
   }
   return {
     id: brother,
-    countries: countries.size,
+    countries: countries.length,
     cities: cities.size,
     states: states.size,
     michelin,

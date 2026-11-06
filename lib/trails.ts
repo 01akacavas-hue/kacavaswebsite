@@ -65,7 +65,7 @@ export function splitDateline(points: readonly LngLat[]): LngLat[][] {
 export function citiesForBrother(places: readonly Place[], brother: BrotherId): CityStop[] {
   const grouped = new Map<string, { country: string; latitude: number; longitude: number; count: number }>()
   for (const place of places) {
-    if (!place.brothers.includes(brother) || isOpenRing(place)) continue
+    if (!place.brothers.includes(brother) || isOpenRing(place) || place.countryPin) continue
     const current = grouped.get(place.city) ?? { country: place.country, latitude: 0, longitude: 0, count: 0 }
     current.latitude += place.latitude
     current.longitude += place.longitude

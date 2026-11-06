@@ -1,5 +1,5 @@
 import { achievements, type Trophy } from "@/data/achievements"
-import { rankBy, scoreboard, statRows, type BrotherScore, type StatKey } from "@/lib/leaderboard"
+import { countriesVisited, rankBy, scoreboard, statRows, type BrotherScore, type StatKey } from "@/lib/leaderboard"
 import { brotherLabel } from "@/lib/places"
 import { accents } from "@/lib/theme"
 import { brotherIds, type BrotherId, type Place } from "@/lib/types"
@@ -72,6 +72,31 @@ function TrophyCard({ trophy, brother }: { trophy: Trophy; brother: BrotherId })
   )
 }
 
+function CountryRoll({ places }: { places: readonly Place[] }) {
+  return (
+    <div className="mt-5 grid gap-5">
+      {brotherIds.map((id) => {
+        const names = countriesVisited(places, id)
+        if (names.length === 0) return null
+        return (
+          <div key={id}>
+            <p className="text-xs tracking-[0.14em] uppercase" style={{ color: accents[id] }}>
+              {brotherLabel(id)}
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {names.map((name) => (
+                <li key={name} className="border border-line px-2 py-1 text-sm">
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function EmptyShelf({ brother }: { brother: BrotherId }) {
   return (
     <div className="flex min-h-36 items-center border border-dashed border-line px-5 py-6">
@@ -93,7 +118,7 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
           Leaderboard
         </h2>
         <p className="mt-3 max-w-2xl text-muted">
-          Countries, cities, states, and Michelin dinners come from visited pins. A shared place counts for each brother. Recommendations stay off. Movies, shows, and Oscars come from the achievements list. A blank list says “Add yours.”
+          Countries, cities, states, and Michelin dinners count only when someone was actually there. A shared table counts for each brother. Recommendations stay off the tally. Movies, shows, and Oscars come from the achievements list. A blank line is still open.
         </p>
         <Podium scores={scores} />
         <p className="mt-2 text-xs tracking-[0.14em] text-faint uppercase">Cities visited</p>
@@ -103,6 +128,7 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
               <h3 className="font-serif text-2xl">{row.label}</h3>
               <p className="mt-1 text-sm text-muted">{row.hint}</p>
               <Race scores={scores} stat={row.key} />
+              {row.key === "countries" ? <CountryRoll places={places} /> : null}
             </section>
           ))}
         </div>
@@ -112,7 +138,7 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
         <h2 id="trophy-title" className="font-serif text-4xl tracking-tight">
           Trophy case
         </h2>
-        <p className="mt-3 max-w-2xl text-muted">Add a trophy in the achievements file and it lands on this shelf.</p>
+        <p className="mt-3 max-w-2xl text-muted">What they have already done, kept on one shelf. An empty box is still waiting.</p>
         <div className="mt-8 grid gap-10">
           {brotherIds.map((id) => {
             const trophies = achievements[id].trophies
@@ -144,7 +170,7 @@ export function Leaderboard({ places }: { places: readonly Place[] }) {
   )
 }
 
-const superlativeOrder: BrotherId[] = ["niko", "alec", "eli"]
+const superlativeOrder: readonly BrotherId[] = brotherIds
 
 function Superlatives() {
   const ribbons = superlativeOrder.flatMap((brother) =>
@@ -153,7 +179,7 @@ function Superlatives() {
   return (
     <div className="mt-14 border border-dashed border-line p-5 sm:p-8">
       <h3 className="font-serif text-3xl tracking-tight">Superlatives</h3>
-      <p className="mt-2 max-w-xl text-sm text-muted">Superlatives, as voted by the brothers. No refunds.</p>
+      <p className="mt-2 max-w-xl text-sm text-muted">A joke, as voted by the brothers. No refunds.</p>
       <ul className="mt-6 flex flex-wrap gap-4">
         {ribbons.map((ribbon) => (
           <li key={ribbon.id}>

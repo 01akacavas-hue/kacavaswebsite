@@ -3,7 +3,7 @@ import type { BrotherId, SocialLink } from "@/lib/types"
 
 export type Brother = {
   id: BrotherId
-  /** Face order on the home cube: 0 Elias, 1 Nicholas, 2 Alec. */
+  /** Scroll order on the home scene: 0 Nicholas, 1 Elias, 2 Alexander. */
   index: number
   name: string
   shortName: string
@@ -22,8 +22,23 @@ export type Brother = {
 
 export const brothers = [
   {
-    id: "eli",
+    id: "niko",
     index: 0,
+    name: "Nicholas Kacavas",
+    shortName: "Nicholas",
+    knownAs: "Niko",
+    epithet: "The captain",
+    href: "/niko",
+    bio: "Captain in the U.S. Army. West Point, class of 2022. He grew up in Manchester with Elias and Alexander.",
+    career: "Captain and cavalry officer.",
+    asideLabel: "Sports",
+    sports: "Grew up playing the same sports as his brothers.",
+    socials: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/nicholas-kacavas-b65337201" }],
+    accent: accents.niko,
+  },
+  {
+    id: "eli",
+    index: 1,
     name: "Elias Kacavas",
     shortName: "Elias",
     epithet: "The actor",
@@ -40,21 +55,6 @@ export const brothers = [
     accent: accents.eli,
   },
   {
-    id: "niko",
-    index: 1,
-    name: "Nicholas Kacavas",
-    shortName: "Nicholas",
-    knownAs: "Niko",
-    epithet: "The captain",
-    href: "/niko",
-    bio: "U.S. Army captain. West Point class of 2022.",
-    career: "Captain and cavalry officer.",
-    asideLabel: "Sports",
-    sports: "Grew up playing the same sports as his brothers.",
-    socials: [{ label: "LinkedIn", href: "https://www.linkedin.com/in/nicholas-kacavas-b65337201" }],
-    accent: accents.niko,
-  },
-  {
     id: "alec",
     index: 2,
     name: "Alexander Kacavas",
@@ -62,7 +62,7 @@ export const brothers = [
     knownAs: "Alec",
     epithet: "GTM lead",
     href: "/alec",
-    bio: "GTM lead at Lance in San Francisco. Babson College. He loves any sport.",
+    bio: "GTM lead at Lance, in San Francisco. Babson College. He loves any sport he can get into.",
     career: "Lance, Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
     asideLabel: "Sports",
     sports: "Any sport he can get into, including Rho Hoops in San Francisco.",
