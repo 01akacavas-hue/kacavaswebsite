@@ -150,14 +150,14 @@ describe("published copy", () => {
     }
   })
 
-  it("keeps the private map out of the menu's public index", () => {
+  it("keeps every page out of the public index", () => {
     const restaurants = pages.find((page) => page.id === "restaurants")
     assert.ok(restaurants)
     assert.equal(restaurants?.index, false)
     assert.equal(pages.filter((page) => page.href === "/restaurants").length, 1)
+    assert.equal(pages.filter((page) => page.enabled && page.index).length, 0)
     const robots = readFileSync(join(root, "app/robots.ts"), "utf8")
-    assert.match(robots, /\/restaurants/)
-    assert.equal(pages.filter((page) => page.index && page.enabled).some((page) => page.href === "/restaurants"), false)
+    assert.match(robots, /disallow:\s*"\/"/)
     const hrefs = pages.map((page) => page.href)
     assert.equal(new Set(hrefs).size, hrefs.length)
   })

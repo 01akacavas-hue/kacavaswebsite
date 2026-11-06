@@ -1,35 +1,39 @@
 import { NextResponse, type NextRequest } from "next/server"
-import { SESSION_COOKIE, isSessionValid } from "@/lib/auth"
+import { SESSION_COOKIE, isPublicPath, isSessionValid } from "@/lib/auth"
 
 /**
  * Next.js 16 renamed Middleware to Proxy. This file is that middleware.
  *
  * It does not see the password. It only checks the signed httpOnly cookie.
  * `app/api/unlock/route.ts` compares the password to `SITE_PASSWORD` and sets
- * the cookie. Unauthenticated requests for /restaurants are rewritten to the
- * password screen. The URL stays /restaurants.
+ * the cookie. A request without that cookie is rewritten to the password
+ * screen, and the address bar stays on the page they asked for.
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const token = request.cookies.get(SESSION_COOKIE)?.value
   const valid = await isSessionValid(token)
-  const restaurants = pathname === "/restaurants" || pathname.startsWith("/restaurants/")
 
-  if (restaurants && !valid) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/gate"
-    return NextResponse.rewrite(url)
+  if (isPublicPath(pathname)) {
+    if (pathname === "/gate" && valid) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/"
+      return NextResponse.redirect(url)
+    }
+    return NextResponse.next()
   }
 
-  if (pathname === "/gate" && valid) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/restaurants"
-    return NextResponse.redirect(url)
+  if (valid) return NextResponse.next()
+
+  if (pathname.startsWith("/api/") || pathname.startsWith("/workers/")) {
+    return NextResponse.json({ ok: false }, { status: 401 })
   }
 
-  return NextResponse.next()
+  const url = request.nextUrl.clone()
+  url.pathname = "/gate"
+  return NextResponse.rewrite(url)
 }
 
 export const config = {
-  matcher: ["/restaurants", "/restaurants/:path*", "/gate"],
+  matcher: ["/((?!_next/static|favicon.ico).*)"],
 }

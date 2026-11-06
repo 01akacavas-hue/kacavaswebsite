@@ -1,5 +1,5 @@
 /**
- * Session gate for /restaurants.
+ * Session gate for the whole site.
  *
  * The password is checked only in the route handler. This module signs a
  * token with that password as the HMAC key and later checks the token.
@@ -25,6 +25,25 @@ export function getSitePassword(): string {
 export function isUsingPasswordFallback(): boolean {
   const fromEnv = process.env.SITE_PASSWORD
   return typeof fromEnv !== "string" || fromEnv.length === 0
+}
+
+const PUBLIC_PATHS = new Set([
+  "/gate",
+  "/api/unlock",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/favicon.ico",
+  "/icon",
+  "/apple-icon",
+  "/health",
+  "/healthz",
+  "/api/health",
+])
+
+/** Routes that must answer before a visitor has the cookie. Everything else is locked. */
+export function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATHS.has(pathname)) return true
+  return pathname === "/_next/static" || pathname.startsWith("/_next/static/")
 }
 
 export async function passwordsMatch(input: string, secret: string): Promise<boolean> {

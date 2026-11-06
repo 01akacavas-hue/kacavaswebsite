@@ -57,12 +57,13 @@ He is on active duty. The public page keeps general role titles, West Point, and
 
 The small note about Nicholas G. Kacavas (1927–2012) is their grandfather, a World War II Navy veteran. He is not Nicholas.
 
-## Restaurants map
+## Password
 
-`/restaurants` is private. The password is checked on the server.
+The whole site is private. The password is checked on the server.
 
-- `proxy.ts` is the Next.js 16 middleware (the file was renamed from `middleware.ts`). It does not see the password. It checks a signed httpOnly cookie and, if that cookie is missing or bad, rewrites `/restaurants` to the password screen. The address bar stays `/restaurants`.
-- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets the cookie. `DELETE` clears it. The Lock button on the map calls that.
+- `proxy.ts` is the Next.js 16 middleware (the file was renamed from `middleware.ts`). It does not see the password. It checks a signed httpOnly cookie. If that cookie is missing or bad, the request is rewritten to the password screen, and the address bar stays on the page they asked for.
+- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets the cookie for the whole site. `DELETE` clears it. Lock, in the menu and on the map, calls that.
+- The password screen, the static files it needs, `robots.txt`, and a health check are the only routes that answer without the cookie.
 
 ### `SITE_PASSWORD` and the placeholder
 

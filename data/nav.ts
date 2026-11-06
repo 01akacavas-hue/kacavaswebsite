@@ -33,7 +33,7 @@ export const pages: readonly SitePage[] = [
     title: "Kacavas: Nicholas, Elias, and Alexander",
     description:
       "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",
-    index: true,
+    index: false,
     enabled: true,
   },
   {
@@ -45,7 +45,7 @@ export const pages: readonly SitePage[] = [
     description:
       "Nicholas H. Kacavas is a U.S. Army captain and a cavalry officer. He goes by Niko. West Point class of 2022. Identical twin of Elias Kacavas.",
     brother: "niko",
-    index: true,
+    index: false,
     enabled: true,
   },
   {
@@ -57,7 +57,7 @@ export const pages: readonly SitePage[] = [
     description:
       "Elias Kacavas is an actor from Manchester, New Hampshire. Credits include Euphoria, Pretty Little Liars: Original Sin, My Big Fat Greek Wedding 3, and Fire Country. He plays in the band The Vanity.",
     brother: "eli",
-    index: true,
+    index: false,
     enabled: true,
   },
   {
@@ -69,7 +69,7 @@ export const pages: readonly SitePage[] = [
     description:
       "Alexander Kacavas is GTM lead at Lance in San Francisco. He goes by Alec. He went to Babson, and he loves any sport. Previously Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
     brother: "alec",
-    index: true,
+    index: false,
     enabled: true,
   },
   {

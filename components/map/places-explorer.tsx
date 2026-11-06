@@ -86,7 +86,7 @@ export function PlacesExplorer({ places, cityTables }: { places: readonly Place[
 
   async function lock() {
     await fetch("/api/unlock", { method: "DELETE" })
-    router.push("/restaurants")
+    router.push("/gate")
     router.refresh()
   }
 
