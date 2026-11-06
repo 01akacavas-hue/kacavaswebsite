@@ -93,4 +93,6 @@ export type SiteImage = {
   alt: string
   width: number
   height: number
+  /** A short line under the picture, when the page shows one. */
+  caption?: string
 }

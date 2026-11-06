@@ -28,8 +28,8 @@ const serif = Cormorant_Garamond({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Kacavas — Nicholas, Elias, and Alexander",
-    template: "%s — Kacavas",
+    default: "Kacavas: Nicholas, Elias, and Alexander",
+    template: "%s, Kacavas",
   },
   description:
     "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",

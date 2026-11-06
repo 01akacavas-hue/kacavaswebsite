@@ -91,8 +91,8 @@ function PortraitCard({
     const t = progressRef.current * (brothers.length - 1)
     const delta = index - t
     const angle = delta * 0.92
-    group.position.x = Math.sin(angle) * 1.22
-    group.position.z = (1 - Math.cos(angle)) * -1.45
+    group.position.x = Math.sin(angle) * 1.7
+    group.position.z = (1 - Math.cos(angle)) * -1.75
     group.position.y = Math.abs(delta) * -0.05
     group.rotation.y = angle * 0.72
     const front = Math.max(0, Math.cos(angle))

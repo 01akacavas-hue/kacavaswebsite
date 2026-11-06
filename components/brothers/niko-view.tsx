@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
 import { nikoPromotion, nikoQuotes, nikoService } from "@/data/niko"
-import { nicholasPhotos, nikoTank } from "@/data/images"
+import { nicholasPhotos, nikoTank, portraits } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -9,26 +9,27 @@ import { Reveal } from "@/components/motion/reveal"
 export function NikoView() {
   return (
     <>
-      <header className="grid items-end gap-8 md:grid-cols-[minmax(0,1.4fr)_minmax(0,0.7fr)]">
-        <div>
-          <p className="flex items-center gap-3 text-xs tracking-[0.22em] text-niko uppercase">
-            <span className="captain-bars" aria-hidden="true">
-              <span />
-              <span />
-            </span>
-            United States Army
-          </p>
-          <h1 className="mt-4 font-serif text-6xl tracking-tight sm:text-8xl">Nicholas</h1>
-          <p className="mt-3 text-sm tracking-[0.14em] text-muted uppercase">Goes by Niko</p>
-          <p className="mt-4 max-w-xl text-lg text-muted">
-            Captain, U.S. Army. West Point, class of 2022. Cavalry officer.
-          </p>
-        </div>
-        <ViewTransition name="portrait-niko">
-          <div className="relative aspect-[3/2] bg-ink-2">
-            <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 640px" />
-          </div>
-        </ViewTransition>
+      <header>
+        <p className="flex items-center gap-3 text-xs tracking-[0.22em] text-niko uppercase">
+          <span className="captain-bars" aria-hidden="true">
+            <span />
+            <span />
+          </span>
+          United States Army
+        </p>
+        <h1 className="mt-4 font-serif text-6xl tracking-tight sm:text-8xl">Nicholas</h1>
+        <p className="mt-3 text-sm tracking-[0.14em] text-muted uppercase">Goes by Niko</p>
+        <p className="mt-4 max-w-xl text-lg text-muted">
+          Captain, U.S. Army. West Point, class of 2022. Cavalry officer.
+        </p>
+        <figure className="mt-10">
+          <ViewTransition name="portrait-niko">
+            <div className="relative aspect-[3/2] w-full bg-ink-2">
+              <Portrait id="niko" priority sizes="(max-width: 768px) 100vw, 1100px" className="object-cover object-center" />
+            </div>
+          </ViewTransition>
+          <figcaption className="mt-3 max-w-2xl text-sm text-muted">{portraits.niko.caption}</figcaption>
+        </figure>
       </header>
 
       <Reveal className="mt-14 max-w-2xl space-y-5 text-lg leading-relaxed">
@@ -56,27 +57,37 @@ export function NikoView() {
       </Reveal>
 
       <Reveal className="mt-16">
-        <div className="relative aspect-[4/3] max-w-3xl bg-ink-2">
-          <Image src={nikoTank.src} alt={nikoTank.alt} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
-        </div>
+        <figure>
+          <div className="relative aspect-[4/3] w-full bg-ink-2">
+            <Image src={nikoTank.src} alt={nikoTank.alt} fill sizes="(max-width: 768px) 100vw, 1100px" className="object-cover object-center" />
+          </div>
+          {nikoTank.caption ? <figcaption className="mt-3 max-w-2xl text-sm text-muted">{nikoTank.caption}</figcaption> : null}
+        </figure>
       </Reveal>
 
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Photographs</h2>
+        <p className="mt-3 max-w-2xl text-muted">Whites on a lawn, a full ballpark, dessert, and the three of them at brunch.</p>
         <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-          {nicholasPhotos.map((photo, index) => (
-            <li key={photo.src} className={index === nicholasPhotos.length - 1 ? "sm:col-span-2" : ""}>
-              <div className={`relative bg-ink-2 ${photo.width > photo.height ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
-                <Image
-                  src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  sizes={photo.width > photo.height ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 45vw"}
-                  className="object-cover"
-                />
-              </div>
-            </li>
-          ))}
+          {nicholasPhotos.map((photo) => {
+            const wide = photo.width > photo.height
+            return (
+              <li key={photo.src} className={wide ? "sm:col-span-2" : ""}>
+                <figure>
+                  <div className={`relative bg-ink-2 ${wide ? "aspect-[4/3]" : "aspect-[3/4]"}`}>
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes={wide ? "(max-width: 768px) 100vw, 960px" : "(max-width: 640px) 100vw, 45vw"}
+                      className="object-cover object-center"
+                    />
+                  </div>
+                  {photo.caption ? <figcaption className="mt-2 text-sm text-muted">{photo.caption}</figcaption> : null}
+                </figure>
+              </li>
+            )
+          })}
         </ul>
       </Reveal>
 

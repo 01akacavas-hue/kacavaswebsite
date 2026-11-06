@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Brother } from "@/data/brothers"
+import { portraits } from "@/data/images"
 import { Portrait } from "@/components/portrait"
 
 export function BrotherPanel({
@@ -10,6 +11,8 @@ export function BrotherPanel({
   variant: "cube" | "card"
 }) {
   const compact = variant === "cube"
+  const portrait = portraits[brother.id]
+  const landscape = portrait.width > portrait.height
   return (
     <article
       className={
@@ -20,12 +23,13 @@ export function BrotherPanel({
       style={{ borderColor: brother.accent }}
     >
       <div
-        className={`relative overflow-hidden bg-ink ${compact ? "h-[250px]" : "h-44 sm:aspect-[4/5] sm:h-auto sm:max-h-[22rem]"}`}
+        className={`relative overflow-hidden bg-ink ${compact ? "h-[250px]" : landscape ? "aspect-[3/2] w-full" : "h-44 sm:aspect-[4/5] sm:h-auto sm:max-h-[22rem]"}`}
       >
         <Portrait
           id={brother.id}
           priority={brother.index === 0}
           sizes={compact ? "440px" : "(max-width: 768px) 90vw, 420px"}
+          className="object-cover object-center"
         />
       </div>
       <div className={compact ? "px-4 pt-3 pb-4" : ""}>

@@ -19,13 +19,13 @@ export type BrotherScore = {
 export type StatKey = "countries" | "cities" | "states" | "michelin" | "movies" | "shows" | "oscars"
 
 export const statRows: readonly { key: StatKey; label: string; hint: string }[] = [
-  { key: "countries", label: "Countries", hint: "Visited places, counted once per country." },
-  { key: "cities", label: "Cities", hint: "Visited places, counted once per city." },
-  { key: "states", label: "States", hint: "U.S. visits. Washington is counted as the District of Columbia." },
-  { key: "michelin", label: "Michelin dinners", hint: "A star is counted only when the note names it, and only after he has been." },
-  { key: "movies", label: "Movies", hint: "Shorts are listed on the page and are not counted here." },
+  { key: "countries", label: "Countries", hint: "Counted once per country, and only after a visit." },
+  { key: "cities", label: "Cities", hint: "Counted once per city, and only after a visit." },
+  { key: "states", label: "States", hint: "U.S. visits only. Washington is counted as the District of Columbia." },
+  { key: "michelin", label: "Michelin dinners", hint: "A star counts when the note names it, and only if he has been." },
+  { key: "movies", label: "Movies", hint: "Shorts stay on the filmography. They are not counted here." },
   { key: "shows", label: "TV shows", hint: "Series he appeared in." },
-  { key: "oscars", label: "Oscars", hint: "Films he appeared in that won Best Picture. Not a personal award." },
+  { key: "oscars", label: "Oscars", hint: "Best Picture films he appeared in. Not a personal award." },
 ]
 
 function visitedBy(place: Place, brother: BrotherId): boolean {

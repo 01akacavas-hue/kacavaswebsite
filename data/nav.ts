@@ -30,7 +30,7 @@ export const pages: readonly SitePage[] = [
     href: "/",
     label: "Home",
     menuNote: "Brothers",
-    title: "Kacavas — Nicholas, Elias, and Alexander",
+    title: "Kacavas: Nicholas, Elias, and Alexander",
     description:
       "Nicholas, Elias, and Alexander Kacavas. A U.S. Army captain, an actor, and a GTM lead, from Manchester, New Hampshire.",
     index: true,
