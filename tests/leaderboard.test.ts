@@ -122,11 +122,13 @@ describe("leaderboard", () => {
     assert.equal(niko.includes("Turks and Caicos"), true)
     assert.deepEqual(niko, [...nikoVisitedCountries])
     assert.deepEqual(alec, ["Costa Rica", "Spain", "United Kingdom", "United States"])
-    assert.deepEqual(eli, [])
+    assert.deepEqual(eli, ["United States"])
     const scores = scoreboard(places, achievements)
     assert.equal(scores.find((score) => score.id === "niko")?.countries, 23)
     assert.equal(scores.find((score) => score.id === "alec")?.countries, 4)
-    assert.equal(scores.find((score) => score.id === "eli")?.countries, 0)
+    assert.equal(scores.find((score) => score.id === "eli")?.countries, 1)
+    assert.equal(scores.find((score) => score.id === "eli")?.cities, 2)
+    assert.equal(scores.find((score) => score.id === "eli")?.states, 2)
   })
 
   it("adds a country pin only where Nicholas has no place", () => {

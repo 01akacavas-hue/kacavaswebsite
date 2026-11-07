@@ -3,8 +3,10 @@ import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { describe, it } from "node:test"
 import { alecRoles } from "../data/alec"
+import { brothers } from "../data/brothers"
 import { pages } from "../data/nav"
 import { cityTables, places } from "../data/places"
+import { brotherIds } from "../lib/types"
 import { products } from "../data/products"
 import { accents } from "../lib/theme"
 import { PASSWORD_FALLBACK } from "../lib/auth"
@@ -111,6 +113,95 @@ describe("published copy", () => {
     assert.equal(cityTables.some((table) => table.dishes.some((dish) => dish.startsWith("Balbuljata"))), true)
     assert.equal(places.some((place) => place.notes.toLowerCase().includes("fort benning")), false)
     assert.equal(places.some((place) => place.notes.toLowerCase().includes("jordi")), false)
+  })
+
+  it("lists the brothers as Nicholas, then Elias, then Alexander", () => {
+    assert.deepEqual([...brotherIds], ["niko", "eli", "alec"])
+    assert.deepEqual(
+      brothers.map((brother) => brother.id),
+      ["niko", "eli", "alec"],
+    )
+    assert.deepEqual(
+      brothers.map((brother) => brother.shortName),
+      ["Nicholas", "Elias", "Alexander"],
+    )
+    assert.deepEqual(
+      brothers.map((brother) => brother.index),
+      [0, 1, 2],
+    )
+    const elias = brothers.find((brother) => brother.id === "eli")
+    assert.equal(elias?.shortName, "Elias")
+    assert.equal(elias !== undefined && "knownAs" in elias, false)
+    assert.deepEqual(
+      pages.filter((page) => page.brother).map((page) => page.brother),
+      ["niko", "eli", "alec"],
+    )
+    const explorer = readFileSync(join(root, "components/map/places-explorer.tsx"), "utf8")
+    assert.match(explorer, /Nicholas&apos;s, Elias&apos;s, and Alexander&apos;s/)
+    assert.equal(explorer.includes("Eli's"), false)
+  })
+
+  it("keeps Elias's restaurants on his own pins", () => {
+    const eli = places.filter((place) => place.brothers.includes("eli"))
+    assert.equal(eli.length, 19)
+    const losAngeles = eli.filter((place) => place.city === "Los Angeles")
+    const newYork = eli.filter((place) => place.city === "New York")
+    assert.equal(losAngeles.length, 16)
+    assert.equal(newYork.length, 3)
+    for (const place of eli) {
+      assert.deepEqual(place.brothers, ["eli"])
+      assert.equal(place.country, "United States")
+      assert.equal(place.countryPin, undefined)
+      assert.equal(place.recommended, undefined)
+      assert.equal(place.wishlist, undefined)
+      assert.equal(place.price, undefined)
+      assert.equal(place.stars, undefined)
+      assert.equal(place.approximate, undefined)
+      assert.equal(/\bEli\b/.test(place.name), false)
+      assert.equal(place.notes.includes("Eli"), false)
+    }
+    assert.deepEqual(
+      eli.map((place) => place.name).sort(),
+      [
+        "Avra",
+        "Backyard Bowls",
+        "Catch",
+        "Chiba",
+        "Estiatorio Louká",
+        "Good Beer",
+        "Hedley's",
+        "Kitchen 24",
+        "Pause Cafe",
+        "Philz Coffee",
+        "Quantum Leap",
+        "Sachi Sushi",
+        "Salsa and Beer",
+        "Sugarfish",
+        "Tar & Roses",
+        "The Apple Pan",
+        "The Bombay Frankie Company",
+        "The Carving Board",
+        "Tu Madre",
+      ],
+    )
+    const chiba = eli.find((place) => place.id === "eli-chiba")
+    assert.match(chiba?.notes ?? "", /Ask for Shig/)
+    assert.match(chiba?.notes ?? "", /Raul/)
+    const madre = eli.find((place) => place.id === "eli-tu-madre")
+    assert.match(madre?.notes ?? "", /Tacos/)
+    assert.match(madre?.notes ?? "", /Sandeep suggested it/)
+    assert.match(eli.find((place) => place.id === "eli-sugarfish")?.notes ?? "", /Sugar fish/)
+    assert.match(eli.find((place) => place.id === "eli-estiatorio-louka")?.notes ?? "", /Estiotoria Luka/)
+    assert.match(eli.find((place) => place.id === "eli-hedleys")?.notes ?? "", /Hedleys/)
+    assert.match(eli.find((place) => place.id === "eli-bombay-frankie")?.notes ?? "", /Bombay Frankies/)
+    assert.match(eli.find((place) => place.id === "eli-tar-and-roses")?.notes ?? "", /Tar and Roses/)
+    assert.match(eli.find((place) => place.id === "eli-apple-pan")?.notes ?? "", /Apple Pan/)
+    assert.equal(
+      places.some((place) => place.countryPin && place.brothers.includes("eli")),
+      false,
+    )
+    assert.equal(places.filter((place) => place.id === "la-avra" && place.brothers.includes("eli")).length, 0)
+    assert.equal(places.filter((place) => place.id === "nyc-catch" && place.brothers.includes("eli")).length, 0)
   })
 
   it("hides shop and creative until they are switched on", () => {
