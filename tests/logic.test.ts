@@ -2,11 +2,14 @@ import assert from "node:assert/strict"
 import { afterEach, describe, it } from "node:test"
 import {
   PASSWORD_FALLBACK,
+  TOKEN_MAX_AGE_SECONDS,
   createSessionValue,
   getSitePassword,
   isSessionValid,
   isUsingPasswordFallback,
+  lockCookieOptions,
   passwordsMatch,
+  unlockCookieOptions,
 } from "../lib/auth"
 import { formatPrice } from "../lib/money"
 import { clusterPoints } from "../lib/cluster"
@@ -49,14 +52,16 @@ describe("password", () => {
 })
 
 describe("session", () => {
-  it("round-trips a signed cookie", async () => {
+  it("round-trips a signed cookie for the rest of a browsing session", async () => {
     process.env.SITE_PASSWORD = "test-secret"
     const now = Date.parse("2026-11-01T00:00:00Z")
     const value = await createSessionValue(now)
+    assert.match(value, /^v2\./)
     assert.equal(await isSessionValid(value, now + 1000), true)
+    assert.equal(await isSessionValid(value, now + 1000 * 60 * 60 * 12), true)
   })
 
-  it("rejects a tampered signature, a bad shape, and an expired token", async () => {
+  it("rejects a tampered signature, a bad shape, an old persistent token, and an expired token", async () => {
     process.env.SITE_PASSWORD = "test-secret"
     const now = Date.parse("2026-11-01T00:00:00Z")
     const value = await createSessionValue(now)
@@ -67,7 +72,9 @@ describe("session", () => {
     assert.equal(await isSessionValid(`${version}.${expiresAt}.${flipped}`, now + 1000), false)
     assert.equal(await isSessionValid("nope", now), false)
     assert.equal(await isSessionValid(undefined, now), false)
-    assert.equal(await isSessionValid(value, now + 1000 * 60 * 60 * 24 * 31), false)
+    assert.equal(await isSessionValid(value.replace(/^v\d+/, "v1"), now + 1000), false)
+    assert.equal(await isSessionValid(value, now + TOKEN_MAX_AGE_SECONDS * 1000), false)
+    assert.equal(await isSessionValid(value, now + (TOKEN_MAX_AGE_SECONDS - 1) * 1000), true)
   })
 
   it("rejects a token signed with a different password", async () => {
@@ -75,6 +82,22 @@ describe("session", () => {
     const value = await createSessionValue(1_000)
     process.env.SITE_PASSWORD = "two"
     assert.equal(await isSessionValid(value, 1_000), false)
+  })
+
+  it("keeps the unlock cookie for the browser session only", () => {
+    const unlock = unlockCookieOptions(true)
+    assert.equal(unlock.httpOnly, true)
+    assert.equal(unlock.secure, true)
+    assert.equal(unlock.sameSite, "lax")
+    assert.equal(unlock.path, "/")
+    assert.equal("maxAge" in unlock, false)
+    assert.equal("expires" in unlock, false)
+
+    const locked = lockCookieOptions(false)
+    assert.equal(locked.secure, false)
+    assert.equal(locked.maxAge, 0)
+    assert.equal(locked.expires.getTime(), 0)
+    assert.equal(locked.path, "/")
   })
 })
 

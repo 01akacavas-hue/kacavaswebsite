@@ -1,22 +1,18 @@
 import { NextResponse } from "next/server"
 import {
   SESSION_COOKIE,
-  SESSION_MAX_AGE_SECONDS,
   createSessionValue,
   getSitePassword,
+  lockCookieOptions,
   passwordsMatch,
+  unlockCookieOptions,
 } from "@/lib/auth"
 import { isRecord, isSameOrigin, readJson } from "@/lib/http"
 
-function cookieBase(request: Request) {
+function cookieSecure(request: Request) {
   const forwarded = request.headers.get("x-forwarded-proto")
   const protocol = forwarded ?? new URL(request.url).protocol.replace(":", "")
-  return {
-    httpOnly: true,
-    secure: protocol === "https",
-    sameSite: "lax" as const,
-    path: "/",
-  }
+  return protocol === "https"
 }
 
 export async function POST(request: Request) {
@@ -32,10 +28,11 @@ export async function POST(request: Request) {
   }
 
   const response = NextResponse.json({ ok: true })
-  response.cookies.set(SESSION_COOKIE, await createSessionValue(), {
-    ...cookieBase(request),
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  })
+  response.cookies.set(
+    SESSION_COOKIE,
+    await createSessionValue(),
+    unlockCookieOptions(cookieSecure(request)),
+  )
   return response
 }
 
@@ -44,6 +41,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ ok: false }, { status: 403 })
   }
   const response = NextResponse.json({ ok: true })
-  response.cookies.set(SESSION_COOKIE, "", { ...cookieBase(request), maxAge: 0 })
+  response.cookies.set(SESSION_COOKIE, "", lockCookieOptions(cookieSecure(request)))
   return response
 }

@@ -4,10 +4,11 @@ import { SESSION_COOKIE, isPublicPath, isSessionValid } from "@/lib/auth"
 /**
  * Next.js 16 renamed Middleware to Proxy. This file is that middleware.
  *
- * It does not see the password. It only checks the signed httpOnly cookie.
- * `app/api/unlock/route.ts` compares the password to `SITE_PASSWORD` and sets
- * the cookie. A request without that cookie is rewritten to the password
- * screen, and the address bar stays on the page they asked for.
+ * It does not see the password. It only checks the signed httpOnly session
+ * cookie. `app/api/unlock/route.ts` compares the password to `SITE_PASSWORD`
+ * and sets that cookie for the browser session. A request without a valid
+ * cookie is rewritten to the password screen, and the address bar stays on
+ * the page they asked for.
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
