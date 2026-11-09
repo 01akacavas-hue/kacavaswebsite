@@ -4,7 +4,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // The optimizer fetches /images without the session cookie, and the gate
+    // then answers with the password page. The browser request includes the cookie.
+    unoptimized: true,
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
