@@ -5,16 +5,60 @@
  * token with that password as the HMAC key and later checks the token.
  * The proxy (`proxy.ts`, Next.js 16's middleware) only calls `isSessionValid`.
  *
+ * Unlock stores that token in an httpOnly session cookie. The cookie has no
+ * `Max-Age` and no `Expires`, so the browser keeps it for the current session
+ * and drops it when the session ends. A new visit has to enter the password
+ * again. Moving between pages in the same session does not ask again. Lock
+ * clears the cookie immediately.
+ *
+ * `v1` tokens were the old cookies that stayed on disk for 30 days. They no
+ * longer unlock the site. The signed token still has an absolute replay cap
+ * so a copied cookie cannot be reused forever. That cap is not the cookie's
+ * lifetime.
+ *
  * If `SITE_PASSWORD` is missing or empty, the password is the public
  * placeholder `kacavas-local`. That is for local development. Set a real
  * value in Vercel before sharing the deployment. The README documents this.
  */
 
 export const SESSION_COOKIE = "kacavas_places"
-export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
 export const PASSWORD_FALLBACK = "kacavas-local"
 
-const VERSION = "v1"
+/** Replay bound for a signed token. Not written onto the cookie as `Max-Age`. */
+export const TOKEN_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
+
+const VERSION = "v2"
+
+export type UnlockCookieOptions = {
+  httpOnly: true
+  secure: boolean
+  sameSite: "lax"
+  path: "/"
+}
+
+export type LockCookieOptions = UnlockCookieOptions & {
+  maxAge: 0
+  expires: Date
+}
+
+/** Cookie attributes for a successful unlock. Omitting `maxAge` and `expires` makes a session cookie. */
+export function unlockCookieOptions(secure: boolean): UnlockCookieOptions {
+  return {
+    httpOnly: true,
+    secure,
+    sameSite: "lax",
+    path: "/",
+  }
+}
+
+/** Cookie attributes for Lock. `Max-Age=0` and an expiry in the past delete the cookie immediately. */
+export function lockCookieOptions(secure: boolean): LockCookieOptions {
+  return {
+    ...unlockCookieOptions(secure),
+    maxAge: 0,
+    expires: new Date(0),
+  }
+}
 
 export function getSitePassword(): string {
   const fromEnv = process.env.SITE_PASSWORD
@@ -53,7 +97,7 @@ export async function passwordsMatch(input: string, secret: string): Promise<boo
 }
 
 export async function createSessionValue(now = Date.now()): Promise<string> {
-  const expiresAt = now + SESSION_MAX_AGE_SECONDS * 1000
+  const expiresAt = now + TOKEN_MAX_AGE_SECONDS * 1000
   const payload = `${VERSION}.${expiresAt}`
   const signature = await hmacHex(payload, getSitePassword())
   return `${payload}.${signature}`

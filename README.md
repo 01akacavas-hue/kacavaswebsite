@@ -62,7 +62,7 @@ The small note about Nicholas G. Kacavas (1927–2012) is their grandfather, a W
 The whole site is private. The password is checked on the server.
 
 - `proxy.ts` is the Next.js 16 middleware (the file was renamed from `middleware.ts`). It does not see the password. It checks a signed httpOnly cookie. If that cookie is missing or bad, the request is rewritten to the password screen, and the address bar stays on the page they asked for.
-- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets the cookie for the whole site. `DELETE` clears it. Lock, in the menu and on the map, calls that.
+- `app/api/unlock/route.ts` compares the submitted password with `SITE_PASSWORD` and sets a session cookie for the whole site. The cookie has no `Max-Age` and no `Expires`, so the browser keeps it for the current session, including while someone moves from page to page, and drops it when that session ends. A later visit has to enter the password again. `DELETE` clears the cookie immediately. Lock, in the menu and on the map, calls that.
 - The password screen, the static files it needs, `robots.txt`, and a health check are the only routes that answer without the cookie.
 
 ### `SITE_PASSWORD` and the placeholder

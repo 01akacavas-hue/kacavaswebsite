@@ -74,6 +74,16 @@ describe("published copy", () => {
     assert.ok(readme.includes("kacavas.com"))
   })
 
+  it("documents a browser session instead of a 30-day unlock", () => {
+    const readme = readFileSync(join(root, "README.md"), "utf8")
+    const password = readme.slice(readme.indexOf("## Password"), readme.indexOf("## Shop"))
+    assert.match(password, /session cookie/)
+    assert.match(password, /current session/)
+    assert.match(password, /drops it when that session ends/)
+    assert.equal(password.toLowerCase().includes("30 day"), false)
+    assert.equal(password.includes("SESSION_MAX_AGE"), false)
+  })
+
   it("keeps place records well formed", () => {
     const ids = new Set<string>()
     for (const place of places) {
