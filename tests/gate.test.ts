@@ -1,4 +1,6 @@
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
 import { afterEach, describe, it } from "node:test"
 import { NextRequest } from "next/server"
 import { DELETE, POST } from "../app/api/unlock/route"
@@ -97,5 +99,10 @@ describe("site gate", () => {
 
     const fresh = await proxy(new NextRequest("https://kacavas.com/gate"))
     assert.equal(fresh.headers.get("x-middleware-next"), "1")
+  })
+
+  it("serves local photos from the browser so the session cookie is sent", () => {
+    const config = readFileSync(join(import.meta.dirname, "../next.config.ts"), "utf8")
+    assert.match(config, /unoptimized:\s*true/)
   })
 })
