@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { Brother } from "@/data/brothers"
-import { portraits } from "@/data/images"
+import { homePortraits } from "@/data/images"
 import { Portrait } from "@/components/portrait"
 
 export function BrotherPanel({
@@ -11,7 +11,7 @@ export function BrotherPanel({
   variant: "cube" | "card"
 }) {
   const compact = variant === "cube"
-  const portrait = portraits[brother.id]
+  const portrait = homePortraits[brother.id]
   const landscape = portrait.width > portrait.height
   return (
     <article
@@ -27,9 +27,10 @@ export function BrotherPanel({
       >
         <Portrait
           id={brother.id}
+          image={portrait}
           priority={brother.index === 0}
           sizes={compact ? "440px" : "(max-width: 768px) 90vw, 420px"}
-          className="object-cover object-center"
+          className="object-cover"
         />
       </div>
       <div className={compact ? "px-4 pt-3 pb-4" : ""}>

@@ -6,7 +6,7 @@ import Link from "next/link"
 import { ViewTransition } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { brothers } from "@/data/brothers"
-import { portraits } from "@/data/images"
+import { homePortraits, objectPosition } from "@/data/images"
 import { BrotherCards } from "@/components/home/brother-cards"
 import { WebGLBoundary } from "@/components/home/webgl-boundary"
 
@@ -25,7 +25,7 @@ export function HomeExperience() {
   const [sceneOn, setSceneOn] = useState(false)
   const [index, setIndex] = useState(0)
   const brother = brothers[index] ?? brothers[0]
-  const portrait = portraits[brother.id]
+  const portrait = homePortraits[brother.id]
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -200,7 +200,8 @@ export function HomeExperience() {
                 fill
                 quality={65}
                 sizes="(max-width: 768px) 80vw, 42vw"
-                className="object-cover object-center"
+                className="object-cover"
+                style={{ objectPosition: objectPosition(portrait) }}
               />
             </div>
           </ViewTransition>

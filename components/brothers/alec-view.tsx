@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { ViewTransition } from "react"
 import { academyAwardPhoto, alecQuote, alecRoles } from "@/data/alec"
-import { alexanderGrill, alexanderPhotos, portraits } from "@/data/images"
+import { alexanderGrill, alexanderPhotos, alexanderShotski, portraits } from "@/data/images"
 import { ExternalLink } from "@/components/chrome/external-link"
 import { Portrait } from "@/components/portrait"
 import { Reveal } from "@/components/motion/reveal"
@@ -81,12 +81,23 @@ export function AlecView() {
               </p>
             </div>
           </article>
-          <article className="flex flex-col justify-between border border-line p-6 sm:p-8">
-            <p className="text-xs tracking-[0.18em] text-alec uppercase">World record</p>
-            <p className="mt-8 font-serif text-7xl tracking-tight sm:text-8xl">1,430</p>
-            <div className="mt-8">
-              <h3 className="font-serif text-3xl">Longest continuous shotski</h3>
-              <p className="mt-4 leading-relaxed">I hold a world record: the longest continuous shotski, with 1,430 people, in Park City, Utah.</p>
+          <article className="flex flex-col border border-line">
+            <div className="relative aspect-[3/4] bg-ink-2">
+              <Image
+                src={alexanderShotski.src}
+                alt={alexanderShotski.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-1 flex-col justify-between p-6 sm:p-8">
+              <p className="text-xs tracking-[0.18em] text-alec uppercase">World record</p>
+              <p className="mt-8 font-serif text-7xl tracking-tight sm:text-8xl">1,430</p>
+              <div className="mt-8">
+                <h3 className="font-serif text-3xl">Longest continuous shotski</h3>
+                <p className="mt-4 leading-relaxed">I hold a world record: the longest continuous shotski, with 1,430 people, in Park City, Utah.</p>
+              </div>
             </div>
           </article>
           <article className="grid border border-line lg:col-span-2 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)]">
@@ -132,7 +143,7 @@ export function AlecView() {
 
       <Reveal className="mt-16">
         <h2 className="font-serif text-4xl">Photographs</h2>
-        <p className="mt-3 max-w-2xl text-muted">San Francisco, the water, a race bib, and the bottle still closed.</p>
+        <p className="mt-3 max-w-2xl text-muted">The northern lights, San Francisco, the water, a race bib, and the bottle still closed.</p>
         <ul className="mt-8 grid gap-4 sm:grid-cols-3">
           {alexanderPhotos.map((photo) => {
             const frame = photoFrame(photo)

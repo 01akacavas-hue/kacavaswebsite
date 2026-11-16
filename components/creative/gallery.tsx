@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { gallery } from "@/data/images"
+import { gallery, objectPosition } from "@/data/images"
 
 const groups = ["Portraits", "The Vanity", "Stills"] as const
 
@@ -17,7 +17,14 @@ export function Gallery() {
               {items.map((item) => (
                 <li key={item.id} className="border border-line">
                   <div className="relative aspect-[4/5] bg-ink-2">
-                    <Image src={item.src} alt={item.alt} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover" />
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      className="object-cover"
+                      style={{ objectPosition: objectPosition(item) }}
+                    />
                   </div>
                   <p className="p-4 text-sm text-muted">{item.caption}</p>
                 </li>

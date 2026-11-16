@@ -100,4 +100,9 @@ export type SiteImage = {
   height: number
   /** A short line under the picture, when the page shows one. */
   caption?: string
+  /**
+   * Subject position when a frame crops the photo.
+   * 0 is the left or top edge. 1 is the right or bottom edge.
+   */
+  focus?: { x: number; y: number }
 }

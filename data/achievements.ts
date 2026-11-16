@@ -1,4 +1,5 @@
-import type { BrotherId } from "@/lib/types"
+import { alexanderShotski } from "@/data/images"
+import type { BrotherId, SiteImage } from "@/lib/types"
 
 export type CreditKind = "movie" | "series" | "short"
 
@@ -19,6 +20,7 @@ export type Trophy = {
   title: string
   kicker: string
   detail: string
+  image?: SiteImage
 }
 
 /** A joke vote. Not a real award. */
@@ -133,6 +135,7 @@ export const achievements: Record<BrotherId, BrotherRecord> = {
         title: "1,430",
         kicker: "Longest continuous shotski",
         detail: "1,430 people, Park City, Utah.",
+        image: alexanderShotski,
       },
       {
         id: "grillmaster",

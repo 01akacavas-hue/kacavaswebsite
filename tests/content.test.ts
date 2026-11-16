@@ -4,6 +4,7 @@ import { join } from "node:path"
 import { describe, it } from "node:test"
 import { alecRoles } from "../data/alec"
 import { brothers } from "../data/brothers"
+import { alexanderPhotos, alexanderShotski, homePortraits, portraits } from "../data/images"
 import { pages } from "../data/nav"
 import { cityTables, places } from "../data/places"
 import { brotherIds } from "../lib/types"
@@ -247,6 +248,26 @@ describe("published copy", () => {
     assert.match(photo, /https:\/\/commons\.wikimedia\.org\/wiki\/File:DSC_7227_/)
     assert.match(photo, /creativecommons\.org\/licenses\/by-sa\/4\.0/)
     assert.ok(statSync(join(root, "public/images/alec/academy-award.jpg")).size > 1000)
+    assert.equal(portraits.alec.src, "/images/alec/portrait.jpg")
+    assert.equal(portraits.alec.width, 1400)
+    assert.equal(portraits.alec.height, 2100)
+    assert.ok(portraits.alec.focus && portraits.alec.focus.y < 0.35)
+    assert.equal(homePortraits.alec.src, "/images/alec/suit.jpg")
+    assert.equal(homePortraits.niko.src, portraits.niko.src)
+    assert.equal(homePortraits.eli.src, portraits.eli.src)
+    assert.ok(homePortraits.alec.focus && homePortraits.alec.focus.y < 0.35)
+    assert.equal(view.includes("suit.jpg"), false)
+    assert.equal(
+      alexanderPhotos.some((photo) => photo.src === "/images/alec/aurora.jpg"),
+      true,
+    )
+    assert.equal(alexanderShotski.src, "/images/alec/shotski.jpg")
+    assert.equal(alexanderShotski.alt, "Alec at the record-setting shotski on Main Street in Park City, Utah.")
+    assert.match(view, /alexanderShotski/)
+    assert.ok(statSync(join(root, "public/images/alec/portrait.jpg")).size > 1000)
+    assert.ok(statSync(join(root, "public/images/alec/suit.jpg")).size > 1000)
+    assert.ok(statSync(join(root, "public/images/alec/shotski.jpg")).size > 1000)
+    assert.ok(statSync(join(root, "public/images/alec/aurora.jpg")).size > 1000)
     assert.equal(view.includes("He attended"), false)
     for (const role of alecRoles) {
       assert.equal(/\bHe\b/.test(role.detail), false, role.id)
