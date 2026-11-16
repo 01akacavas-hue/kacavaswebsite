@@ -1,5 +1,12 @@
 import type { BrotherId, SiteImage } from "@/lib/types"
 
+/** CSS object-position. A photo with no focus stays centered. */
+export function objectPosition(image: Pick<SiteImage, "focus">): string {
+  const x = image.focus?.x ?? 0.5
+  const y = image.focus?.y ?? 0.5
+  return `${x * 100}% ${y * 100}%`
+}
+
 /**
  * All image paths live here.
  *
@@ -68,11 +75,26 @@ export const portraits: Record<BrotherId, SiteImage> = {
     height: 1350,
   },
   alec: {
-    src: "/images/alec/aurora.jpg",
-    alt: "Alexander smiling on a balcony in a blue shirt, the northern lights pink and green behind him.",
-    caption: "A balcony, a blue shirt, and the northern lights doing the decorating.",
+    src: "/images/alec/portrait.jpg",
+    alt: "Alexander in a cream cable-knit sweater, outdoors, with soft grass behind him.",
+    caption: "A cream cable-knit sweater, and the grass going soft behind him.",
     width: 1400,
-    height: 1867,
+    height: 2100,
+    focus: { x: 0.5, y: 0.14 },
+  },
+}
+
+/** Home page only. Alexander's profile keeps `portraits.alec`. */
+export const homePortraits: Record<BrotherId, SiteImage> = {
+  niko: portraits.niko,
+  eli: portraits.eli,
+  alec: {
+    src: "/images/alec/suit.jpg",
+    alt: "Alexander in a navy suit and a light blue tie, smiling.",
+    caption: "A navy suit, a light blue tie, and the steps behind him.",
+    width: 623,
+    height: 1058,
+    focus: { x: 0.5, y: 0.16 },
   },
 }
 
@@ -147,7 +169,21 @@ export const alexanderGrill: SiteImage = {
   height: 1024,
 }
 
+export const alexanderShotski: SiteImage = {
+  src: "/images/alec/shotski.jpg",
+  alt: "Alec at the record-setting shotski on Main Street in Park City, Utah.",
+  width: 768,
+  height: 1024,
+}
+
 export const alexanderPhotos: readonly (SiteImage & { caption?: string; wide?: boolean })[] = [
+  {
+    src: "/images/alec/aurora.jpg",
+    alt: "Alexander smiling on a balcony in a blue shirt, the northern lights pink and green behind him.",
+    caption: "A balcony, a blue shirt, and the northern lights doing the decorating.",
+    width: 1400,
+    height: 1867,
+  },
   {
     src: "/images/alec/rho-lock-in.jpg",
     alt: "Alexander standing in front of a box truck wrapped in a Rho advertisement in San Francisco.",
@@ -223,7 +259,7 @@ export const gallery: readonly GalleryItem[] = [
   {
     id: "alec-portrait",
     ...portraits.alec,
-    caption: "A balcony, a blue shirt, and the northern lights doing the decorating.",
+    caption: "A cream cable-knit sweater, and the grass going soft behind him.",
     group: "Portraits",
   },
   {

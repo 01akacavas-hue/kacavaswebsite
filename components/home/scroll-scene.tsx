@@ -4,7 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { useEffect, useMemo, useRef, useState } from "react"
 import * as THREE from "three"
 import { brothers } from "@/data/brothers"
-import { portraits } from "@/data/images"
+import { homePortraits } from "@/data/images"
 
 const CARD_W = 1.46
 const CARD_H = 1.96
@@ -83,7 +83,8 @@ function PortraitCard({
 }) {
   const groupRef = useRef<THREE.Group>(null)
   const brother = brothers[index]
-  const texture = usePortrait(brother ? portraits[brother.id].src : "")
+  const portrait = brother ? homePortraits[brother.id] : undefined
+  const texture = usePortrait(portrait?.src ?? "", portrait?.focus)
 
   useFrame(() => {
     const group = groupRef.current
@@ -121,8 +122,10 @@ function PortraitCard({
   )
 }
 
-function usePortrait(src: string): THREE.Texture | null {
+function usePortrait(src: string, focus?: { x: number; y: number }): THREE.Texture | null {
   const [texture, setTexture] = useState<THREE.Texture | null>(null)
+  const focusX = focus?.x ?? 0.5
+  const focusY = focus?.y ?? 0.5
 
   useEffect(() => {
     let active = true
@@ -133,7 +136,7 @@ function usePortrait(src: string): THREE.Texture | null {
         next.dispose()
         return
       }
-      coverCrop(next, CARD_W / CARD_H)
+      coverCrop(next, CARD_W / CARD_H, focusX, focusY)
       next.colorSpace = THREE.SRGBColorSpace
       next.anisotropy = 8
       next.needsUpdate = true
@@ -144,24 +147,26 @@ function usePortrait(src: string): THREE.Texture | null {
       active = false
       loaded?.dispose()
     }
-  }, [src])
+  }, [src, focusX, focusY])
 
   return texture
 }
 
-function coverCrop(texture: THREE.Texture, planeAspect: number) {
+function coverCrop(texture: THREE.Texture, planeAspect: number, focusX: number, focusY: number) {
   const image = texture.image as { width?: number; height?: number } | undefined
   const width = image?.width ?? 1
   const height = image?.height ?? 1
   const imageAspect = width / height
+  const clamp = (value: number) => Math.min(1, Math.max(0, value))
   if (imageAspect > planeAspect) {
     const repeatX = planeAspect / imageAspect
     texture.repeat.set(repeatX, 1)
-    texture.offset.set((1 - repeatX) / 2, 0)
+    texture.offset.set(clamp((1 - repeatX) * focusX), 0)
   } else {
     const repeatY = imageAspect / planeAspect
     texture.repeat.set(1, repeatY)
-    texture.offset.set(0, (1 - repeatY) / 2)
+    // A higher offset keeps the top of the photo. focusY is 0 at the top.
+    texture.offset.set(0, clamp((1 - repeatY) * (1 - focusY)))
   }
   texture.wrapS = THREE.ClampToEdgeWrapping
   texture.wrapT = THREE.ClampToEdgeWrapping

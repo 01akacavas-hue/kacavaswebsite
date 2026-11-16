@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { achievements, type Trophy } from "@/data/achievements"
 import { countriesVisited, rankBy, scoreboard, statRows, type BrotherScore, type StatKey } from "@/lib/leaderboard"
 import { brotherLabel } from "@/lib/places"
@@ -61,13 +62,21 @@ function Podium({ scores }: { scores: readonly BrotherScore[] }) {
 }
 
 function TrophyCard({ trophy, brother }: { trophy: Trophy; brother: BrotherId }) {
+  const image = trophy.image
   return (
-    <article className="trophy-card border border-line bg-ink p-6" style={{ borderTopWidth: 3, borderTopColor: accents[brother] }}>
-      <p className="text-[0.68rem] tracking-[0.16em] uppercase" style={{ color: accents[brother] }}>
-        {trophy.kicker}
-      </p>
-      <h3 className="mt-3 font-serif text-4xl tracking-tight">{trophy.title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-muted">{trophy.detail}</p>
+    <article className="trophy-card overflow-hidden border border-line bg-ink" style={{ borderTopWidth: 3, borderTopColor: accents[brother] }}>
+      {image ? (
+        <div className="relative bg-ink-2" style={{ aspectRatio: `${image.width} / ${image.height}` }}>
+          <Image src={image.src} alt={image.alt} fill sizes="(max-width: 640px) 100vw, 640px" className="object-cover" />
+        </div>
+      ) : null}
+      <div className="p-6">
+        <p className="text-[0.68rem] tracking-[0.16em] uppercase" style={{ color: accents[brother] }}>
+          {trophy.kicker}
+        </p>
+        <h3 className="mt-3 font-serif text-4xl tracking-tight">{trophy.title}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{trophy.detail}</p>
+      </div>
     </article>
   )
 }
