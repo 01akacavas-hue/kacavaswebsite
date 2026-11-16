@@ -34,7 +34,7 @@ export function MapScopeToggle({ scope, onChange }: { scope: MapScope; onChange:
   )
 }
 
-export function ShadeLegend({ scope }: { scope: MapScope }) {
+export function ShadeLegend() {
   return (
     <div className="max-w-[18rem] border border-line bg-ink px-3 py-2.5 text-paper shadow-[0_8px_20px_rgb(26_23_20_/_0.12)]" aria-label="Who has been where">
       <p className="text-[0.62rem] tracking-[0.14em] text-muted uppercase">Who has been</p>
@@ -47,7 +47,7 @@ export function ShadeLegend({ scope }: { scope: MapScope }) {
         ))}
       </ul>
       <p className="mt-2 text-[0.68rem] leading-snug text-muted">One brother fills the place. Two blend. All three mix.</p>
-      {scope === "us" ? <p className="mt-1 text-[0.68rem] leading-snug text-muted">States and Washington, DC. Pan for Alaska and Hawaii.</p> : null}
+      <p className="mt-1 text-[0.68rem] leading-snug text-muted">Each state and Washington, DC is outlined on the globe. Alaska and Hawaii stay where they are.</p>
     </div>
   )
 }

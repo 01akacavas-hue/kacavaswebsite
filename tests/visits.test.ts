@@ -9,6 +9,14 @@ import { visitedStates } from "../lib/leaderboard"
 import { mixBrotherColors } from "../lib/shade-color"
 import { accents } from "../lib/theme"
 import { countryShadeGeoJSON, shadeCounts, stateShadeGeoJSON, unshadedCountryNames, unshadedStateNames } from "../lib/shade-geo"
+import type { Geometry } from "geojson"
+
+function firstCoordinate(geometry: Geometry | undefined): number[] | null {
+  if (!geometry) return null
+  const point = geometry.type === "Polygon" ? geometry.coordinates[0]?.[0] : geometry.type === "MultiPolygon" ? geometry.coordinates[0]?.[0]?.[0] : null
+  if (!point || point.length < 2) return null
+  return point
+}
 
 const root = join(import.meta.dirname, "..")
 
@@ -133,15 +141,33 @@ describe("visit shading", () => {
     const countries = countryShadeGeoJSON(places)
     const states = stateShadeGeoJSON(places)
     assert.equal(states.features.length, 51)
-    assert.deepEqual(shadeCounts(countries), { 1: 17, 2: 9, 3: 1 })
+    assert.deepEqual(shadeCounts(countries), { 1: 17, 2: 9, 3: 0 })
     assert.deepEqual(shadeCounts(states), { 1: 17, 2: 10, 3: 1 })
     const vatican = countries.features.find((feature) => feature.properties?.name === "Vatican")
     assert.equal(vatican?.properties?.brothers, "alec")
-    const america = countries.features.find((feature) => feature.properties?.name === "United States of America")
-    assert.equal(america?.properties?.brothers, "niko,eli,alec")
+    assert.equal(
+      countries.features.some((feature) => feature.properties?.name === "United States of America"),
+      false,
+    )
     const york = states.features.find((feature) => feature.properties?.name === "New York")
     assert.equal(york?.properties?.brothers, "niko,eli,alec")
     const idaho = states.features.find((feature) => feature.properties?.name === "Idaho")
     assert.equal(idaho?.properties?.brothers, "")
+    const alaska = states.features.find((feature) => feature.properties?.name === "Alaska")
+    const hawaii = states.features.find((feature) => feature.properties?.name === "Hawaii")
+    const district = states.features.find((feature) => feature.properties?.name === "District of Columbia")
+    assert.equal(alaska?.properties?.brothers, "")
+    assert.equal(hawaii?.properties?.brothers, "alec")
+    assert.equal(district?.properties?.brothers, "niko,alec")
+    const hawaiiPoint = firstCoordinate(hawaii?.geometry)
+    const alaskaPoint = firstCoordinate(alaska?.geometry)
+    assert.ok(hawaiiPoint && hawaiiPoint[0] < -140 && hawaiiPoint[1] < 30)
+    assert.ok(alaskaPoint && alaskaPoint[1] > 50)
+  })
+
+  it("keeps state outlines on the globe instead of hiding them behind the United States view", () => {
+    const source = readFileSync(join(root, "components/map/globe-map.tsx"), "utf8")
+    assert.equal(source.includes('scope === "us" ? "visible"'), false)
+    assert.equal(source.includes('scope === "us" ? ["!='), false)
   })
 })
