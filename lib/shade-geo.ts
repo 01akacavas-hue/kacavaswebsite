@@ -104,12 +104,15 @@ function painted(name: string, brothers: readonly BrotherId[], geometry: Geometr
   }
 }
 
+/** The United States is shaded state by state, never as one country shape. */
+const stateShadedCountries = new Set(["United States of America"])
+
 export function countryShadeGeoJSON(places: readonly Place[]): FeatureCollection<Geometry, ShadeProperties> {
   const groups = countryBrothers(places)
   const features: Feature<Geometry, ShadeProperties>[] = []
   for (const item of countryCollection.features) {
     const name = item.properties?.name
-    if (!name) continue
+    if (!name || stateShadedCountries.has(name)) continue
     const brothers = brothersFor(groups, name)
     if (brothers.length === 0) continue
     features.push(painted(name, brothers, item.geometry))
@@ -145,6 +148,7 @@ export function unshadedCountryNames(places: readonly Place[]): string[] {
   for (const brother of brotherIds) {
     for (const country of countriesVisited(places, brother)) {
       const geo = countryGeoName(country)
+      if (stateShadedCountries.has(geo)) continue
       if (!drawn.has(geo)) missing.add(`${country} -> ${geo}`)
     }
   }

@@ -81,6 +81,10 @@ function shadeBeforeId(style: RecolorableStyle): string | undefined {
   return style.layers.find((layer) => layer.type === "symbol")?.id
 }
 
+function shadeLineBeforeId(style: RecolorableStyle): string | undefined {
+  return style.layers.find((layer) => layer.type === "symbol")?.id ?? shadeBeforeId(style)
+}
+
 function fly(map: MaplibreMap, longitude: number, latitude: number, zoom: number, pitch: number, duration: number) {
   return new Promise<void>((resolve) => {
     if (duration === 0) {
@@ -176,6 +180,7 @@ export function GlobeMap({
   const countryShade = useMemo(() => countryShadeGeoJSON(catalog), [catalog])
   const stateShade = useMemo(() => stateShadeGeoJSON(catalog), [catalog])
   const beforeId = style ? shadeBeforeId(style) : undefined
+  const lineBeforeId = style ? shadeLineBeforeId(style) : undefined
 
   useEffect(() => {
     if (!map) return
@@ -428,7 +433,7 @@ export function GlobeMap({
             id="country-fill"
             type="fill"
             beforeId={beforeId}
-            filter={(scope === "us" ? ["!=", ["get", "name"], "United States of America"] : ["has", "name"]) as FilterSpecification}
+            filter={["!=", ["get", "name"], "United States of America"] as FilterSpecification}
             paint={{
               "fill-color": brotherFillColor,
               "fill-opacity": 0.82,
@@ -440,7 +445,6 @@ export function GlobeMap({
             id="state-fill"
             type="fill"
             beforeId={beforeId}
-            layout={{ visibility: scope === "us" ? "visible" : "none" }}
             paint={{
               "fill-color": brotherFillColor,
               "fill-opacity": ["case", ["==", ["get", "brothers"], ""], 0, 0.82],
@@ -449,13 +453,13 @@ export function GlobeMap({
           <Layer
             id="state-line"
             type="line"
-            beforeId={beforeId}
-            layout={{ visibility: scope === "us" ? "visible" : "none" }}
+            beforeId={lineBeforeId}
             paint={{
-              "line-color": "#cfc6ba",
-              "line-width": ["interpolate", ["linear"], ["zoom"], 2, 0.7, 5, 1.3],
-              "line-opacity": 0.95,
+              "line-color": "#3f3a34",
+              "line-width": ["interpolate", ["linear"], ["zoom"], 0.8, 0.8, 3, 1.15, 6, 1.6],
+              "line-opacity": 0.9,
             }}
+            layout={{ "line-join": "round", "line-cap": "round" }}
           />
         </Source>
         <Source id="trails" type="geojson" data={trails}>
@@ -552,7 +556,7 @@ export function GlobeMap({
       </Map>
       <div className="pointer-events-none absolute top-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-col items-start gap-2">
         <MapScopeToggle scope={scope} onChange={setScope} />
-        <ShadeLegend scope={scope} />
+        <ShadeLegend />
       </div>
     </div>
   )
