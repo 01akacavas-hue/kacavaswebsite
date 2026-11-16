@@ -97,6 +97,8 @@ describe("published copy", () => {
       assert.ok(place.longitude >= -180 && place.longitude <= 180)
       assert.ok(place.name.length > 0)
       assert.ok(place.category.length > 0)
+      assert.equal(/\bEli\b/.test(place.name), false, place.id)
+      assert.equal(/\bEli\b/.test(place.notes), false, place.id)
     }
     assert.ok(places.length > 150)
     assert.equal(places.filter((place) => place.id === "boston-anchor").length, 1)

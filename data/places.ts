@@ -239,7 +239,7 @@ const alecPlaces: readonly Place[] = [
     latitude: 42.3645,
     longitude: -71.0536,
     approximate: true,
-    notes: "Classy cigar lounge in Boston. Niko's, Eli's, and my favorite.",
+    notes: "Classy cigar lounge in Boston. Niko's, Elias's, and my favorite.",
   }),
   pin({
     id: "boston-limoncello",
