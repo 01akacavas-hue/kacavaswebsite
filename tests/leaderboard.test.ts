@@ -45,7 +45,7 @@ describe("leaderboard", () => {
   it("maps every visited U.S. city to a state or the District", () => {
     const missing = new Set<string>()
     for (const place of places) {
-      if (place.countryPin || place.country !== "United States" || place.recommended || place.wishlist) continue
+      if (place.countryPin || place.statePin || place.country !== "United States" || place.recommended || place.wishlist) continue
       if (!stateForCity(place.city)) missing.add(place.city)
     }
     assert.deepEqual([...missing], [])
@@ -121,18 +121,35 @@ describe("leaderboard", () => {
     assert.equal(niko.includes("United Kingdom"), false)
     assert.equal(niko.includes("Turks and Caicos"), true)
     assert.deepEqual(niko, [...nikoVisitedCountries])
-    assert.deepEqual(alec, ["Costa Rica", "Spain", "United Kingdom", "United States"])
+    assert.deepEqual(alec, [
+      "Barbados",
+      "Canada",
+      "Costa Rica",
+      "Dominican Republic",
+      "Greece",
+      "Italy",
+      "Jamaica",
+      "Netherlands",
+      "Poland",
+      "South Africa",
+      "Spain",
+      "United Kingdom",
+      "United States",
+      "Vatican City",
+    ])
     assert.deepEqual(eli, ["United States"])
     const scores = scoreboard(places, achievements)
     assert.equal(scores.find((score) => score.id === "niko")?.countries, 23)
-    assert.equal(scores.find((score) => score.id === "alec")?.countries, 4)
+    assert.equal(scores.find((score) => score.id === "alec")?.countries, 14)
     assert.equal(scores.find((score) => score.id === "eli")?.countries, 1)
+    assert.equal(scores.find((score) => score.id === "niko")?.states, 10)
+    assert.equal(scores.find((score) => score.id === "alec")?.states, 28)
     assert.equal(scores.find((score) => score.id === "eli")?.cities, 2)
     assert.equal(scores.find((score) => score.id === "eli")?.states, 2)
   })
 
   it("adds a country pin only where Nicholas has no place", () => {
-    const pins = places.filter((place) => place.countryPin)
+    const pins = places.filter((place) => place.countryPin && place.brothers.includes("niko"))
     assert.deepEqual(
       pins.map((pin) => pin.country).sort(),
       [

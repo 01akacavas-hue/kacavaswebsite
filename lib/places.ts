@@ -29,7 +29,7 @@ export function queryPlaces(places: readonly Place[], query: PlaceQuery): Place[
     if (query.neighborhood !== "all" && (place.neighborhood ?? "") !== query.neighborhood) return false
     if (query.category !== "all" && place.category !== query.category) return false
     if (!text) return true
-    const haystack = [place.name, place.city, place.neighborhood, place.category, place.notes, place.country]
+    const haystack = [place.name, place.city, place.neighborhood, place.category, place.notes, place.visitNote, place.country]
       .filter(Boolean)
       .join(" ")
       .toLowerCase()
@@ -71,9 +71,9 @@ export function uniqueValues(places: readonly Place[], key: "city" | "neighborho
 }
 
 export function placesInCity(places: readonly Place[], place: Place): Place[] {
-  if (place.countryPin) return []
+  if (place.countryPin || place.statePin) return []
   return places
-    .filter((item) => !item.countryPin && item.city === place.city && Boolean(item.wishlist) === Boolean(place.wishlist))
+    .filter((item) => !item.countryPin && !item.statePin && item.city === place.city && Boolean(item.wishlist) === Boolean(place.wishlist))
     .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
 }
 
@@ -90,13 +90,16 @@ export function starLabel(stars: Place["stars"]): string {
 function sortText(place: Place, key: Exclude<PlaceSortKey, "price" | "stars">): string {
   if (key === "neighborhood") return place.neighborhood ?? ""
   if (key === "city" && place.countryPin) return place.country
+  if (key === "city" && place.statePin) return place.state ?? place.name
   return place[key] ?? ""
 }
 
 export function googleMapsUrl(place: Place): string {
   const query = place.countryPin
     ? place.country
-    : [place.name, place.neighborhood, place.city, place.country].filter(Boolean).join(", ")
+    : place.statePin
+      ? `${place.state ?? place.name}, United States`
+      : [place.name, place.neighborhood, place.city, place.country].filter(Boolean).join(", ")
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
 }
 

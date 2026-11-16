@@ -1,5 +1,6 @@
 import type { Place, PlaceCategory } from "@/lib/types"
-import { countryPinsFor } from "./country-pins"
+import { attachCountryNotes, countryPinsFor } from "./country-pins"
+import { attachStateNotes, statePinsFor } from "./state-pins"
 import { eliPlaces } from "./eli-places"
 import { nikoPlaces } from "./niko-places"
 
@@ -2719,4 +2720,6 @@ const alecPlaces: readonly Place[] = [
 
 const guidePlaces: readonly Place[] = [...alecPlaces, ...nikoPlaces, ...eliPlaces]
 
-export const places: readonly Place[] = [...guidePlaces, ...countryPinsFor(guidePlaces)]
+const notedPlaces = attachCountryNotes(attachStateNotes([...guidePlaces]))
+
+export const places: readonly Place[] = [...notedPlaces, ...countryPinsFor(notedPlaces), ...statePinsFor(notedPlaces)]

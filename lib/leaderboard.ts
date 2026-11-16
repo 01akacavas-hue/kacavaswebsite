@@ -22,7 +22,7 @@ export type StatKey = "countries" | "cities" | "states" | "michelin" | "movies" 
 export const statRows: readonly { key: StatKey; label: string; hint: string }[] = [
   { key: "countries", label: "Countries", hint: "Counted once per country, and only after a visit. A country pin stands in when Nicholas has no specific place there yet." },
   { key: "cities", label: "Cities", hint: "Counted once per city, and only after a visit." },
-  { key: "states", label: "States", hint: "U.S. visits only. Washington is counted as the District of Columbia." },
+  { key: "states", label: "States", hint: "U.S. visits only. The city of Washington is counted as Washington, DC, beside the states." },
   { key: "michelin", label: "Michelin dinners", hint: "A star counts when the note names it, and only if he has been." },
   { key: "movies", label: "Movies", hint: "Shorts stay on the filmography. They are not counted here." },
   { key: "shows", label: "TV shows", hint: "Series he appeared in." },
@@ -31,6 +31,24 @@ export const statRows: readonly { key: StatKey; label: string; hint: string }[] 
 
 function visitedBy(place: Place, brother: BrotherId): boolean {
   return place.brothers.includes(brother) && !isOpenRing(place)
+}
+
+/** U.S. states a brother has actually been to, including Washington, DC. */
+export function visitedStates(places: readonly Place[], brother: BrotherId): Set<string> {
+  const states = new Set<string>()
+  for (const place of places) {
+    if (!visitedBy(place, brother)) continue
+    if (place.statePin) {
+      if (place.state) states.add(place.state)
+      continue
+    }
+    if (place.countryPin) continue
+    if (place.country === "United States") {
+      const state = stateForCity(place.city)
+      if (state) states.add(state)
+    }
+  }
+  return states
 }
 
 /**
@@ -56,15 +74,11 @@ export function countriesVisited(places: readonly Place[], brother: BrotherId): 
 export function scoreBrother(places: readonly Place[], brother: BrotherId, record: BrotherRecord): BrotherScore {
   const countries = countriesVisited(places, brother)
   const cities = new Set<string>()
-  const states = new Set<string>()
+  const states = visitedStates(places, brother)
   let michelin = 0
   for (const place of places) {
-    if (!visitedBy(place, brother) || place.countryPin) continue
+    if (!visitedBy(place, brother) || place.countryPin || place.statePin) continue
     cities.add(`${place.city}\u0000${place.country}`)
-    if (place.country === "United States") {
-      const state = stateForCity(place.city)
-      if (state) states.add(state)
-    }
     if (place.michelin) michelin += 1
   }
   return {

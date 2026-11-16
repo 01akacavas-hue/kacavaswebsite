@@ -1,6 +1,7 @@
 /**
  * Visited U.S. cities in the guides, mapped once.
- * Washington is the District, counted beside the states and labeled as such.
+ * The city of Washington is Washington, DC, counted beside the states.
+ * Washington state stays Washington.
  */
 export const usStateByCity: Record<string, string> = {
   Arlington: "Virginia",
@@ -42,7 +43,7 @@ export const usStateByCity: Record<string, string> = {
   Vacherie: "Louisiana",
   Vernon: "Connecticut",
   Wallace: "Louisiana",
-  Washington: "District of Columbia",
+  Washington: "Washington, DC",
   Wellfleet: "Massachusetts",
   Worcester: "Massachusetts",
   York: "Maine",

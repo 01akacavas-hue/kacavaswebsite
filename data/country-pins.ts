@@ -1,11 +1,13 @@
 import type { BrotherId, Place } from "@/lib/types"
 import { canonicalCountry, nikoVisitedCountries } from "./niko-countries"
-import { brotherLabel } from "@/lib/places"
+import { brotherLabel, brothersInOrder } from "@/lib/places"
 
 export type CountryVisitList = {
   brother: BrotherId
   /** Canonical country names. America is the United States, and Czechia is the Czech Republic. */
   countries: readonly string[]
+  /** His note for a country. Countries without one use the plain "has been" line. */
+  notes?: Readonly<Record<string, string>>
 }
 
 /**
@@ -14,6 +16,38 @@ export type CountryVisitList = {
  */
 export const countryVisitLists: readonly CountryVisitList[] = [
   { brother: "niko", countries: nikoVisitedCountries },
+  {
+    brother: "alec",
+    countries: [
+      "Canada",
+      "Jamaica",
+      "Dominican Republic",
+      "Barbados",
+      "Costa Rica",
+      "United Kingdom",
+      "Italy",
+      "Spain",
+      "Netherlands",
+      "Greece",
+      "Vatican City",
+      "Poland",
+      "South Africa",
+    ],
+    notes: {
+      Canada: "Ottawa trip with Elias and Niagara with family.",
+      Jamaica: "Family trip. Daiquiris and the arcade room.",
+      "Dominican Republic": "Punta Cana.",
+      Barbados: "2025 Christmas with Pop and the bros.",
+      "Costa Rica": "San José and Tamarindo. Ximena and cousins.",
+      "United Kingdom": "Love London and Farnborough.",
+      Italy: "One of my top 3 countries in the world. Venice, Milan, Rome, and the Amalfi Coast!",
+      Spain: "Barcelona backpacking with Johnny and Tossa de Mar with family as a jit.",
+      Netherlands: "Amsterdam backpacking.",
+      Greece: "Many times with family. Athens, Sparta, Naxos, Paros, Antiparos, and Corfu!",
+      Poland: "Kraków with Niko.",
+      "South Africa": "Cape Town with the Pottingers and the Eastern Cape with Mindy, David, and Jenean.",
+    },
+  },
 ]
 
 /**
@@ -35,6 +69,14 @@ const countryCenters: Record<string, { latitude: number; longitude: number }> = 
   Switzerland: { latitude: 46.82, longitude: 8.23 },
   Austria: { latitude: 47.52, longitude: 14.55 },
   Hungary: { latitude: 47.16, longitude: 19.5 },
+  "Dominican Republic": { latitude: 18.9, longitude: -70.4 },
+  Italy: { latitude: 42.5, longitude: 12.57 },
+  "Vatican City": { latitude: 41.9022, longitude: 12.4533 },
+  Poland: { latitude: 51.92, longitude: 19.13 },
+  "South Africa": { latitude: -29, longitude: 24 },
+  "Costa Rica": { latitude: 9.93, longitude: -84.09 },
+  Spain: { latitude: 40.2, longitude: -3.7 },
+  "United Kingdom": { latitude: 54, longitude: -2.5 },
 }
 
 function countryId(brother: BrotherId, country: string): string {
@@ -45,18 +87,53 @@ function countryId(brother: BrotherId, country: string): string {
   return `country-${brother}-${slug}`
 }
 
-/**
- * One pin per listed country that this brother does not already have a place in.
- * A restaurant, a recommendation, or any other pin in that country is enough to skip it.
- */
-export function countryPinsFor(existing: readonly Place[], lists: readonly CountryVisitList[] = countryVisitLists): Place[] {
+export function countryVisitSentence(brother: BrotherId, country: string, note?: string): string {
+  if (!note) return `${brotherLabel(brother)} has been. No specific place is on the map yet.`
+  return `${brotherLabel(brother)} has been to ${country}.\n\n${note}`
+}
+
+function coveredCountryKeys(existing: readonly Place[]): Set<string> {
   const covered = new Set<string>()
   for (const place of existing) {
     if (place.countryPin) continue
     const country = canonicalCountry(place.country)
     for (const brother of place.brothers) covered.add(`${brother}\0${country}`)
   }
+  return covered
+}
 
+/** Keep his note on places he already has in that country, instead of adding another pin. */
+export function attachCountryNotes(places: readonly Place[], lists: readonly CountryVisitList[] = countryVisitLists): Place[] {
+  const covered = coveredCountryKeys(places)
+  const notes = new Map<string, string>()
+  for (const list of lists) {
+    for (const [raw, note] of Object.entries(list.notes ?? {})) {
+      const country = canonicalCountry(raw)
+      const key = `${list.brother}\0${country}`
+      if (!note.trim() || !covered.has(key)) continue
+      notes.set(key, countryVisitSentence(list.brother, country, note))
+    }
+  }
+  return places.map((place) => {
+    if (place.countryPin || place.statePin) return place
+    const country = canonicalCountry(place.country)
+    const parts: string[] = []
+    for (const brother of brothersInOrder(place.brothers)) {
+      const text = notes.get(`${brother}\0${country}`)
+      if (text) parts.push(text)
+    }
+    if (parts.length === 0) return place
+    const visitNote = [place.visitNote, ...parts].filter(Boolean).join("\n\n")
+    return { ...place, visitNote }
+  })
+}
+
+/**
+ * One pin per listed country that this brother does not already have a place in.
+ * A restaurant, a recommendation, or any other pin in that country is enough to skip it.
+ */
+export function countryPinsFor(existing: readonly Place[], lists: readonly CountryVisitList[] = countryVisitLists): Place[] {
+  const covered = coveredCountryKeys(existing)
   const pins: Place[] = []
   for (const list of lists) {
     for (const raw of list.countries) {
@@ -66,6 +143,7 @@ export function countryPinsFor(existing: readonly Place[], lists: readonly Count
       const center = countryCenters[country]
       if (!center) throw new Error(`No country center for ${country}`)
       covered.add(key)
+      const note = list.notes?.[country] ?? list.notes?.[raw]
       pins.push({
         id: countryId(list.brother, country),
         name: country,
@@ -77,7 +155,7 @@ export function countryPinsFor(existing: readonly Place[], lists: readonly Count
         approximate: true,
         countryPin: true,
         brothers: [list.brother],
-        notes: `${brotherLabel(list.brother)} has been. No specific place is on the map yet.`,
+        notes: countryVisitSentence(list.brother, country, note),
       })
     }
   }
