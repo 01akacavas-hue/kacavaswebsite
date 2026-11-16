@@ -60,7 +60,7 @@ export const brothers = [
     name: "Alexander Kacavas",
     shortName: "Alexander",
     knownAs: "Alec",
-    epithet: "GTM lead",
+    epithet: "The businessman",
     href: "/alec",
     bio: "GTM lead at Lance, in San Francisco. Babson College. He loves any sport he can get into.",
     career: "Lance, Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",

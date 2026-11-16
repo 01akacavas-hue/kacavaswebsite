@@ -13,7 +13,7 @@ export function AlecView() {
     <>
       <header className="grid items-end gap-8 md:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]">
         <div>
-          <p className="text-xs tracking-[0.22em] text-alec uppercase">GTM lead</p>
+          <p className="text-xs tracking-[0.22em] text-alec uppercase">Businessman</p>
           <h1 className="mt-3 font-serif text-6xl tracking-tight sm:text-8xl">Alexander</h1>
           <p className="mt-3 text-sm tracking-[0.14em] text-muted uppercase">Goes by Alec</p>
           <p className="mt-4 max-w-xl text-lg text-muted">

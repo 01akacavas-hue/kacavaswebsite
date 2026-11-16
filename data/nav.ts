@@ -64,7 +64,7 @@ export const pages: readonly SitePage[] = [
     id: "alec",
     href: "/alec",
     label: "Alexander",
-    menuNote: "GTM lead",
+    menuNote: "Businessman",
     title: "Alexander Kacavas",
     description:
       "Alexander Kacavas is GTM lead at Lance in San Francisco. He goes by Alec. He went to Babson, and he loves any sport. Previously Rho, Vive Mints, Blue Water Mortgage, and Silent Falcon.",
