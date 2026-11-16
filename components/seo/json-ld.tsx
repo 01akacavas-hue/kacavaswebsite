@@ -38,7 +38,7 @@ const graph = {
       "@type": "Person",
       name: "Alexander Kacavas",
       alternateName: "Alec Kacavas",
-      jobTitle: "GTM Lead",
+      jobTitle: "Businessman",
       url: `${SITE_URL}/alec`,
       worksFor: {
         "@type": "Organization",
