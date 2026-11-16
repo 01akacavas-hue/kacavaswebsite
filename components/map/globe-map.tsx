@@ -7,7 +7,10 @@ import { setWorkerUrl, type ExpressionSpecification, type FilterSpecification, t
 setWorkerUrl("/workers/maplibre")
 import "maplibre-gl/dist/maplibre-gl.css"
 import { ClusterDonut } from "@/components/map/cluster-donut"
+import { MapScopeToggle, ShadeLegend, type MapScope } from "@/components/map/shade-legend"
 import { loadEditorialStyle, type RecolorableStyle } from "@/lib/globe-style"
+import { brotherFillColor } from "@/lib/shade-color"
+import { countryShadeGeoJSON, stateShadeGeoJSON } from "@/lib/shade-geo"
 import { placeIdFromMapFeatures, placesToGeoJSON, trailsToGeoJSON } from "@/lib/pins"
 import { accents } from "@/lib/theme"
 import type { CityStop } from "@/lib/trails"
@@ -71,6 +74,13 @@ async function expandCluster(map: MaplibreMap, mark: ClusterMark, reducedMotion:
   })
 }
 
+function shadeBeforeId(style: RecolorableStyle): string | undefined {
+  for (const id of ["building", "tunnel_motorway_casing", "boundary_3"]) {
+    if (style.layers.some((layer) => layer.id === id)) return id
+  }
+  return style.layers.find((layer) => layer.type === "symbol")?.id
+}
+
 function fly(map: MaplibreMap, longitude: number, latitude: number, zoom: number, pitch: number, duration: number) {
   return new Promise<void>((resolve) => {
     if (duration === 0) {
@@ -127,6 +137,7 @@ export function GlobeMap({
   const [style, setStyle] = useState<RecolorableStyle | null>(null)
   const [failed, setFailed] = useState(false)
   const [map, setMap] = useState<MaplibreMap | null>(null)
+  const [scope, setScope] = useState<MapScope>("world")
   const [clusters, setClusters] = useState<ClusterMark[]>([])
   const [wave, setWave] = useState<{ places: readonly Place[]; count: number }>({ places, count: 0 })
   const spinPaused = useRef(false)
@@ -162,6 +173,9 @@ export function GlobeMap({
   const revealed = wave.places === places ? wave.count : 0
   const pins = useMemo(() => placesToGeoJSON(reducedMotion || revealed >= places.length ? places : places.slice(0, revealed)), [places, revealed, reducedMotion])
   const trails = useMemo(() => trailsToGeoJSON(catalog, trailBrothers), [catalog, trailBrothers])
+  const countryShade = useMemo(() => countryShadeGeoJSON(catalog), [catalog])
+  const stateShade = useMemo(() => stateShadeGeoJSON(catalog), [catalog])
+  const beforeId = style ? shadeBeforeId(style) : undefined
 
   useEffect(() => {
     if (!map) return
@@ -276,6 +290,35 @@ export function GlobeMap({
     }
   }, [map, reducedMotion])
 
+  const scopeSeen = useRef<MapScope | null>(null)
+  useEffect(() => {
+    if (!map) return
+    if (scopeSeen.current === scope) return
+    const previous = scopeSeen.current
+    scopeSeen.current = scope
+    if (previous === null && scope === "world") return
+    spinPaused.current = true
+    const duration = reducedMotion ? 0 : 1500
+    if (scope === "us") {
+      map.fitBounds(
+        [
+          [-125, 24.4],
+          [-66.8, 49.4],
+        ],
+        {
+          padding: phone ? 28 : 40,
+          pitch: phone || reducedMotion ? 0 : 22,
+          bearing: 0,
+          duration,
+          maxZoom: phone ? 3.4 : 3.8,
+          essential: true,
+        },
+      )
+      return
+    }
+    void fly(map, -28, 25, phone ? 1.45 : 1.72, phone || reducedMotion ? 0 : 16, duration)
+  }, [map, scope, phone, reducedMotion])
+
   function onLoad(event: { target: MaplibreMap }) {
     const next = event.target
     next.setSky({
@@ -380,6 +423,41 @@ export function GlobeMap({
         onMouseMove={onMove}
         onMouseLeave={() => onHover(null)}
       >
+        <Source id="country-shade" type="geojson" data={countryShade}>
+          <Layer
+            id="country-fill"
+            type="fill"
+            beforeId={beforeId}
+            filter={(scope === "us" ? ["!=", ["get", "name"], "United States of America"] : ["has", "name"]) as FilterSpecification}
+            paint={{
+              "fill-color": brotherFillColor,
+              "fill-opacity": 0.82,
+            }}
+          />
+        </Source>
+        <Source id="state-shade" type="geojson" data={stateShade}>
+          <Layer
+            id="state-fill"
+            type="fill"
+            beforeId={beforeId}
+            layout={{ visibility: scope === "us" ? "visible" : "none" }}
+            paint={{
+              "fill-color": brotherFillColor,
+              "fill-opacity": ["case", ["==", ["get", "brothers"], ""], 0, 0.82],
+            }}
+          />
+          <Layer
+            id="state-line"
+            type="line"
+            beforeId={beforeId}
+            layout={{ visibility: scope === "us" ? "visible" : "none" }}
+            paint={{
+              "line-color": "#cfc6ba",
+              "line-width": ["interpolate", ["linear"], ["zoom"], 2, 0.7, 5, 1.3],
+              "line-opacity": 0.95,
+            }}
+          />
+        </Source>
         <Source id="trails" type="geojson" data={trails}>
           {brotherIds.map((id) => (
             <Layer
@@ -472,6 +550,10 @@ export function GlobeMap({
           </Marker>
         ) : null}
       </Map>
+      <div className="pointer-events-none absolute top-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-col items-start gap-2">
+        <MapScopeToggle scope={scope} onChange={setScope} />
+        <ShadeLegend scope={scope} />
+      </div>
     </div>
   )
 }

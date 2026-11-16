@@ -54,7 +54,10 @@ describe("published copy", () => {
       const travelGuide =
         file.endsWith(join("data", "places.ts")) ||
         file.endsWith(join("data", "niko-places.ts")) ||
-        file.endsWith(join("data", "niko-countries.ts"))
+        file.endsWith(join("data", "niko-countries.ts")) ||
+        file.endsWith(join("data", "country-pins.ts")) ||
+        file.endsWith(join("data", "alec-states.ts")) ||
+        file.endsWith(join("data", "state-pins.ts"))
       if (!travelGuide && text.includes("poland")) hits.push(`${file} contains “poland”`)
     }
     assert.deepEqual(hits, [])

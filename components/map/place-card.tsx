@@ -18,15 +18,16 @@ function CardBody({
   onClose: () => void
   onSelect: (id: string) => void
 }) {
-  const cityPlaces = place.countryPin
-    ? []
-    : places
-        .filter((item) => !item.countryPin && item.city === place.city)
-        .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
+  const cityPlaces =
+    place.countryPin || place.statePin
+      ? []
+      : places
+          .filter((item) => !item.countryPin && !item.statePin && item.city === place.city)
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }))
   const index = cityPlaces.findIndex((item) => item.id === place.id)
   const previous = index > 0 ? cityPlaces[index - 1] : undefined
   const next = index >= 0 && index < cityPlaces.length - 1 ? cityPlaces[index + 1] : undefined
-  const where = place.countryPin ? "Country" : [place.neighborhood, place.city, place.country].filter(Boolean).join(" · ")
+  const where = place.countryPin ? "Country" : place.statePin ? "State" : [place.neighborhood, place.city, place.country].filter(Boolean).join(" · ")
   const open = placeStateLabel(place) !== "Visited"
 
   return (
@@ -68,11 +69,12 @@ function CardBody({
           {place.mustTry ? <span className="text-xs tracking-[0.12em] uppercase">Must try</span> : null}
           {place.approximate ? <span className="text-xs tracking-[0.12em] text-faint uppercase">Approximate pin</span> : null}
         </div>
-        <p className="mt-4 leading-relaxed">{place.notes}</p>
+        <p className="mt-4 leading-relaxed whitespace-pre-line">{place.notes}</p>
+        {place.visitNote ? <p className="mt-4 border-t border-line pt-4 leading-relaxed whitespace-pre-line">{place.visitNote}</p> : null}
         <a className="mt-4 inline-flex h-11 items-center text-sm underline decoration-line underline-offset-4" href={googleMapsUrl(place)} target="_blank" rel="noreferrer">
           Open in Maps
         </a>
-        {place.countryPin ? null : (
+        {place.countryPin || place.statePin ? null : (
           <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
             <button type="button" className="h-11 px-2 text-xs tracking-[0.14em] uppercase disabled:opacity-30" disabled={!previous} onClick={() => previous && onSelect(previous.id)}>
               Previous

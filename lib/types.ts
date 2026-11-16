@@ -20,6 +20,7 @@ export const placeCategories = [
   "lodging",
   "comedy",
   "country",
+  "state",
 ] as const
 
 export type PlaceCategory = (typeof placeCategories)[number]
@@ -74,6 +75,18 @@ export type Place = {
    * It is not a restaurant, a city, or a stand-in for either.
    */
   countryPin?: boolean
+  /**
+   * The state itself, used when this brother has no specific place in that state.
+   * It is not a restaurant. Washington, DC is the District.
+   */
+  statePin?: boolean
+  /** State name for a state pin. The District is Washington, DC. */
+  state?: string
+  /**
+   * A state or country visit note kept on an existing place, so the map does not
+   * gain a second pin where he already has one.
+   */
+  visitNote?: string
 }
 
 export type Product = {
